@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Ensure the base path is /dev
+RewriteBase /dev/
+
+RewriteRule ^$ index.html [L]
+
+# If the requested resource doesn't map to a real file or directory,
+# rewrite everything under /dev to /dev/index.html so SPA routes work
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
