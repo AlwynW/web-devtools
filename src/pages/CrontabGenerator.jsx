@@ -48,17 +48,17 @@ export default function CrontabGenerator({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           Crontab Generator
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Build cron schedules in a human-friendly way.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-6">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
             Quick presets
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -66,14 +66,14 @@ export default function CrontabGenerator({ onToast }) {
               <button
                 key={p.cron}
                 onClick={() => selectPreset(p)}
-                className={`p-3 rounded-xl border text-left text-sm transition-all ${
+                className={`p-3 border text-left text-sm font-mono transition-colors ${
                   preset === p.cron
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-1 ring-blue-500"
-                    : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+                    ? "border-stone-900 dark:border-stone-100 bg-stone-100 dark:bg-stone-900"
+                    : "border-stone-200 dark:border-stone-700 hover:border-stone-300 dark:hover:border-stone-600"
                 }`}
               >
-                <div className="font-medium dark:text-slate-200">{p.label}</div>
-                <div className="font-mono text-xs text-slate-500 mt-1">
+                <div className="text-stone-800 dark:text-stone-200">{p.label}</div>
+                <div className="font-mono text-xs text-stone-500 mt-1">
                   {p.cron}
                 </div>
               </button>
@@ -82,15 +82,15 @@ export default function CrontabGenerator({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
             Build custom schedule
           </label>
-          <p className="text-xs text-slate-500 mb-3">
+          <p className="text-xs font-mono text-stone-500 mb-3">
             minute hour day-of-month month day-of-week (0-6, 0=Sun)
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">
+              <label className="block text-xs font-mono text-stone-500 mb-1">
                 Minute
               </label>
               <input
@@ -102,11 +102,11 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setMinute(parseInt(e.target.value) || 0);
                 }}
-                className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">
+              <label className="block text-xs font-mono text-stone-500 mb-1">
                 Hour
               </label>
               <input
@@ -118,11 +118,11 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setHour(parseInt(e.target.value) || 0);
                 }}
-                className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">
+              <label className="block text-xs font-mono text-stone-500 mb-1">
                 Day (1-31)
               </label>
               <input
@@ -134,11 +134,11 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setDayOfMonth(parseInt(e.target.value) || 1);
                 }}
-                className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">
+              <label className="block text-xs font-mono text-stone-500 mb-1">
                 Month
               </label>
               <select
@@ -147,7 +147,7 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setMonth(e.target.value);
                 }}
-                className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
               >
                 <option value="*">* (every)</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => (
@@ -158,7 +158,7 @@ export default function CrontabGenerator({ onToast }) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">
+              <label className="block text-xs font-mono text-stone-500 mb-1">
                 Day of week
               </label>
               <select
@@ -167,7 +167,7 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setDayOfWeek(e.target.value);
                 }}
-                className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
               >
                 <option value="*">* (every)</option>
                 {DAYS.map((d) => (
@@ -181,7 +181,7 @@ export default function CrontabGenerator({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
             Or paste custom cron expression
           </label>
           <input
@@ -192,7 +192,7 @@ export default function CrontabGenerator({ onToast }) {
               setPreset(null);
             }}
             placeholder="* * * * *"
-            className="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue-500 dark:text-white"
+            className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
           />
         </div>
 

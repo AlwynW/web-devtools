@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ClipboardCopy, RefreshCw } from "lucide-react";
+import { ClipboardText, ArrowsClockwise } from "phosphor-react";
 import { faker } from "@faker-js/faker";
 import Button from "../components/Button";
 import { copyToClipboard } from "../utils/clipboard";
@@ -43,20 +43,22 @@ export default function PersonaGenerator({ onToast }) {
     copyToClipboard(val, () => onToast(`${label} copied!`));
 
   if (!persona)
-    return <div className="text-center p-12">Loading persona generator...</div>;
+    return <div className="text-center p-12 font-mono text-stone-500">Loading persona generator...</div>;
 
   return (
     <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">Persona</h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
-          Professional grade utility for daily development.
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
+          Persona
+        </h2>
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
+          Quickly spin up fake personas for testing.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row gap-8 items-center md:items-start">
+      <div className="bg-white dark:bg-stone-900 p-6 sm:p-8 border border-stone-200 dark:border-stone-800 flex flex-col md:flex-row gap-8 items-center md:items-start">
         <div className="flex flex-col items-center gap-4 shrink-0">
-          <div className="w-40 h-40 rounded-full border-4 border-slate-100 dark:border-slate-700 overflow-hidden bg-slate-50">
+          <div className="w-40 h-40 border-4 border-stone-200 dark:border-stone-700 overflow-hidden bg-stone-50 dark:bg-stone-900">
             <img src={persona.avatar} alt="Profile" className="w-full h-full" />
           </div>
           <Button
@@ -75,18 +77,18 @@ export default function PersonaGenerator({ onToast }) {
             { label: "Email", val: persona.email },
           ].map((field) => (
             <div key={field.label}>
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+              <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
                 {field.label}
               </label>
-              <div className="flex justify-between items-center bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-750 mt-1">
-                <span className="text-lg font-medium truncate pr-4 dark:text-white">
+              <div className="flex justify-between items-center bg-stone-50 dark:bg-stone-900 p-3 border border-stone-200 dark:border-stone-700 mt-1">
+                <span className="text-lg font-mono truncate pr-4 text-stone-800 dark:text-stone-100">
                   {field.val}
                 </span>
                 <button
                   onClick={() => copyField(field.val, field.label)}
-                  className="text-slate-400 hover:text-blue-600"
+                  className="p-2 border border-stone-300 dark:border-stone-700 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
                 >
-                  <ClipboardCopy size={16} />
+                  <ClipboardText size={16} weight="thin" />
                 </button>
               </div>
             </div>
@@ -98,11 +100,11 @@ export default function PersonaGenerator({ onToast }) {
         <Button
           variant="outline"
           onClick={copyFullPersona}
-          icon={ClipboardCopy}
+          icon={ClipboardText}
         >
           Full Report
         </Button>
-        <Button onClick={generatePersona} icon={RefreshCw}>
+        <Button onClick={generatePersona} icon={ArrowsClockwise}>
           New Persona
         </Button>
       </div>

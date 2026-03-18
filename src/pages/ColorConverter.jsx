@@ -74,16 +74,16 @@ export default function ColorConverter({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           Color Converter
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Convert between hex, RGB, HSL, and OKLCH.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
           Input color (hex, rgb, hsl, oklch)
         </label>
         <input
@@ -91,11 +91,11 @@ export default function ColorConverter({ onToast }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="#3b82f6 or rgb(59, 130, 246) or oklch(0.6 0.2 250)"
-          className="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono focus:ring-2 focus:ring-blue-500 dark:text-white"
+          className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
         />
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm">
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
@@ -104,7 +104,7 @@ export default function ColorConverter({ onToast }) {
           <>
             <div className="flex items-center gap-4">
               <label
-                className="w-24 h-24 rounded-xl border-2 border-slate-200 dark:border-slate-700 shrink-0 cursor-pointer overflow-hidden block"
+                className="w-24 h-24 border-2 border-stone-200 dark:border-stone-700 shrink-0 cursor-pointer overflow-hidden block"
                 style={{ backgroundColor: previewColor }}
                 title="Click to pick a color"
               >
@@ -115,7 +115,7 @@ export default function ColorConverter({ onToast }) {
                   className="w-full h-full opacity-0 cursor-pointer"
                 />
               </label>
-              <div className="text-sm text-slate-500 dark:text-slate-400">
+              <div className="text-sm font-mono text-stone-500 dark:text-stone-400">
                 Click swatch to open color picker
               </div>
             </div>
@@ -129,18 +129,18 @@ export default function ColorConverter({ onToast }) {
               ].map(({ key, label }) => (
                 <div
                   key={key}
-                  className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700"
+                  className="flex items-center justify-between p-3 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700"
                 >
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                  <span className="text-sm font-mono text-stone-600 dark:text-stone-300">
                     {label}
                   </span>
                   <div className="flex items-center gap-2">
-                    <code className="font-mono text-sm dark:text-slate-200">
+                    <code className="font-mono text-sm text-stone-800 dark:text-stone-200">
                       {formats[key]}
                     </code>
                     <button
                       onClick={() => copy(formats[key], `${label} copied!`)}
-                      className="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500"
+                      className="p-1.5 border border-stone-300 dark:border-stone-700 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-500 font-mono text-xs"
                       title="Copy"
                     >
                       Copy

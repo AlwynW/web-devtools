@@ -38,47 +38,47 @@ export default function HttpStatusCodes() {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           HTTP Status Codes
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Quick reference for common HTTP status codes.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by code (e.g. 404) or keyword (e.g. Not Found)"
-          className="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 dark:text-white"
+          placeholder="> search by code (e.g. 404) or keyword (e.g. Not Found)"
+          className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
         />
 
         <div className="space-y-2">
           {filtered.map((c) => (
             <div
               key={c.code}
-              className="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors"
+              className="flex items-center gap-4 p-4 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors"
             >
               <span
-                className={`w-16 text-center font-bold text-lg ${
+                className={`w-16 text-center font-mono font-bold text-lg ${
                   c.code >= 200 && c.code < 300
-                    ? "text-emerald-600"
+                    ? "text-emerald-600 dark:text-emerald-400"
                     : c.code >= 300 && c.code < 400
-                      ? "text-amber-600"
+                      ? "text-amber-600 dark:text-amber-400"
                       : c.code >= 400
-                        ? "text-red-600"
-                        : "text-slate-600"
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-stone-600 dark:text-stone-400"
                 }`}
               >
                 {c.code}
               </span>
               <div className="flex-1">
-                <div className="font-semibold dark:text-slate-100">
+                <div className="font-mono font-semibold text-stone-800 dark:text-stone-100">
                   {c.name}
                 </div>
-                <div className="text-sm text-slate-500 dark:text-slate-400">
+                <div className="text-sm font-mono text-stone-500 dark:text-stone-400">
                   {c.desc}
                 </div>
               </div>
@@ -87,7 +87,7 @@ export default function HttpStatusCodes() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-8 text-slate-500">
+          <div className="text-center py-8 font-mono text-stone-500 text-sm">
             No matching status codes.
           </div>
         )}

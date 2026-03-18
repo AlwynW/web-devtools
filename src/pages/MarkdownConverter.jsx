@@ -36,32 +36,32 @@ export default function MarkdownConverter({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           Markdown Converter
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Convert between Markdown and HTML.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
-        <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-max">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
           <button
             onClick={() => setMode("md2html")}
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
+            className={`px-3 py-1.5 transition-colors ${
               mode === "md2html"
-                ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
             }`}
           >
             Markdown → HTML
           </button>
           <button
             onClick={() => setMode("html2md")}
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
+            className={`px-3 py-1.5 transition-colors ${
               mode === "html2md"
-                ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
             }`}
           >
             HTML → Markdown
@@ -69,7 +69,7 @@ export default function MarkdownConverter({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
             Input ({mode === "md2html" ? "Markdown" : "HTML"})
           </label>
           <textarea
@@ -81,35 +81,37 @@ export default function MarkdownConverter({ onToast }) {
                 ? "# Heading\n\n**bold** *italic*"
                 : "<h1>Heading</h1><p>Paragraph</p>"
             }
-            className="w-full h-40 p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue-500 dark:text-white"
+            className="w-full h-40 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
           />
         </div>
 
-        <button
-          onClick={convert}
-          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium"
-        >
-          Convert
-        </button>
+        <div className="flex justify-end">
+          <button
+            onClick={convert}
+            className="px-4 py-2 border border-stone-400 dark:border-stone-600 text-xs font-mono tracking-tight text-stone-800 dark:text-stone-100 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+          >
+            {" > Convert"}
+          </button>
+        </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm">
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
 
         {output && (
           <>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
               Output ({mode === "md2html" ? "HTML" : "Markdown"})
             </label>
             {mode === "md2html" && (
               <div className="mb-2">
-                <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+                <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-1">
                   Preview
                 </div>
                 <div
-                  className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4 [&_code]:bg-slate-100 [&_code]:dark:bg-slate-900 [&_code]:px-1 [&_code]:rounded [&_pre]:p-3 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:bg-slate-100 [&_pre]:dark:bg-slate-900 [&_a]:text-blue-600 [&_a]:underline"
+                  className="p-4 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4 [&_code]:bg-stone-100 [&_code]:dark:bg-stone-800 [&_code]:px-1 [&_pre]:p-3 [&_pre]:overflow-x-auto [&_pre]:bg-stone-100 [&_pre]:dark:bg-stone-800 [&_a]:text-stone-700 [&_a]:dark:text-stone-300 [&_a]:underline"
                   dangerouslySetInnerHTML={{ __html: output }}
                 />
               </div>

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Upload } from "lucide-react";
+import { UploadSimple } from "phosphor-react";
 import CryptoJS from "crypto-js";
 import CopyArea from "../components/CopyArea";
 
@@ -64,31 +64,31 @@ export default function HashGenerator({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           Hash Generator
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Create MD5, SHA-1, SHA-256, or SHA-512 hashes for verification.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
-        <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-max">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
           <button
             onClick={switchToText}
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
+            className={`px-3 py-1.5 transition-colors ${
               mode === "text"
-                ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
             }`}
           >
             Text
           </button>
           <label
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-all cursor-pointer ${
+            className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-2 ${
               mode === "file"
-                ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
             }`}
           >
             <input
@@ -96,51 +96,51 @@ export default function HashGenerator({ onToast }) {
               onChange={handleFile}
               className="hidden"
             />
-            <span className="flex items-center gap-2">
-              <Upload size={16} /> File
-            </span>
+            <UploadSimple size={14} weight="thin" /> File
           </label>
         </div>
 
         {mode === "text" ? (
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
               Input text
             </label>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onBlur={compute}
-              placeholder="Enter text to hash..."
-              className="w-full h-32 p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue-500 dark:text-white"
+              placeholder="> enter text to hash"
+              className="w-full h-32 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
             />
           </div>
         ) : (
-          <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-            <div className="font-medium dark:text-slate-200">{fileName}</div>
-            <div className="text-sm text-slate-500">
+          <div className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700">
+            <div className="font-mono text-sm text-stone-800 dark:text-stone-200">{fileName}</div>
+            <div className="text-xs font-mono text-stone-500">
               {(input.length / 1024).toFixed(1)} KB loaded
             </div>
           </div>
         )}
 
         {mode === "text" && (
-          <button
-            onClick={compute}
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium"
-          >
-            Generate hashes
-          </button>
+          <div className="flex justify-end">
+            <button
+              onClick={compute}
+              className="px-4 py-2 border border-stone-400 dark:border-stone-600 text-xs font-mono tracking-tight text-stone-800 dark:text-stone-100 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+            >
+              {" > Generate hashes"}
+            </button>
+          </div>
         )}
 
         {Object.keys(hashes).length > 0 && (
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
               Hashes
             </label>
             {Object.entries(hashes).map(([name, hash]) => (
               <div key={name}>
-                <div className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+                <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
                   {name}
                 </div>
                 <CopyArea

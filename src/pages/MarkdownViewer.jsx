@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { marked } from "marked";
-import { FileDown, Maximize2, Minimize2 } from "lucide-react";
+import { FileArrowDown, CornersOut, CornersIn } from "phosphor-react";
 
 export default function MarkdownViewer() {
   const [content, setContent] = useState(null);
@@ -65,25 +65,25 @@ export default function MarkdownViewer() {
   };
 
   return (
-    <div className={`mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${fullWidth ? "max-w-none w-full" : "max-w-3xl"}`}>
+    <div className={`mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${fullWidth ? "relative left-1/2 -translate-x-1/2 w-screen max-w-none px-4 sm:px-6" : "max-w-3xl"}`}>
       <header className="mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="text-center sm:text-left">
-          <h2 className="text-4xl font-black mb-2 tracking-tight">
+          <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
             Markdown Viewer
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">
+          <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
             Drop a .md file to preview it. No editing — just viewing.
           </p>
         </div>
         <button
           onClick={() => setFullWidth((v) => !v)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all shrink-0 self-center sm:self-auto ${
+          className={`flex items-center gap-2 px-4 py-2 text-xs font-mono tracking-tight border transition-colors shrink-0 self-center sm:self-auto ${
             fullWidth
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600"
+              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border-stone-900 dark:border-stone-100 hover:bg-stone-800 dark:hover:bg-stone-200"
+              : "bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-200 border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800"
           }`}
         >
-          {fullWidth ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+          {fullWidth ? <CornersIn size={18} weight="thin" /> : <CornersOut size={18} weight="thin" />}
           {fullWidth ? "Narrow" : "Fit width"}
         </button>
       </header>
@@ -93,10 +93,10 @@ export default function MarkdownViewer() {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors bg-white dark:bg-slate-800 shadow-sm border-slate-200 dark:border-slate-700 ${
+          className={`border-2 border-dashed p-8 text-center transition-colors bg-white dark:bg-stone-900 border-stone-300 dark:border-stone-700 ${
             dragOver
-              ? "border-blue-500 bg-blue-50/50 dark:bg-blue-900/20"
-              : "hover:border-slate-400 dark:hover:border-slate-500"
+              ? "border-stone-500 bg-stone-100/50 dark:bg-stone-900/50"
+              : "hover:border-stone-400 dark:hover:border-stone-600"
           }`}
         >
           <input
@@ -110,34 +110,34 @@ export default function MarkdownViewer() {
             htmlFor="md-viewer-file-input"
             className="cursor-pointer flex flex-col items-center gap-3"
           >
-            <FileDown size={40} className="text-slate-400" />
-            <span className="font-medium text-slate-600 dark:text-slate-300">
+            <FileArrowDown size={40} weight="thin" className="text-stone-400" />
+            <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
               Drop a markdown file here or click to browse
             </span>
           </label>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm">
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
 
         {content && fileName && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
-              <span className="font-medium text-slate-600 dark:text-slate-300 truncate">
+          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 overflow-hidden">
+            <div className="px-4 py-3 border-b border-stone-200 dark:border-stone-700 flex items-center justify-between bg-stone-50 dark:bg-stone-900/50">
+              <span className="font-mono text-sm text-stone-600 dark:text-stone-300 truncate">
                 {fileName}
               </span>
               <button
                 onClick={clear}
-                className="text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 shrink-0 ml-2"
+                className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 shrink-0 ml-2"
               >
                 Clear
               </button>
             </div>
             <div
-              className="p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-slate-100 [&_code]:dark:bg-slate-900 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:bg-slate-100 [&_pre]:dark:bg-slate-900 [&_pre]:mb-4 [&_a]:text-blue-600 [&_a]:underline [&_blockquote]:border-l-blue-500 [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
+              className="p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-stone-100 [&_code]:dark:bg-stone-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-stone-100 [&_pre]:dark:bg-stone-800 [&_pre]:mb-4 [&_a]:text-stone-700 [&_a]:dark:text-stone-300 [&_a]:underline [&_blockquote]:border-l-stone-500 [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>

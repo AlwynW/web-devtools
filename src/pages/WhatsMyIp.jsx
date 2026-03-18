@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { RefreshCw } from "lucide-react";
+import { ArrowsClockwise } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
 
@@ -46,23 +46,23 @@ export default function WhatsMyIp({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           What&apos;s my IP?
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Your public IP address as seen from the internet.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
         {loading && (
-          <div className="text-center py-8 text-slate-500">
+          <div className="text-center py-8 text-stone-500">
             Fetching your IP...
           </div>
         )}
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm">
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
@@ -72,7 +72,7 @@ export default function WhatsMyIp({ onToast }) {
             <div className="space-y-4">
               {ipv4 && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
                     IPv4
                   </label>
                   <CopyArea
@@ -83,7 +83,7 @@ export default function WhatsMyIp({ onToast }) {
               )}
               {ipv6 && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
                     IPv6
                   </label>
                   <CopyArea
@@ -95,7 +95,7 @@ export default function WhatsMyIp({ onToast }) {
             </div>
 
             <div className="mt-4 flex justify-end">
-              <Button onClick={load} icon={RefreshCw}>
+              <Button onClick={load} icon={ArrowsClockwise}>
                 Refresh
               </Button>
             </div>

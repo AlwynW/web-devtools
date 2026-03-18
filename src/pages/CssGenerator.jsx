@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
 
@@ -100,16 +100,16 @@ export default function CssGenerator({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           Box-Shadow & Gradient
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Visual sliders that output the exact CSS code.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-6">
-        <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-max flex-wrap">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max flex-wrap font-mono text-[11px]">
           {[
             { id: "shadow", label: "Box-Shadow" },
             { id: "shadow-builder", label: "Shadow Builder" },
@@ -118,10 +118,10 @@ export default function CssGenerator({ onToast }) {
             <button
               key={m.id}
               onClick={() => setMode(m.id)}
-              className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
+              className={`px-3 py-1.5 transition-colors ${
                 mode === m.id
-                  ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                  : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
               }`}
             >
               {m.label}
@@ -133,11 +133,11 @@ export default function CssGenerator({ onToast }) {
           <>
             <div className="flex flex-col items-center gap-4">
               <div
-                className="w-full max-w-xs aspect-square rounded-2xl flex items-center justify-center p-8 border border-slate-200 dark:border-slate-600"
+                className="w-full max-w-xs aspect-square  flex items-center justify-center p-8 border border-stone-200 dark:border-stone-600"
                 style={{ backgroundColor: shadowPreviewBgColor }}
               >
                 <div
-                  className="w-32 h-32 rounded-xl"
+                  className="w-32 h-32 "
                   style={{
                     backgroundColor: shadowBoxColor,
                     boxShadow: `${shadow.x}px ${shadow.y}px ${shadow.blur}px ${shadow.spread}px ${shadow.color}`,
@@ -145,7 +145,7 @@ export default function CssGenerator({ onToast }) {
                 />
               </div>
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-800 ">
                   {[
                     { id: "light", label: "Light" },
                     { id: "dark", label: "Dark" },
@@ -154,10 +154,10 @@ export default function CssGenerator({ onToast }) {
                     <button
                       key={m.id}
                       onClick={() => setShadowPreviewBg(m.id)}
-                      className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                      className={`px-3 py-1.5  text-sm font-medium transition-all ${
                         shadowPreviewBg === m.id
-                          ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                          : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                          ? "bg-white dark:bg-stone-700 shadow text-stone-600 dark:text-stone-400"
+                          : "text-stone-500 hover:text-stone-700 dark:hover:text-stone-300"
                       }`}
                     >
                       {m.label}
@@ -170,31 +170,31 @@ export default function CssGenerator({ onToast }) {
                       type="color"
                       value={shadowPreviewColor.slice(0, 7)}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-10 h-8 rounded border border-slate-200 dark:border-slate-600 cursor-pointer"
+                      className="w-10 h-8  border border-stone-200 dark:border-stone-600 cursor-pointer"
                     />
                     <input
                       type="text"
                       value={shadowPreviewColor}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-24 px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-xs dark:text-white"
+                      className="w-24 px-2 py-1.5 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  font-mono text-xs dark:text-white"
                     />
                   </div>
                 )}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <span className="text-xs font-medium text-stone-500 dark:text-stone-400">
                     Box:
                   </span>
                   <input
                     type="color"
                     value={shadowBoxColor.slice(0, 7)}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-10 h-8 rounded border border-slate-200 dark:border-slate-600 cursor-pointer"
+                    className="w-10 h-8  border border-stone-200 dark:border-stone-600 cursor-pointer"
                   />
                   <input
                     type="text"
                     value={shadowBoxColor}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-24 px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-xs dark:text-white"
+                    className="w-24 px-2 py-1.5 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  font-mono text-xs dark:text-white"
                   />
                 </div>
               </div>
@@ -207,9 +207,9 @@ export default function CssGenerator({ onToast }) {
                 { key: "spread", label: "Spread", min: -20, max: 20 },
               ].map(({ key, label, min, max }) => (
                 <div key={key}>
-                  <label className="flex justify-between text-sm font-medium mb-1 dark:text-slate-300">
+                  <label className="flex justify-between text-sm font-medium mb-1 dark:text-stone-300">
                     <span>{label}</span>
-                    <span className="text-blue-600 dark:text-blue-400">
+                    <span className="text-stone-600 dark:text-stone-400">
                       {shadow[key]}
                     </span>
                   </label>
@@ -221,13 +221,13 @@ export default function CssGenerator({ onToast }) {
                     onChange={(e) =>
                       setShadow({ ...shadow, [key]: parseInt(e.target.value) })
                     }
-                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-blue-600"
+                    className="w-full h-2 bg-stone-200  appearance-none cursor-pointer dark:bg-stone-700 accent-stone-600"
                   />
                 </div>
               ))}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2 dark:text-slate-300">
+              <label className="block text-sm font-medium mb-2 dark:text-stone-300">
                 Color
               </label>
               <div className="flex items-center gap-2">
@@ -237,7 +237,7 @@ export default function CssGenerator({ onToast }) {
                   onChange={(e) =>
                     setShadow({ ...shadow, color: e.target.value })
                   }
-                  className="w-12 h-10 rounded border border-slate-200 dark:border-slate-600 cursor-pointer"
+                  className="w-12 h-10  border border-stone-200 dark:border-stone-600 cursor-pointer"
                 />
                 <input
                   type="text"
@@ -246,7 +246,7 @@ export default function CssGenerator({ onToast }) {
                     setShadow({ ...shadow, color: e.target.value })
                   }
                   placeholder="#000000 or #00000080"
-                  className="flex-1 px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-sm dark:text-white"
+                  className="flex-1 px-3 py-1.5 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  font-mono text-sm dark:text-white"
                 />
               </div>
             </div>
@@ -261,11 +261,11 @@ export default function CssGenerator({ onToast }) {
           <>
             <div className="flex flex-col items-center gap-4">
               <div
-                className="w-full max-w-xs aspect-square rounded-2xl flex items-center justify-center p-8 border border-slate-200 dark:border-slate-600"
+                className="w-full max-w-xs aspect-square  flex items-center justify-center p-8 border border-stone-200 dark:border-stone-600"
                 style={{ backgroundColor: shadowPreviewBgColor }}
               >
                 <div
-                  className="w-36 h-36 rounded-2xl"
+                  className="w-36 h-36 "
                   style={{
                     backgroundColor: shadowBoxColor,
                     boxShadow: shadowBuilderCss.replace("box-shadow: ", "").replace(";", ""),
@@ -273,7 +273,7 @@ export default function CssGenerator({ onToast }) {
                 />
               </div>
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-800 ">
                   {[
                     { id: "light", label: "Light" },
                     { id: "dark", label: "Dark" },
@@ -282,10 +282,10 @@ export default function CssGenerator({ onToast }) {
                     <button
                       key={m.id}
                       onClick={() => setShadowPreviewBg(m.id)}
-                      className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                      className={`px-3 py-1.5  text-sm font-medium transition-all ${
                         shadowPreviewBg === m.id
-                          ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                          : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                          ? "bg-white dark:bg-stone-700 shadow text-stone-600 dark:text-stone-400"
+                          : "text-stone-500 hover:text-stone-700 dark:hover:text-stone-300"
                       }`}
                     >
                       {m.label}
@@ -298,31 +298,31 @@ export default function CssGenerator({ onToast }) {
                       type="color"
                       value={shadowPreviewColor.slice(0, 7)}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-10 h-8 rounded border border-slate-200 dark:border-slate-600 cursor-pointer"
+                      className="w-10 h-8  border border-stone-200 dark:border-stone-600 cursor-pointer"
                     />
                     <input
                       type="text"
                       value={shadowPreviewColor}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-24 px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-xs dark:text-white"
+                      className="w-24 px-2 py-1.5 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  font-mono text-xs dark:text-white"
                     />
                   </div>
                 )}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <span className="text-xs font-medium text-stone-500 dark:text-stone-400">
                     Box:
                   </span>
                   <input
                     type="color"
                     value={shadowBoxColor.slice(0, 7)}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-10 h-8 rounded border border-slate-200 dark:border-slate-600 cursor-pointer"
+                    className="w-10 h-8  border border-stone-200 dark:border-stone-600 cursor-pointer"
                   />
                   <input
                     type="text"
                     value={shadowBoxColor}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-24 px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-xs dark:text-white"
+                    className="w-24 px-2 py-1.5 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  font-mono text-xs dark:text-white"
                   />
                 </div>
               </div>
@@ -331,19 +331,19 @@ export default function CssGenerator({ onToast }) {
               {layers.map((layer, i) => (
                 <div
                   key={i}
-                  className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 space-y-3"
+                  className="p-4  border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/50 space-y-3"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-bold text-slate-600 dark:text-slate-300">
+                    <span className="text-sm font-bold text-stone-600 dark:text-stone-300">
                       Layer {i + 1}
                     </span>
                     <button
                       onClick={() => removeLayer(i)}
                       disabled={layers.length <= 1}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-1.5  text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Remove layer"
                     >
-                      <Trash2 size={16} />
+                      <Trash size={16} weight="thin" />
                     </button>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -354,7 +354,7 @@ export default function CssGenerator({ onToast }) {
                       { key: "spread", label: "Spread", min: -40, max: 40 },
                     ].map(({ key, label, min, max }) => (
                       <div key={key}>
-                        <label className="flex justify-between text-xs font-medium mb-1 text-slate-500 dark:text-slate-400">
+                        <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
                           <span>{label}</span>
                           <span>{layer[key]}</span>
                         </label>
@@ -366,7 +366,7 @@ export default function CssGenerator({ onToast }) {
                           onChange={(e) =>
                             updateLayer(i, key, parseInt(e.target.value))
                           }
-                          className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-blue-600"
+                          className="w-full h-2 bg-stone-200  appearance-none cursor-pointer dark:bg-stone-700 accent-stone-600"
                         />
                       </div>
                     ))}
@@ -376,14 +376,14 @@ export default function CssGenerator({ onToast }) {
                       type="color"
                       value={layer.color.slice(0, 7)}
                       onChange={(e) => updateLayer(i, "color", e.target.value)}
-                      className="w-10 h-8 rounded border border-slate-200 dark:border-slate-600 cursor-pointer"
+                      className="w-10 h-8  border border-stone-200 dark:border-stone-600 cursor-pointer"
                     />
                     <input
                       type="text"
                       value={layer.color}
                       onChange={(e) => updateLayer(i, "color", e.target.value)}
                       placeholder="#00000020"
-                      className="flex-1 px-2 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-xs dark:text-white"
+                      className="flex-1 px-2 py-1.5 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  font-mono text-xs dark:text-white"
                     />
                   </div>
                 </div>
@@ -403,7 +403,7 @@ export default function CssGenerator({ onToast }) {
           <>
             <div className="flex justify-center">
               <div
-                className="w-full h-24 rounded-xl border border-slate-200 dark:border-slate-600"
+                className="w-full h-24  border border-stone-200 dark:border-stone-600"
                 style={{
                   background:
                     gradient.type === "radial"
@@ -412,7 +412,7 @@ export default function CssGenerator({ onToast }) {
                 }}
               />
             </div>
-            <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-max">
+            <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-800  w-max">
               {[
                 { id: "linear", label: "Linear" },
                 { id: "radial", label: "Radial" },
@@ -420,10 +420,10 @@ export default function CssGenerator({ onToast }) {
                 <button
                   key={m.id}
                   onClick={() => setGradient({ ...gradient, type: m.id })}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                  className={`px-3 py-1.5  text-sm font-medium transition-all ${
                     gradient.type === m.id
-                      ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                      ? "bg-white dark:bg-stone-700 shadow text-stone-600 dark:text-stone-400"
+                      : "text-stone-500 hover:text-stone-700 dark:hover:text-stone-300"
                   }`}
                 >
                   {m.label}
@@ -432,9 +432,9 @@ export default function CssGenerator({ onToast }) {
             </div>
             {gradient.type === "linear" && (
               <div>
-                <label className="flex justify-between text-sm font-medium mb-1 dark:text-slate-300">
+                <label className="flex justify-between text-sm font-medium mb-1 dark:text-stone-300">
                   <span>Angle</span>
-                  <span className="text-blue-600 dark:text-blue-400">
+                  <span className="text-stone-600 dark:text-stone-400">
                     {gradient.angle}deg
                   </span>
                 </label>
@@ -449,14 +449,14 @@ export default function CssGenerator({ onToast }) {
                       angle: parseInt(e.target.value),
                     })
                   }
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-blue-600"
+                  className="w-full h-2 bg-stone-200  appearance-none cursor-pointer dark:bg-stone-700 accent-stone-600"
                 />
               </div>
             )}
             {gradient.type === "radial" && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+                  <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1">
                     Shape
                   </label>
                   <select
@@ -464,14 +464,14 @@ export default function CssGenerator({ onToast }) {
                     onChange={(e) =>
                       setGradient({ ...gradient, radialShape: e.target.value })
                     }
-                    className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                    className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  text-sm dark:text-white"
                   >
                     <option value="circle">circle</option>
                     <option value="ellipse">ellipse</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+                  <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1">
                     Size
                   </label>
                   <select
@@ -479,7 +479,7 @@ export default function CssGenerator({ onToast }) {
                     onChange={(e) =>
                       setGradient({ ...gradient, radialSize: e.target.value })
                     }
-                    className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                    className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  text-sm dark:text-white"
                   >
                     <option value="closest-side">closest-side</option>
                     <option value="closest-corner">closest-corner</option>
@@ -488,7 +488,7 @@ export default function CssGenerator({ onToast }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+                  <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1">
                     Position
                   </label>
                   <select
@@ -496,7 +496,7 @@ export default function CssGenerator({ onToast }) {
                     onChange={(e) =>
                       setGradient({ ...gradient, radialPos: e.target.value })
                     }
-                    className="w-full p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm dark:text-white"
+                    className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  text-sm dark:text-white"
                   >
                     <option value="center">center</option>
                     <option value="top">top</option>
@@ -513,12 +513,12 @@ export default function CssGenerator({ onToast }) {
             )}
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium dark:text-slate-300">
+                <label className="text-sm font-medium dark:text-stone-300">
                   Color stops
                 </label>
                 <button
                   onClick={addStop}
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm text-stone-600 dark:text-stone-400 hover:underline"
                 >
                   + Add stop
                 </button>
@@ -527,10 +527,10 @@ export default function CssGenerator({ onToast }) {
                 {gradient.stops.map((stop, i) => (
                   <div
                     key={i}
-                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 space-y-2"
+                    className="p-3  border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/50 space-y-2"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                      <span className="text-xs font-bold text-stone-500 dark:text-stone-400">
                         Stop {i + 1}
                       </span>
                       {gradient.stops.length > 2 && (
@@ -549,7 +549,7 @@ export default function CssGenerator({ onToast }) {
                         onChange={(e) =>
                           updateStop(i, "color", e.target.value)
                         }
-                        className="w-10 h-8 rounded border border-slate-200 dark:border-slate-600 cursor-pointer"
+                        className="w-10 h-8  border border-stone-200 dark:border-stone-600 cursor-pointer"
                       />
                       <input
                         type="text"
@@ -557,10 +557,10 @@ export default function CssGenerator({ onToast }) {
                         onChange={(e) =>
                           updateStop(i, "color", e.target.value)
                         }
-                        className="w-24 px-2 py-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-mono text-xs dark:text-white"
+                        className="w-24 px-2 py-1 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  font-mono text-xs dark:text-white"
                       />
                       <div className="flex-1 min-w-[8rem]">
-                        <label className="flex justify-between text-xs font-medium mb-1 text-slate-500 dark:text-slate-400">
+                        <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
                           <span>Position</span>
                           <span>{stop.pos}%</span>
                         </label>
@@ -572,7 +572,7 @@ export default function CssGenerator({ onToast }) {
                           onChange={(e) =>
                             updateStop(i, "pos", parseInt(e.target.value) || 0)
                           }
-                          className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-blue-600"
+                          className="w-full h-2 bg-stone-200  appearance-none cursor-pointer dark:bg-stone-700 accent-stone-600"
                         />
                       </div>
                       <input
@@ -583,9 +583,9 @@ export default function CssGenerator({ onToast }) {
                         onChange={(e) =>
                           updateStop(i, "pos", Math.min(100, Math.max(0, parseInt(e.target.value) || 0)))
                         }
-                        className="w-14 px-2 py-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-sm dark:text-white"
+                        className="w-14 px-2 py-1 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700  text-sm dark:text-white"
                       />
-                      <span className="text-slate-500 text-sm">%</span>
+                      <span className="text-stone-500 text-sm">%</span>
                     </div>
                   </div>
                 ))}

@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Search } from "lucide-react";
+import { MagnifyingGlass } from "phosphor-react";
 import { TAILWIND_CLASSES } from "../data/tailwindClasses";
 import { copyToClipboard } from "../utils/clipboard";
 
@@ -24,26 +24,27 @@ export default function TailwindSearch({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           Tailwind Class Search
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Quick reference for z-index, flex-basis, and other utilities.
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
         <div className="relative">
-          <Search
-            size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+          <MagnifyingGlass
+            size={16}
+            weight="thin"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
           />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search classes (e.g. z-50, flex-basis, justify)"
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 dark:text-white"
+            placeholder="> search classes (e.g. z-50, flex-basis, justify)"
+            className="w-full pl-11 pr-4 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
           />
         </div>
 
@@ -51,14 +52,14 @@ export default function TailwindSearch({ onToast }) {
           {results.map((c) => (
             <div
               key={c.class}
-              className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors group"
+              className="flex items-center justify-between p-3 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors group"
             >
               <div className="min-w-0 flex-1">
-                <code className="font-mono font-bold text-blue-600 dark:text-blue-400">
+                <code className="font-mono font-bold text-stone-800 dark:text-stone-200">
                   {c.class}
                 </code>
-                <div className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                  <span className="font-medium text-slate-600 dark:text-slate-300">
+                <div className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
+                  <span className="font-mono text-stone-600 dark:text-stone-300">
                     {c.property}
                   </span>
                   {" → "}
@@ -67,7 +68,7 @@ export default function TailwindSearch({ onToast }) {
               </div>
               <button
                 onClick={() => copy(c.class)}
-                className="ml-3 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="ml-3 px-3 py-1.5 border border-stone-300 dark:border-stone-700 text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 Copy
               </button>
@@ -76,7 +77,7 @@ export default function TailwindSearch({ onToast }) {
         </div>
 
         {results.length === 0 && (
-          <div className="text-center py-12 text-slate-500">
+          <div className="text-center py-12 text-stone-500 font-mono text-sm">
             No matching classes found.
           </div>
         )}

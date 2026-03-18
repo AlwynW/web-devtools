@@ -34,49 +34,59 @@ export default function TimestampGenerator({ onToast }) {
   return (
     <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">Timestamp</h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
-          Professional grade utility for daily development.
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
+          Timestamp
+        </h2>
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
+          Convert to/from Unix timestamps.
         </p>
       </header>
 
-      <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-max mb-6 mx-auto">
+      <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max mb-6 mx-auto font-mono text-[11px]">
         <button
-          className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${mode === "current" ? "bg-white dark:bg-slate-700 shadow-sm text-blue-600 dark:text-blue-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
+          className={`px-3 py-1.5 transition-colors ${
+            mode === "current"
+              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+              : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+          }`}
           onClick={() => setMode("current")}
         >
           Live Clock
         </button>
         <button
-          className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${mode === "custom" ? "bg-white dark:bg-slate-700 shadow-sm text-blue-600 dark:text-blue-400" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
+          className={`px-3 py-1.5 transition-colors ${
+            mode === "custom"
+              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+              : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+          }`}
           onClick={() => setMode("custom")}
         >
           Select Time
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800">
         {mode === "custom" && (
           <div className="mb-6 flex flex-col items-center">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
               Local Date & Time
             </label>
             <input
               type="datetime-local"
               value={customDate}
               onChange={(e) => setCustomDate(e.target.value)}
-              className="p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-900 dark:border-slate-700 dark:text-white"
+              className="p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
             />
           </div>
         )}
-        <div className="text-center mb-2 text-sm text-slate-500 uppercase tracking-widest font-bold">
+        <div className="text-center mb-2 text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
           Unix Epoch
         </div>
         <CopyArea
           text={displayTs}
           onCopySuccess={() => onToast("Timestamp copied!")}
         />
-        <div className="mt-6 text-center text-xs text-slate-400 font-mono">
+        <div className="mt-6 text-center text-xs font-mono text-stone-400">
           UTC:{" "}
           {mode === "current"
             ? new Date().toUTCString()

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ClipboardCopy, Check } from "lucide-react";
+import { ClipboardText, Check } from "phosphor-react";
 import { copyToClipboard } from "../utils/clipboard";
 
 const CopyArea = ({ text, onCopySuccess }) => {
@@ -15,9 +15,9 @@ const CopyArea = ({ text, onCopySuccess }) => {
 
   return (
     <div className="relative group mt-4">
-      <div className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 pr-16 text-lg font-mono text-slate-800 dark:text-slate-100 break-words whitespace-pre-wrap min-h-[3.5rem] flex items-start">
+      <div className="w-full bg-stone-50 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-4 pr-16 text-sm font-mono text-stone-800 dark:text-stone-100 break-words whitespace-pre-wrap min-h-[3.5rem] flex items-start">
         {text || (
-          <span className="text-slate-400 italic">
+          <span className="text-stone-400 italic">
             Waiting for generation...
           </span>
         )}
@@ -25,13 +25,13 @@ const CopyArea = ({ text, onCopySuccess }) => {
       <button
         onClick={handleCopy}
         disabled={!text}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400 text-slate-500 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         title="Copy to clipboard"
       >
         {copied ? (
-          <Check size={20} className="text-emerald-500" />
+          <Check size={18} weight="thin" className="text-emerald-500" />
         ) : (
-          <ClipboardCopy size={20} />
+          <ClipboardText size={18} weight="thin" />
         )}
       </button>
     </div>

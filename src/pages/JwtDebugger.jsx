@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ClipboardCopy } from "lucide-react";
+import { ClipboardText } from "phosphor-react";
 import CryptoJS from "crypto-js";
 import { copyToClipboard } from "../utils/clipboard";
 
@@ -118,16 +118,16 @@ export default function JwtDebugger({ onToast }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
           JWT Debugger
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Decode and create JWT tokens (HS256).
         </p>
       </header>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-6">
-        <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-lg w-max">
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
           {[
             { id: "decode", label: "Decode" },
             { id: "create", label: "Create" },
@@ -139,10 +139,10 @@ export default function JwtDebugger({ onToast }) {
                 setError(null);
                 if (m.id === "create") setCreatedToken("");
               }}
-              className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
+              className={`px-3 py-1.5 transition-colors ${
                 mode === m.id
-                  ? "bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400"
-                  : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
               }`}
             >
               {m.label}
@@ -152,18 +152,18 @@ export default function JwtDebugger({ onToast }) {
 
         {mode === "decode" && (
           <>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+        <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
           JWT Token
         </label>
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-          className="w-full h-24 p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue-500 dark:text-white"
+          className="w-full h-24 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
         />
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm">
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
@@ -172,38 +172,38 @@ export default function JwtDebugger({ onToast }) {
           <div className="space-y-4">
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
                   Header
                 </label>
                 <button
                   onClick={() => copy(decoded.header, "Header copied!")}
-                  className="text-slate-400 hover:text-blue-600 p-1"
+                  className="p-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
                 >
-                  <ClipboardCopy size={16} />
+                  <ClipboardText size={16} weight="thin" />
                 </button>
               </div>
-              <pre className="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl font-mono text-sm overflow-x-auto dark:text-slate-200">
+              <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-sm overflow-x-auto text-stone-800 dark:text-stone-200">
                 {decoded.header}
               </pre>
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
                   Payload
                 </label>
                 <button
                   onClick={() => copy(decoded.payload, "Payload copied!")}
-                  className="text-slate-400 hover:text-blue-600 p-1"
+                  className="p-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
                 >
-                  <ClipboardCopy size={16} />
+                  <ClipboardText size={16} weight="thin" />
                 </button>
               </div>
-              <pre className="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl font-mono text-sm overflow-x-auto dark:text-slate-200">
+              <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-sm overflow-x-auto text-stone-800 dark:text-stone-200">
                 {decoded.payload}
               </pre>
               {(decoded.exp || decoded.iat || decoded.sub) && (
-                <div className="mt-2 text-xs text-slate-500 space-y-1">
+                <div className="mt-2 text-xs text-stone-500 space-y-1 font-mono">
                   {decoded.exp && (
                     <div>
                       exp: {decoded.exp}{" "}
@@ -222,10 +222,10 @@ export default function JwtDebugger({ onToast }) {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
                 Signature (Base64URL)
               </label>
-              <pre className="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl font-mono text-xs break-all dark:text-slate-200">
+              <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-xs break-all text-stone-800 dark:text-stone-200">
                 {decoded.signature}
               </pre>
             </div>
@@ -237,67 +237,67 @@ export default function JwtDebugger({ onToast }) {
         {mode === "create" && (
           <>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
                 Header (JSON)
               </label>
               <textarea
                 value={createHeader}
                 onChange={(e) => setCreateHeader(e.target.value)}
-                className="w-full h-20 p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue-500 dark:text-white"
+                className="w-full h-20 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
                 placeholder='{"alg":"HS256","typ":"JWT"}'
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
                 Payload (JSON)
               </label>
               <textarea
                 value={createPayload}
                 onChange={(e) => setCreatePayload(e.target.value)}
-                className="w-full h-32 p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue-500 dark:text-white"
+                className="w-full h-32 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
                 placeholder='{"sub":"user@example.com","iat":...,"exp":...}'
               />
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-stone-500 mt-1 font-mono">
                 Tip: iat and exp are Unix timestamps (seconds). Use current time + 3600 for 1h expiry.
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
                 Secret (for HS256)
               </label>
               <input
                 type="password"
                 value={createSecret}
                 onChange={(e) => setCreateSecret(e.target.value)}
-                placeholder="your-256-bit-secret"
-                className="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue-500 dark:text-white"
+                placeholder="> your-256-bit-secret"
+                className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
               />
             </div>
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm">
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
                 {error}
               </div>
             )}
             <button
               onClick={handleCreate}
-              className="w-full py-3 rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+              className="w-full py-3 font-mono text-xs tracking-tight border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900 hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors"
             >
-              Sign & Create JWT
+                {" > Sign & Create JWT"}
             </button>
             {createdToken && (
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
                     Created Token
                   </label>
                   <button
                     onClick={() => copy(createdToken, "Token copied!")}
-                    className="text-slate-400 hover:text-blue-600 p-1"
+                    className="p-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
                   >
-                    <ClipboardCopy size={16} />
+                    <ClipboardText size={16} weight="thin" />
                   </button>
                 </div>
-                <pre className="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl font-mono text-xs break-all overflow-x-auto dark:text-slate-200">
+                <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-xs break-all overflow-x-auto text-stone-800 dark:text-stone-200">
                   {createdToken}
                 </pre>
               </div>

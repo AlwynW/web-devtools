@@ -6,13 +6,14 @@ const Button = ({
   icon: Icon,
 }) => {
   const baseStyle =
-    "flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95";
+    "flex items-center justify-center gap-2 px-4 py-2 border font-mono text-xs tracking-tight transition-colors focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400";
   const variants = {
-    primary: "bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500",
+    primary:
+      "bg-stone-900 hover:bg-stone-800 text-stone-50 border-stone-900 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-950 dark:border-stone-200",
     secondary:
-      "bg-slate-200 hover:bg-slate-300 text-slate-800 focus:ring-slate-500 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-100",
+      "bg-stone-100 hover:bg-stone-200 text-stone-800 border-stone-300 dark:bg-stone-900 dark:hover:bg-stone-800 dark:text-stone-100 dark:border-stone-700",
     outline:
-      "border-2 border-slate-200 hover:border-blue-500 hover:text-blue-600 text-slate-600 dark:border-slate-700 dark:text-slate-300 dark:hover:text-blue-400",
+      "border-stone-400 text-stone-700 hover:bg-stone-100 dark:border-stone-600 dark:text-stone-200 dark:hover:bg-stone-900",
   };
 
   return (
@@ -20,7 +21,7 @@ const Button = ({
       onClick={onClick}
       className={`${baseStyle} ${variants[variant]} ${className}`}
     >
-      {Icon && <Icon size={18} />}
+      {Icon && <Icon size={18} weight="thin" />}
       {children}
     </button>
   );
