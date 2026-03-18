@@ -23,6 +23,18 @@ import {
   SquaresFour,
   Square,
   QrCode,
+  TextT,
+  Table,
+  GitBranch,
+  Tag,
+  Database,
+  LockKey,
+  Image,
+  Hexagon,
+  TerminalWindow,
+  ListNumbers,
+  Link,
+  Radio,
 } from "phosphor-react";
 
 export const navGroups = [
@@ -64,6 +76,18 @@ export const navGroups = [
         label: "Crontab",
         icon: CalendarCheck,
         description: "Build and understand cron expressions.",
+      },
+      {
+        path: "/slug",
+        label: "Slug",
+        icon: TextT,
+        description: "Convert text to URL-friendly slugs.",
+      },
+      {
+        path: "/meta-tags",
+        label: "Meta Tags",
+        icon: Tag,
+        description: "Generate Open Graph and Twitter meta tags.",
       },
     ],
   },
@@ -142,6 +166,25 @@ export const navGroups = [
         icon: FingerprintSimple,
         description: "Create hashes for strings.",
       },
+      {
+        path: "/escape",
+        label: "Escape/Unescape",
+        icon: TerminalWindow,
+        description: "Escape strings for JSON, regex, SQL, etc.",
+      },
+      {
+        path: "/hex-converter",
+        label: "Hex Converter",
+        icon: Hexagon,
+        description: "Convert between hex, binary, decimal, octal.",
+      },
+      
+      {
+        path: "/password-hash",
+        label: "Password Hash",
+        icon: LockKey,
+        description: "Hash passwords with bcrypt.",
+      }
     ],
   },
   {
@@ -159,6 +202,18 @@ export const navGroups = [
         icon: File,
         description: "Convert between Markdown and HTML.",
       },
+      {
+        path: "/yaml-json",
+        label: "YAML/JSON",
+        icon: File,
+        description: "Convert between YAML and JSON.",
+      },
+      {
+        path: "/csv-json",
+        label: "CSV/JSON",
+        icon: Table,
+        description: "Convert between CSV and JSON.",
+      },
     ],
   },
   {
@@ -175,6 +230,24 @@ export const navGroups = [
         label: "MarkDown Viewer",
         icon: DownloadSimple,
         description: "Render Markdown for quick previews.",
+      },
+      {
+        path: "/favicon",
+        label: "Favicon",
+        icon: Image,
+        description: "Generate favicons from text or emoji.",
+      },
+      {
+        path: "/url-parser",
+        label: "URL Parser",
+        icon: Link,
+        description: "Parse and build URLs with query params.",
+      },
+      {
+        path: "/morse",
+        label: "Morse Code",
+        icon: Radio,
+        description: "Encode/decode Morse with reference table.",
       },
     ],
   },
@@ -198,6 +271,25 @@ export const navGroups = [
         label: "My IP",
         icon: Globe,
         description: "Show your public IP address.",
+      },
+      {
+        path: "/git-cheatsheet",
+        label: "Git Cheatsheet",
+        icon: GitBranch,
+        description: "Quick reference for common Git commands.",
+      },
+      
+      {
+        path: "/sql-formatter",
+        label: "SQL Formatter",
+        icon: Database,
+        description: "Format and minify SQL queries.",
+      },
+      {
+        path: "/ascii-table",
+        label: "ASCII Table",
+        icon: ListNumbers,
+        description: "Look up character codes and symbols.",
       },
     ],
   },

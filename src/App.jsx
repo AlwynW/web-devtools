@@ -25,6 +25,19 @@ import MarkdownViewer from "./pages/MarkdownViewer";
 import GridTemplateBuilder from "./pages/GridTemplateBuilder";
 import PerfectBorderGenerator from "./pages/PerfectBorderGenerator";
 import QrCodeGenerator from "./pages/QrCodeGenerator";
+import SlugGenerator from "./pages/SlugGenerator";
+import YamlJsonConverter from "./pages/YamlJsonConverter";
+import CsvJsonConverter from "./pages/CsvJsonConverter";
+import GitCheatsheet from "./pages/GitCheatsheet";
+import MetaTagGenerator from "./pages/MetaTagGenerator";
+import SqlFormatter from "./pages/SqlFormatter";
+import PasswordHash from "./pages/PasswordHash";
+import FaviconGenerator from "./pages/FaviconGenerator";
+import HexConverter from "./pages/HexConverter";
+import EscapeUnescape from "./pages/EscapeUnescape";
+import AsciiUnicodeTable from "./pages/AsciiUnicodeTable";
+import UrlParser from "./pages/UrlParser";
+import MorseCode from "./pages/MorseCode";
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -73,6 +86,19 @@ export default function App() {
           element={<PerfectBorderGenerator onToast={showToast} />}
         />
         <Route path="qr" element={<QrCodeGenerator onToast={showToast} />} />
+        <Route path="slug" element={<SlugGenerator onToast={showToast} />} />
+        <Route path="yaml-json" element={<YamlJsonConverter onToast={showToast} />} />
+        <Route path="csv-json" element={<CsvJsonConverter onToast={showToast} />} />
+        <Route path="git-cheatsheet" element={<GitCheatsheet onToast={showToast} />} />
+        <Route path="meta-tags" element={<MetaTagGenerator onToast={showToast} />} />
+        <Route path="sql-formatter" element={<SqlFormatter onToast={showToast} />} />
+        <Route path="password-hash" element={<PasswordHash onToast={showToast} />} />
+        <Route path="favicon" element={<FaviconGenerator onToast={showToast} />} />
+        <Route path="hex-converter" element={<HexConverter onToast={showToast} />} />
+        <Route path="escape" element={<EscapeUnescape onToast={showToast} />} />
+        <Route path="ascii-table" element={<AsciiUnicodeTable onToast={showToast} />} />
+        <Route path="url-parser" element={<UrlParser onToast={showToast} />} />
+        <Route path="morse" element={<MorseCode onToast={showToast} />} />
       </Route>
     </Routes>
   );

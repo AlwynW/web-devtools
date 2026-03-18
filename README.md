@@ -1,6 +1,8 @@
 ## DevKit – Modern Developer Utilities
 
-DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundles a collection of generators, converters, validators, and reference tools into a single, fast interface so you don’t have to keep ten tabs and five CLI commands open just to get simple things done.
+DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundles a collection of generators, converters, validators, and reference tools into a single, fast interface so you don't have to keep ten tabs and five CLI commands open just to get simple things done.
+
+[Demo](https://dev.alwyn.be)
 
 ### Features
 
@@ -11,6 +13,8 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **Persona**: Quickly spin up fake personas for testing.
   - **Lorem**: Generate lorem ipsum placeholder text.
   - **Crontab**: Build and understand cron expressions.
+  - **Slug**: Convert text to URL-friendly slugs with full options.
+  - **Meta Tags**: Generate Open Graph and Twitter Card meta tags.
 
 - **CSS tools**
   - **CSS Shadow/Gradient**: Design shadows and gradients and copy the CSS.
@@ -25,38 +29,50 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **JWT**: Inspect JSON Web Tokens.
   - **HTML Entity**: Convert text to/from HTML entities.
   - **Hash**: Create hashes for strings.
+  - **Escape/Unescape**: Escape strings for JSON, regex, SQL, HTML, shell.
+  - **Hex Converter**: Convert between hex, binary, decimal, octal.
+  - **Password Hash**: Hash passwords with bcrypt and verify.
 
 - **Convert / Validate**
   - **JSON**: Pretty-print, minify, and validate JSON.
   - **Markdown/HTML**: Convert between Markdown and HTML.
+  - **YAML/JSON**: Convert between YAML and JSON.
+  - **CSV/JSON**: Convert between CSV and JSON.
 
 - **Tools**
   - **Regex**: Build and test regular expressions.
-  - **MD Viewer**: Render Markdown for quick previews.
+  - **Markdown Viewer**: Render Markdown for quick previews.
+  - **Favicon**: Generate favicons from text or emoji.
+  - **URL Parser**: Parse and build URLs with query params.
+  - **Morse Code**: Encode/decode Morse with reference table and spacebar input.
 
 - **Reference**
   - **HTTP Status**: Look up HTTP status codes.
   - **Tailwind**: Quick Tailwind CSS reference.
   - **My IP**: Show your public IP address.
+  - **Git Cheatsheet**: Quick reference for common Git commands.
+  - **SQL Formatter**: Format and minify SQL queries.
+  - **ASCII Table**: Look up character codes and symbols.
 
 ### Tech Stack
 
-- **Frontend**: React with `react-router-dom`
-- **Styling**: Tailwind CSS with a modern dark/light UI
-- **Icons**: `lucide-react`
+- **Frontend**: React 19 with React Router v7
+- **Build**: Vite 7
+- **Styling**: Tailwind CSS v4 with light/dark theme
+- **Icons**: Phosphor React
 
 ### Getting Started
 
 #### Prerequisites
 
-- **Node.js** (LTS recommended)
+- **Node.js** (v20+ recommended)
 - **npm**, **pnpm**, or **yarn**
 
 #### Installation
 
 ```bash
-git clone https://github.com/<your-org-or-user>/devkit.git
-cd devkit
+git clone <your-repo-url>
+cd utilities
 npm install        # or pnpm install / yarn
 ```
 
@@ -66,7 +82,7 @@ npm install        # or pnpm install / yarn
 npm run dev
 ```
 
-Then open the printed local URL in your browser (usually `http://localhost:5173` or `http://localhost:3000`, depending on your setup).
+Then open the printed local URL in your browser (usually `http://localhost:5173`).
 
 #### Production build
 
@@ -74,13 +90,21 @@ Then open the printed local URL in your browser (usually `http://localhost:5173`
 npm run build
 ```
 
-This will output a static bundle you can deploy to any static host (Netlify, Vercel, GitHub Pages, etc.).
+This outputs a static bundle. The build uses `--base=/dev/` by default, so deploy to a path like `/dev/` on your host (e.g. Netlify, Vercel, GitHub Pages).
+
+#### Preview
+
+```bash
+npm run preview
+```
+
+Preview the production build locally.
 
 ### Usage
 
-- **Navigate the sidebar** to jump between tools.
-- **Copy/paste friendly**: most tools are optimized for quick copy of results.
-- **Dark mode ready**: respects the app’s dark theme styling.
+- **Search tools**: Press `Ctrl+K` (or `Cmd+K` on Mac) to open the tools panel and search.
+- **Theme**: Light/dark mode switcher in the header; defaults to your system preference.
+- **Copy-friendly**: Most tools are optimized for quick copy of results.
 
 ### Contributing
 
@@ -94,7 +118,7 @@ Contributions are welcome and encouraged!
 3. **Commit your changes** with clear messages.
 4. **Open a Pull Request** describing what you changed and why.
 
-If you’re unsure where to start, you can:
+If you're unsure where to start, you can:
 
 - Improve or add new utilities.
 - Polish the UI/UX.
@@ -102,26 +126,9 @@ If you’re unsure where to start, you can:
 
 ### License
 
-This project is open source under the **The Unlicense**. See `LICENSE` (or create one if it’s missing) for details.
+This project is open source under **The Unlicense**. See `LICENSE` for details.
 
 ### Acknowledgements
 
 - Built for developers who love **simple, fast tools**.
-- Icons by `lucide-react`.
-
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Icons by [Phosphor Icons](https://phosphoricons.com/).
