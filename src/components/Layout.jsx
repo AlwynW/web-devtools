@@ -96,8 +96,8 @@ export default function Layout({ toast }) {
     <div className="min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100 selection:bg-stone-200 flex flex-col">
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-2">
-          <div className="bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 px-6 py-3 border border-stone-700 dark:border-stone-300 flex items-center gap-3 font-mono text-xs tracking-tight">
-            <Check size={18} weight="thin" className="text-emerald-400" />{" "}
+          <div className="bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 px-6 pl-3 py-3 border border-stone-700 dark:border-stone-300 flex items-center gap-3 font-mono text-xs tracking-tight">
+            <Check size={18} weight="thin" className="text-white dark:text-stone-900" />{" "}
             {toast}
           </div>
         </div>

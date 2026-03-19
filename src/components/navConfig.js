@@ -35,6 +35,10 @@ import {
   ListNumbers,
   Link,
   Radio,
+  Lightning,
+  Hourglass,
+  HandPointing,
+  NotePencil,
 } from "phosphor-react";
 
 export const navGroups = [
@@ -249,6 +253,12 @@ export const navGroups = [
         icon: Radio,
         description: "Encode/decode Morse with reference table.",
       },
+      {
+        path: "/local-notes",
+        label: "Local Notes",
+        icon: NotePencil,
+        description: "Store notes in localStorage. Add and remove.",
+      },
     ],
   },
   {
@@ -290,6 +300,29 @@ export const navGroups = [
         label: "ASCII Table",
         icon: ListNumbers,
         description: "Look up character codes and symbols.",
+      },
+    ],
+  },
+  {
+    name: "Pointless",
+    items: [
+      {
+        path: "/strobo",
+        label: "Strobo",
+        icon: Lightning,
+        description: "Flashing lights. Speed and color.",
+      },
+      {
+        path: "/existential-timer",
+        label: "Existential Timer",
+        icon: Hourglass,
+        description: "Counts seconds. Asks why. No answers.",
+      },
+      {
+        path: "/click-counter",
+        label: "Click Counter",
+        icon: HandPointing,
+        description: "Count clicks. Button moves. Pointless.",
       },
     ],
   },

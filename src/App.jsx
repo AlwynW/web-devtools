@@ -38,6 +38,10 @@ import EscapeUnescape from "./pages/EscapeUnescape";
 import AsciiUnicodeTable from "./pages/AsciiUnicodeTable";
 import UrlParser from "./pages/UrlParser";
 import MorseCode from "./pages/MorseCode";
+import Strobo from "./pages/Strobo";
+import ExistentialTimer from "./pages/ExistentialTimer";
+import ClickCounter from "./pages/ClickCounter";
+import LocalNotes from "./pages/LocalNotes";
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -99,6 +103,10 @@ export default function App() {
         <Route path="ascii-table" element={<AsciiUnicodeTable onToast={showToast} />} />
         <Route path="url-parser" element={<UrlParser onToast={showToast} />} />
         <Route path="morse" element={<MorseCode onToast={showToast} />} />
+        <Route path="strobo" element={<Strobo />} />
+        <Route path="existential-timer" element={<ExistentialTimer />} />
+        <Route path="click-counter" element={<ClickCounter />} />
+        <Route path="local-notes" element={<LocalNotes onToast={showToast} />} />
       </Route>
     </Routes>
   );
