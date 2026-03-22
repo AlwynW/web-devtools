@@ -46,6 +46,11 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **URL Parser**: Parse and build URLs with query params.
   - **Morse Code**: Encode/decode Morse with reference table and spacebar input.
 
+- **Time**
+  - **Timezones**: Compare the same instant across two IANA time zones.
+  - **Stopwatch**: Lap-capable stopwatch with a wide high-resolution display.
+  - **Countdown**: Count down with a full-screen flash when time hits zero.
+
 - **Reference**
   - **HTTP Status**: Look up HTTP status codes.
   - **Tailwind**: Quick Tailwind CSS reference.
