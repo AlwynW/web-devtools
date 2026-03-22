@@ -42,6 +42,9 @@ import Strobo from "./pages/Strobo";
 import ExistentialTimer from "./pages/ExistentialTimer";
 import ClickCounter from "./pages/ClickCounter";
 import LocalNotes from "./pages/LocalNotes";
+import TimezoneConverter from "./pages/TimezoneConverter";
+import Stopwatch from "./pages/Stopwatch";
+import CountdownTimer from "./pages/CountdownTimer";
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -107,6 +110,9 @@ export default function App() {
         <Route path="existential-timer" element={<ExistentialTimer />} />
         <Route path="click-counter" element={<ClickCounter />} />
         <Route path="local-notes" element={<LocalNotes onToast={showToast} />} />
+        <Route path="timezone-converter" element={<TimezoneConverter />} />
+        <Route path="stopwatch" element={<Stopwatch />} />
+        <Route path="countdown" element={<CountdownTimer />} />
       </Route>
     </Routes>
   );

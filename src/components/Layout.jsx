@@ -92,6 +92,8 @@ export default function Layout({ toast }) {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  const outletWide = location.pathname === "/stopwatch";
+
   return (
     <div className="min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100 selection:bg-stone-200 flex flex-col">
       {toast && (
@@ -268,7 +270,11 @@ export default function Layout({ toast }) {
           isMenuOpen ? "scale-[0.99] opacity-70 blur-[1px]" : "scale-100 opacity-100"
         }`}
       >
-        <div className="max-w-4xl mx-auto">
+        <div
+          className={
+            outletWide ? "w-full max-w-none mx-auto" : "max-w-4xl mx-auto"
+          }
+        >
           <Outlet />
         </div>
       </main>

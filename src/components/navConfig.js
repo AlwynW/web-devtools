@@ -39,6 +39,9 @@ import {
   Hourglass,
   HandPointing,
   NotePencil,
+  GlobeStand,
+  Timer,
+  Alarm,
 } from "phosphor-react";
 
 export const navGroups = [
@@ -258,6 +261,29 @@ export const navGroups = [
         label: "Local Notes",
         icon: NotePencil,
         description: "Store notes in localStorage. Add and remove.",
+      },
+    ],
+  },
+  {
+    name: "Time",
+    items: [
+      {
+        path: "/timezone-converter",
+        label: "Timezones",
+        icon: GlobeStand,
+        description: "Compare the same instant across two IANA time zones.",
+      },
+      {
+        path: "/stopwatch",
+        label: "Stopwatch",
+        icon: Timer,
+        description: "Lap-capable stopwatch with a wide high-resolution display.",
+      },
+      {
+        path: "/countdown",
+        label: "Countdown",
+        icon: Alarm,
+        description: "Count down with a full-screen flash when time hits zero.",
       },
     ],
   },
