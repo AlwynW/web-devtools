@@ -12,27 +12,134 @@ const INTERNAL = 1024;
 const TAB_FAVICON_SIZE = 32;
 const TAB_FAVICON_LINK_ID = "utilities-tab-favicon-preview";
 
-/** @param {HTMLCanvasElement} canvas */
-function drawGenerated(canvas, size, mode, text, emoji, fgColor, bgColor) {
+/**
+ * Largest bold sans font size that fits inside a square of side `innerPx` (for centered fillText).
+ * @param {CanvasRenderingContext2D} ctx
+ */
+function maxFontSizeBoldTextInSquare(ctx, text, innerPx) {
+  const maxSide = Math.max(8, innerPx);
+  const margin = 0.992;
+
+  const fits = (fontSize) => {
+    ctx.font = `bold ${fontSize}px sans-serif`;
+    const m = ctx.measureText(text);
+    if (m.width > maxSide * margin) return false;
+    const a = m.actualBoundingBoxAscent;
+    const d = m.actualBoundingBoxDescent;
+    if (
+      a != null &&
+      d != null &&
+      Number.isFinite(a) &&
+      Number.isFinite(d) &&
+      (a > 0 || d > 0)
+    ) {
+      return a + d <= maxSide * margin;
+    }
+    return fontSize * 0.88 <= maxSide * margin;
+  };
+
+  let lo = 8;
+  let hi = Math.min(Math.ceil(maxSide * 1.35), 2048);
+  let best = lo;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (fits(mid)) {
+      best = mid;
+      lo = mid + 1;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  return best;
+}
+
+/** `textBaseline: "middle"` does not match ink center; use alphabetic + this y. */
+function yBaselineForVerticalInkCenter(ctx, text, canvasSize) {
+  const m = ctx.measureText(text);
+  const a = m.actualBoundingBoxAscent;
+  const d = m.actualBoundingBoxDescent;
+  if (a != null && d != null && Number.isFinite(a) && Number.isFinite(d) && (a > 0 || d > 0)) {
+    return canvasSize / 2 + (a - d) / 2;
+  }
+  return canvasSize / 2;
+}
+
+/** Offset x when `textAlign: "center"` so the ink box is optically centered. */
+function xCenterForInk(ctx, text, canvasSize) {
+  const m = ctx.measureText(text);
+  const L = m.actualBoundingBoxLeft;
+  const R = m.actualBoundingBoxRight;
+  if (L != null && R != null && Number.isFinite(L) && Number.isFinite(R)) {
+    return canvasSize / 2 - (R - L) / 2;
+  }
+  return canvasSize / 2;
+}
+
+/**
+ * @param {HTMLCanvasElement} canvas
+ * @param {number} paddingPct Inset on each side as percent of canvas width (0–40).
+ * @param {number} borderRadiusPct 0–100 maps to corner radius 0 … size/2 (100 = circular).
+ */
+function drawGenerated(
+  canvas,
+  size,
+  mode,
+  text,
+  emoji,
+  fgColor,
+  bgColor,
+  paddingPct,
+  transparentBg,
+  borderRadiusPct,
+) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   canvas.width = size;
   canvas.height = size;
 
-  ctx.fillStyle = bgColor;
-  ctx.fillRect(0, 0, size, size);
+  const pct = Math.min(40, Math.max(0, paddingPct));
+  const pad = Math.round((size * pct) / 100);
+  const inner = Math.max(1, size - 2 * pad);
+
+  const br = Math.min(100, Math.max(0, borderRadiusPct));
+  const cornerR = (br / 100) * (size / 2);
+
+  ctx.save();
+  ctx.beginPath();
+  if (typeof ctx.roundRect === "function") {
+    ctx.roundRect(0, 0, size, size, cornerR);
+  } else {
+    ctx.rect(0, 0, size, size);
+  }
+  ctx.clip();
+
+  if (!transparentBg) {
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, size, size);
+  } else {
+    ctx.clearRect(0, 0, size, size);
+  }
+
   ctx.fillStyle = fgColor;
   ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
+  ctx.textBaseline = "alphabetic";
 
   if (mode === "emoji") {
-    ctx.font = `${Math.round(size * 0.5)}px sans-serif`;
-    ctx.fillText(emoji || "?", size / 2, size / 2);
+    const em = emoji || "?";
+    ctx.font = `${Math.round(inner * 0.72)}px sans-serif`;
+    const x = xCenterForInk(ctx, em, size);
+    const y = yBaselineForVerticalInkCenter(ctx, em, size);
+    ctx.fillText(em, x, y);
   } else {
     const displayText = (text || "F").slice(0, 2).toUpperCase();
-    ctx.font = `bold ${Math.round(size * 0.42)}px sans-serif`;
-    ctx.fillText(displayText, size / 2, size / 2);
+    const fontSize = maxFontSizeBoldTextInSquare(ctx, displayText, inner);
+    ctx.font = `bold ${fontSize}px sans-serif`;
+    const x = xCenterForInk(ctx, displayText, size);
+    const y = yBaselineForVerticalInkCenter(ctx, displayText, size);
+    ctx.fillText(displayText, x, y);
   }
+
+  ctx.restore();
 }
 
 /** Center-crop cover to square */
@@ -98,7 +205,10 @@ const IOS_SPECS = [
   { size: 1024, label: "1024", file: "ios-1024.png", hint: "App Store" },
 ];
 
-function SizePreview({ sourceRef, spec, maxPreviewPx, drawKey }) {
+const CHECKERBOARD_CLASS =
+  "inline-block rounded-sm [background:repeating-conic-gradient(#d6d3d1_0%_25%,#fafaf9_0%_50%)] [background-size:10px_10px] dark:[background:repeating-conic-gradient(#44403c_0%_25%,#1c1917_0%_50%)]";
+
+function SizePreview({ sourceRef, spec, maxPreviewPx, drawKey, checkerboard }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -116,10 +226,10 @@ function SizePreview({ sourceRef, spec, maxPreviewPx, drawKey }) {
   }, [sourceRef, spec.size, drawKey]);
 
   const display = Math.min(maxPreviewPx, spec.size, 128);
-  return (
+  const canvas = (
     <canvas
       ref={ref}
-      className="block border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+      className={`block border border-stone-200 dark:border-stone-700 ${checkerboard ? "" : "bg-stone-50 dark:bg-stone-950"}`}
       style={{
         imageRendering: spec.size <= 64 ? "pixelated" : "auto",
         width: display,
@@ -127,6 +237,10 @@ function SizePreview({ sourceRef, spec, maxPreviewPx, drawKey }) {
       }}
     />
   );
+  if (checkerboard) {
+    return <span className={CHECKERBOARD_CLASS}>{canvas}</span>;
+  }
+  return canvas;
 }
 
 export default function FaviconGenerator({ onToast }) {
@@ -139,6 +253,9 @@ export default function FaviconGenerator({ onToast }) {
   const [emoji, setEmoji] = useState("🔥");
   const [fgColor, setFgColor] = useState("#ffffff");
   const [bgColor, setBgColor] = useState("#000000");
+  const [paddingPercent, setPaddingPercent] = useState(0);
+  const [borderRadiusPercent, setBorderRadiusPercent] = useState(0);
+  const [transparentBg, setTransparentBg] = useState(false);
 
   const [uploadObjectUrl, setUploadObjectUrl] = useState(null);
   const [uploadImage, setUploadImage] = useState(null);
@@ -151,9 +268,21 @@ export default function FaviconGenerator({ onToast }) {
   const drawKey = useMemo(
     () =>
       sourceKind === "generate"
-        ? `g:${mode}:${text}:${emoji}:${fgColor}:${bgColor}`
+        ? `g:${mode}:${text}:${emoji}:${fgColor}:${bgColor}:${paddingPercent}:${borderRadiusPercent}:${transparentBg}`
         : `u:${uploadObjectUrl ?? ""}:${uploadImage?.naturalWidth ?? 0}`,
-    [sourceKind, mode, text, emoji, fgColor, bgColor, uploadObjectUrl, uploadImage],
+    [
+      sourceKind,
+      mode,
+      text,
+      emoji,
+      fgColor,
+      bgColor,
+      paddingPercent,
+      borderRadiusPercent,
+      transparentBg,
+      uploadObjectUrl,
+      uploadImage,
+    ],
   );
 
   useEffect(() => {
@@ -180,7 +309,18 @@ export default function FaviconGenerator({ onToast }) {
     if (!canvas) return;
 
     if (sourceKind === "generate") {
-      drawGenerated(canvas, INTERNAL, mode, text, emoji, fgColor, bgColor);
+      drawGenerated(
+        canvas,
+        INTERNAL,
+        mode,
+        text,
+        emoji,
+        fgColor,
+        bgColor,
+        paddingPercent,
+        transparentBg,
+        borderRadiusPercent,
+      );
     } else if (sourceKind === "upload" && uploadImage?.complete && uploadImage.naturalWidth > 0) {
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -200,7 +340,18 @@ export default function FaviconGenerator({ onToast }) {
         ctx.drawImage(canvas, 0, 0);
       }
     }
-  }, [sourceKind, mode, text, emoji, fgColor, bgColor, uploadImage]);
+  }, [
+    sourceKind,
+    mode,
+    text,
+    emoji,
+    fgColor,
+    bgColor,
+    paddingPercent,
+    borderRadiusPercent,
+    transparentBg,
+    uploadImage,
+  ]);
 
   useEffect(() => {
     if (!tabPreview) {
@@ -448,7 +599,7 @@ export default function FaviconGenerator({ onToast }) {
                 />
                 <span className="text-xs font-mono text-stone-500">{fgColor}</span>
               </div>
-              <div className="flex items-center gap-3">
+              <div className={`flex items-center gap-3 ${transparentBg ? "opacity-40 pointer-events-none" : ""}`}>
                 <label className="text-sm font-mono text-stone-600 dark:text-stone-300">
                   Background
                 </label>
@@ -456,10 +607,69 @@ export default function FaviconGenerator({ onToast }) {
                   type="color"
                   value={bgColor}
                   onChange={(e) => setBgColor(e.target.value)}
-                  className="w-10 h-10 border border-stone-300 dark:border-stone-600 cursor-pointer bg-transparent"
+                  disabled={transparentBg}
+                  className="w-10 h-10 border border-stone-300 dark:border-stone-600 cursor-pointer bg-transparent disabled:cursor-not-allowed"
                 />
                 <span className="text-xs font-mono text-stone-500">{bgColor}</span>
               </div>
+            </div>
+
+            <div className="space-y-3 max-w-md">
+              <div>
+                <div className="flex justify-between items-baseline gap-4 mb-2">
+                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                    Padding
+                  </label>
+                  <span className="text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums">
+                    {paddingPercent}%
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={40}
+                  step={1}
+                  value={paddingPercent}
+                  onChange={(e) => setPaddingPercent(Number(e.target.value))}
+                  className="w-full h-2 accent-stone-700 dark:accent-stone-300"
+                />
+                <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400 mt-1.5">
+                  Inset around the glyph; scales with export size.
+                </p>
+              </div>
+              <div>
+                <div className="flex justify-between items-baseline gap-4 mb-2">
+                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                    Border radius
+                  </label>
+                  <span className="text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums">
+                    {borderRadiusPercent}%
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={borderRadiusPercent}
+                  onChange={(e) => setBorderRadiusPercent(Number(e.target.value))}
+                  className="w-full h-2 accent-stone-700 dark:accent-stone-300"
+                />
+                <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400 mt-1.5">
+                  0% square, 100% circular; corners outside the shape are transparent.
+                </p>
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer w-fit">
+                <input
+                  type="checkbox"
+                  checked={transparentBg}
+                  onChange={(e) => setTransparentBg(e.target.checked)}
+                  className="rounded border-stone-400 text-stone-900 focus:ring-stone-500"
+                />
+                <span className="text-sm font-mono text-stone-700 dark:text-stone-200">
+                  Transparent background
+                </span>
+              </label>
             </div>
           </>
         )}
@@ -534,13 +744,23 @@ export default function FaviconGenerator({ onToast }) {
             <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
               Source preview ({INTERNAL} px)
             </p>
-            <div className="p-4 bg-stone-100 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 w-fit">
+            <div className="p-4 bg-stone-100 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 w-fit max-w-[min(100%,310px)]">
               {masterReady ? (
-                <canvas
-                  ref={previewRef}
-                  className="block max-w-[min(100%,280px)] h-auto border border-stone-300 dark:border-stone-600"
-                  style={{ imageRendering: "auto" }}
-                />
+                sourceKind === "generate" && transparentBg ? (
+                  <span className={CHECKERBOARD_CLASS}>
+                    <canvas
+                      ref={previewRef}
+                      className="block max-w-[min(100%,280px)] h-auto border border-stone-300 dark:border-stone-600"
+                      style={{ imageRendering: "auto" }}
+                    />
+                  </span>
+                ) : (
+                  <canvas
+                    ref={previewRef}
+                    className="block max-w-[min(100%,280px)] h-auto border border-stone-300 dark:border-stone-600"
+                    style={{ imageRendering: "auto" }}
+                  />
+                )
               ) : (
                 <div className="w-[200px] h-[200px] flex items-center justify-center text-[11px] font-mono text-stone-400 border border-dashed border-stone-300 dark:border-stone-600">
                   {sourceKind === "upload" && !uploadImage ? "Choose an image" : "…"}
@@ -608,6 +828,7 @@ export default function FaviconGenerator({ onToast }) {
                           spec={spec}
                           maxPreviewPx={72}
                           drawKey={drawKey}
+                          checkerboard={sourceKind === "generate" && transparentBg}
                         />
                         <div className="min-w-0 flex-1">
                           <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
@@ -641,6 +862,7 @@ export default function FaviconGenerator({ onToast }) {
                           spec={spec}
                           maxPreviewPx={spec.size > 256 ? 96 : 72}
                           drawKey={drawKey}
+                          checkerboard={sourceKind === "generate" && transparentBg}
                         />
                         <div className="min-w-0 flex-1">
                           <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
@@ -674,6 +896,7 @@ export default function FaviconGenerator({ onToast }) {
                       spec={spec}
                       maxPreviewPx={72}
                       drawKey={drawKey}
+                      checkerboard={sourceKind === "generate" && transparentBg}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="font-mono text-xs text-stone-800 dark:text-stone-100">{spec.label}</p>

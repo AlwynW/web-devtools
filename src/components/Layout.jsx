@@ -266,9 +266,7 @@ export default function Layout({ toast }) {
       </div>
 
       <main
-        className={`flex-1 min-w-0 px-4 sm:px-6 py-6 sm:py-8 transition-all duration-500 ${
-          isMenuOpen ? "scale-[0.99] opacity-70 blur-[1px]" : "scale-100 opacity-100"
-        }`}
+        className={`flex-1 min-w-0 px-4 sm:px-6 py-6 sm:py-8 transition-all duration-500`}
       >
         <div
           className={
