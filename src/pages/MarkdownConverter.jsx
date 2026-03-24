@@ -12,6 +12,7 @@ export default function MarkdownConverter({ onToast }) {
   const [mode, setMode] = useState("md2html");
   const [input, setInput] = useState("# Hello\n\n**Bold** and *italic* text.");
   const [output, setOutput] = useState("");
+  const [outputView, setOutputView] = useState("rendered");
   const [error, setError] = useState(null);
 
   const convert = useCallback(async () => {
@@ -47,7 +48,10 @@ export default function MarkdownConverter({ onToast }) {
       <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
         <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
           <button
-            onClick={() => setMode("md2html")}
+            onClick={() => {
+              setMode("md2html");
+              setOutputView("rendered");
+            }}
             className={`px-3 py-1.5 transition-colors ${
               mode === "md2html"
                 ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
@@ -57,7 +61,10 @@ export default function MarkdownConverter({ onToast }) {
             Markdown → HTML
           </button>
           <button
-            onClick={() => setMode("html2md")}
+            onClick={() => {
+              setMode("html2md");
+              setOutputView("code");
+            }}
             className={`px-3 py-1.5 transition-colors ${
               mode === "html2md"
                 ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
@@ -102,28 +109,57 @@ export default function MarkdownConverter({ onToast }) {
 
         {output && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
-              Output ({mode === "md2html" ? "HTML" : "Markdown"})
-            </label>
-            {mode === "md2html" && (
+            <div className="flex flex-wrap justify-between items-center gap-3 mb-2">
+              <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                Output ({mode === "md2html" ? "HTML" : "Markdown"})
+              </label>
+              <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+                <button
+                  onClick={() => setOutputView("rendered")}
+                  className={`px-3 py-1.5 transition-colors ${
+                    outputView === "rendered"
+                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                      : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  }`}
+                >
+                  Rendered
+                </button>
+                <button
+                  onClick={() => setOutputView("code")}
+                  className={`px-3 py-1.5 transition-colors ${
+                    outputView === "code"
+                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                      : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  }`}
+                >
+                  Code
+                </button>
+              </div>
+            </div>
+
+            {outputView === "rendered" && (
               <div className="mb-2">
-                <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-1">
-                  Preview
-                </div>
                 <div
                   className="p-4 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4 [&_code]:bg-stone-100 [&_code]:dark:bg-stone-800 [&_code]:px-1 [&_pre]:p-3 [&_pre]:overflow-x-auto [&_pre]:bg-stone-100 [&_pre]:dark:bg-stone-800 [&_a]:text-stone-700 [&_a]:dark:text-stone-300 [&_a]:underline"
-                  dangerouslySetInnerHTML={{ __html: output }}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      mode === "md2html"
+                        ? output
+                        : marked.parse(output || ""),
+                  }}
                 />
               </div>
             )}
-            <CopyArea
-              text={output}
-              onCopySuccess={() =>
-                onToast(
-                  mode === "md2html" ? "HTML copied!" : "Markdown copied!",
-                )
-              }
-            />
+            {outputView === "code" && (
+              <CopyArea
+                text={output}
+                onCopySuccess={() =>
+                  onToast(
+                    mode === "md2html" ? "HTML copied!" : "Markdown copied!",
+                  )
+                }
+              />
+            )}
           </>
         )}
       </div>

@@ -25,7 +25,7 @@ const CopyArea = ({ text, onCopySuccess }) => {
       <button
         onClick={handleCopy}
         disabled={!text}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute right-2 top-2 p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         title="Copy to clipboard"
       >
         {copied ? (

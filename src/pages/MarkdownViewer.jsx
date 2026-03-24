@@ -1,18 +1,36 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { marked } from "marked";
 import { FileArrowDown, CornersOut, CornersIn } from "phosphor-react";
 
 export default function MarkdownViewer() {
+  const [markdownInput, setMarkdownInput] = useState("");
   const [content, setContent] = useState(null);
   const [fileName, setFileName] = useState(null);
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [fullWidth, setFullWidth] = useState(false);
 
+  const parseMarkdown = useCallback(async (text, sourceName = null) => {
+    setError(null);
+    const raw = String(text ?? "");
+    if (!raw.trim()) {
+      setContent(null);
+      setFileName(sourceName);
+      return;
+    }
+    try {
+      const html = await marked.parse(raw);
+      setContent(html);
+      setFileName(sourceName);
+    } catch (e) {
+      setError(e.message || "Failed to parse markdown");
+      setContent(null);
+      setFileName(sourceName);
+    }
+  }, []);
+
   const processFile = useCallback((file) => {
     setError(null);
-    setContent(null);
-    setFileName(null);
 
     if (!file) return;
 
@@ -27,16 +45,22 @@ export default function MarkdownViewer() {
     reader.onload = async () => {
       try {
         const text = reader.result;
-        const html = await marked.parse(text);
-        setContent(html);
-        setFileName(file.name);
+        setMarkdownInput(String(text ?? ""));
+        await parseMarkdown(text, file.name);
       } catch (e) {
         setError(e.message || "Failed to parse markdown");
       }
     };
     reader.onerror = () => setError("Failed to read file");
     reader.readAsText(file);
-  }, []);
+  }, [parseMarkdown]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      parseMarkdown(markdownInput);
+    }, 200);
+    return () => clearTimeout(t);
+  }, [markdownInput, parseMarkdown]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -59,6 +83,7 @@ export default function MarkdownViewer() {
   };
 
   const clear = () => {
+    setMarkdownInput("");
     setContent(null);
     setFileName(null);
     setError(null);
@@ -72,7 +97,7 @@ export default function MarkdownViewer() {
             Markdown Viewer
           </h2>
           <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-            Drop a .md file to preview it. No editing — just viewing.
+            Drop a .md file or type markdown directly to preview it.
           </p>
         </div>
         <button
@@ -89,6 +114,18 @@ export default function MarkdownViewer() {
       </header>
 
       <div className="space-y-6">
+        <div>
+          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            Markdown Input
+          </label>
+          <textarea
+            value={markdownInput}
+            onChange={(e) => setMarkdownInput(e.target.value)}
+            placeholder="# Paste or type markdown here"
+            className="w-full h-40 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+          />
+        </div>
+
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -123,11 +160,11 @@ export default function MarkdownViewer() {
           </div>
         )}
 
-        {content && fileName && (
+        {content && (
           <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 overflow-hidden">
             <div className="px-4 py-3 border-b border-stone-200 dark:border-stone-700 flex items-center justify-between bg-stone-50 dark:bg-stone-900/50">
               <span className="font-mono text-sm text-stone-600 dark:text-stone-300 truncate">
-                {fileName}
+                {fileName || "Direct input"}
               </span>
               <button
                 onClick={clear}
