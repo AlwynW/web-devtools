@@ -173,6 +173,104 @@ function canvasToBlob(canvas) {
   });
 }
 
+async function blobToUint8Array(blob) {
+  return new Uint8Array(await blob.arrayBuffer());
+}
+
+function writeAscii(out, offset, text) {
+  for (let i = 0; i < text.length; i += 1) {
+    out[offset + i] = text.charCodeAt(i) & 0xff;
+  }
+}
+
+function createIcoFromPngs(pngImages) {
+  const count = pngImages.length;
+  const dirSize = 6 + count * 16;
+  const totalSize = dirSize + pngImages.reduce((sum, img) => sum + img.bytes.length, 0);
+  const out = new Uint8Array(totalSize);
+  const view = new DataView(out.buffer);
+
+  view.setUint16(0, 0, true); // reserved
+  view.setUint16(2, 1, true); // icon type
+  view.setUint16(4, count, true); // image count
+
+  let dataOffset = dirSize;
+  for (let i = 0; i < count; i += 1) {
+    const { size, bytes } = pngImages[i];
+    const entryOffset = 6 + i * 16;
+    out[entryOffset + 0] = size >= 256 ? 0 : size;
+    out[entryOffset + 1] = size >= 256 ? 0 : size;
+    out[entryOffset + 2] = 0; // palette
+    out[entryOffset + 3] = 0; // reserved
+    view.setUint16(entryOffset + 4, 1, true); // color planes
+    view.setUint16(entryOffset + 6, 32, true); // bpp
+    view.setUint32(entryOffset + 8, bytes.length, true);
+    view.setUint32(entryOffset + 12, dataOffset, true);
+    out.set(bytes, dataOffset);
+    dataOffset += bytes.length;
+  }
+
+  return new Blob([out], { type: "image/x-icon" });
+}
+
+function createIcnsFromPngs(pngChunks) {
+  const chunks = [];
+  let bodyLength = 0;
+
+  for (const chunk of pngChunks) {
+    const chunkLen = 8 + chunk.bytes.length;
+    const packed = new Uint8Array(chunkLen);
+    const view = new DataView(packed.buffer);
+    writeAscii(packed, 0, chunk.type);
+    view.setUint32(4, chunkLen, false); // big-endian
+    packed.set(chunk.bytes, 8);
+    chunks.push(packed);
+    bodyLength += chunkLen;
+  }
+
+  const totalLength = 8 + bodyLength;
+  const out = new Uint8Array(totalLength);
+  const view = new DataView(out.buffer);
+  writeAscii(out, 0, "icns");
+  view.setUint32(4, totalLength, false); // big-endian
+
+  let offset = 8;
+  for (const chunk of chunks) {
+    out.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return new Blob([out], { type: "application/octet-stream" });
+}
+
+async function buildElectronIco(source) {
+  const sizes = [16, 24, 32, 48, 64, 128, 256];
+  const pngImages = [];
+  for (const size of sizes) {
+    const scaled = scaleCanvasTo(source, size);
+    const bytes = await blobToUint8Array(await canvasToBlob(scaled));
+    pngImages.push({ size, bytes });
+  }
+  return createIcoFromPngs(pngImages);
+}
+
+async function buildElectronIcns(source) {
+  const mapping = [
+    { size: 16, type: "icp4" },
+    { size: 32, type: "icp5" },
+    { size: 128, type: "ic07" },
+    { size: 256, type: "ic08" },
+    { size: 512, type: "ic09" },
+    { size: 1024, type: "ic10" },
+  ];
+  const pngChunks = [];
+  for (const { size, type } of mapping) {
+    const scaled = scaleCanvasTo(source, size);
+    const bytes = await blobToUint8Array(await canvasToBlob(scaled));
+    pngChunks.push({ type, bytes });
+  }
+  return createIcnsFromPngs(pngChunks);
+}
+
 const WEB_SPECS = [
   { size: 16, label: "16 × 16", file: "favicon-16x16.png", hint: "Browser tab" },
   { size: 32, label: "32 × 32", file: "favicon-32x32.png", hint: "Standard favicon" },
@@ -203,6 +301,37 @@ const IOS_SPECS = [
   { size: 167, label: "167", file: "ios-167.png", hint: "83.5 @2× iPad Pro" },
   { size: 180, label: "180", file: "ios-180.png", hint: "60 @3× iPhone" },
   { size: 1024, label: "1024", file: "ios-1024.png", hint: "App Store" },
+];
+
+const ELECTRON_WINDOWS_SPECS = [
+  { size: 16, label: "16", file: "icon-16.png", hint: "Small icon" },
+  { size: 24, label: "24", file: "icon-24.png", hint: "Small icon @150%" },
+  { size: 32, label: "32", file: "icon-32.png", hint: "Taskbar / title bar" },
+  { size: 48, label: "48", file: "icon-48.png", hint: "Explorer listing" },
+  { size: 64, label: "64", file: "icon-64.png", hint: "Medium density" },
+  { size: 128, label: "128", file: "icon-128.png", hint: "Installer assets" },
+  { size: 256, label: "256", file: "icon-256.png", hint: "High density source" },
+];
+
+const ELECTRON_MAC_SPECS = [
+  { size: 16, label: "16", file: "icon_16x16.png", hint: "Dock/source layer" },
+  { size: 32, label: "32", file: "icon_16x16@2x.png", hint: "Retina 16pt" },
+  { size: 64, label: "64", file: "icon_32x32@2x.png", hint: "Retina 32pt" },
+  { size: 128, label: "128", file: "icon_128x128.png", hint: "Finder preview" },
+  { size: 256, label: "256", file: "icon_128x128@2x.png", hint: "Retina 128pt" },
+  { size: 512, label: "512", file: "icon_512x512.png", hint: "App icon base" },
+  { size: 1024, label: "1024", file: "icon_512x512@2x.png", hint: "Retina app icon" },
+];
+
+const ELECTRON_LINUX_SPECS = [
+  { size: 16, label: "16", file: "icon-16.png", hint: "Panel/menu" },
+  { size: 32, label: "32", file: "icon-32.png", hint: "Desktop/menu" },
+  { size: 48, label: "48", file: "icon-48.png", hint: "Desktop launcher" },
+  { size: 64, label: "64", file: "icon-64.png", hint: "High density" },
+  { size: 128, label: "128", file: "icon-128.png", hint: "App stream" },
+  { size: 256, label: "256", file: "icon-256.png", hint: "Package icon" },
+  { size: 512, label: "512", file: "icon-512.png", hint: "Primary source" },
+  { size: 1024, label: "1024", file: "icon-1024.png", hint: "Future proof source" },
 ];
 
 const CHECKERBOARD_CLASS =
@@ -448,7 +577,12 @@ export default function FaviconGenerator({ onToast }) {
       return;
     }
     const zip = new JSZip();
-    const rootName = outputScope === "web" ? "favicon-web" : "favicon-mobile";
+    const rootName =
+      outputScope === "web"
+        ? "favicon-web"
+        : outputScope === "mobile"
+          ? "favicon-mobile"
+          : "electron-icons";
     const root = zip.folder(rootName);
     if (!root) {
       onToast?.("Could not create ZIP.");
@@ -461,7 +595,7 @@ export default function FaviconGenerator({ onToast }) {
         const blob = await canvasToBlob(scaled);
         root.file(spec.file, blob);
       }
-    } else {
+    } else if (outputScope === "mobile") {
       const andFolder = root.folder("android");
       const iosFolder = root.folder("ios");
       for (const spec of ANDROID_SPECS) {
@@ -474,6 +608,30 @@ export default function FaviconGenerator({ onToast }) {
         const blob = await canvasToBlob(scaled);
         iosFolder?.file(spec.file, blob);
       }
+    } else {
+      const winFolder = root.folder("windows");
+      const macFolder = root.folder("macos");
+      const linuxFolder = root.folder("linux");
+      for (const spec of ELECTRON_WINDOWS_SPECS) {
+        const scaled = scaleCanvasTo(source, spec.size);
+        const blob = await canvasToBlob(scaled);
+        winFolder?.file(spec.file, blob);
+      }
+      for (const spec of ELECTRON_MAC_SPECS) {
+        const scaled = scaleCanvasTo(source, spec.size);
+        const blob = await canvasToBlob(scaled);
+        macFolder?.file(spec.file, blob);
+      }
+      for (const spec of ELECTRON_LINUX_SPECS) {
+        const scaled = scaleCanvasTo(source, spec.size);
+        const blob = await canvasToBlob(scaled);
+        linuxFolder?.file(spec.file, blob);
+      }
+
+      const icoBlob = await buildElectronIco(source);
+      const icnsBlob = await buildElectronIcns(source);
+      root.file("icon.ico", icoBlob);
+      root.file("icon.icns", icnsBlob);
     }
 
     const blob = await zip.generateAsync({ type: "blob" });
@@ -485,14 +643,30 @@ export default function FaviconGenerator({ onToast }) {
     onToast?.("ZIP downloaded.");
   };
 
+  const downloadElectronBundleFile = async (kind) => {
+    const source = masterRef.current;
+    if (!source?.width) {
+      onToast?.("Nothing to export yet.");
+      return;
+    }
+    const blob = kind === "ico" ? await buildElectronIco(source) : await buildElectronIcns(source);
+    const file = kind === "ico" ? "icon.ico" : "icon.icns";
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = file;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    onToast?.(`Downloaded ${file}`);
+  };
+
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
         <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Favicon Generator
+          Icon Generator
         </h2>
         <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Text, emoji, or image → PNG sizes for web and mobile icons.
+          Text, emoji, or image → PNG sizes for web, mobile, and desktop app icons.
         </p>
       </header>
 
@@ -707,35 +881,7 @@ export default function FaviconGenerator({ onToast }) {
           </div>
         )}
 
-        <div className="flex flex-wrap gap-3 items-center border-t border-stone-200 dark:border-stone-800 pt-6">
-          <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
-            Export
-          </span>
-          <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
-            <button
-              type="button"
-              onClick={() => setOutputScope("web")}
-              className={`px-3 py-1.5 transition-colors ${
-                outputScope === "web"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
-              }`}
-            >
-              Web favicon
-            </button>
-            <button
-              type="button"
-              onClick={() => setOutputScope("mobile")}
-              className={`px-3 py-1.5 transition-colors ${
-                outputScope === "mobile"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
-              }`}
-            >
-              Mobile (Android + iOS)
-            </button>
-          </div>
-        </div>
+        
 
         <canvas ref={masterRef} className="hidden" width={INTERNAL} height={INTERNAL} />
 
@@ -794,13 +940,56 @@ export default function FaviconGenerator({ onToast }) {
           )}
         </div>
 
+        <div className="flex flex-wrap gap-3 items-center border-t border-stone-200 dark:border-stone-800 pt-6">
+          <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+            Export
+          </span>
+          <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+            <button
+              type="button"
+              onClick={() => setOutputScope("web")}
+              className={`px-3 py-1.5 transition-colors ${
+                outputScope === "web"
+                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
+                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              }`}
+            >
+              Web favicon
+            </button>
+            <button
+              type="button"
+              onClick={() => setOutputScope("mobile")}
+              className={`px-3 py-1.5 transition-colors ${
+                outputScope === "mobile"
+                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
+                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              }`}
+            >
+              Mobile (Android + iOS)
+            </button>
+            <button
+              type="button"
+              onClick={() => setOutputScope("electron")}
+              className={`px-3 py-1.5 transition-colors ${
+                outputScope === "electron"
+                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
+                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              }`}
+            >
+              Desktop app (Windows + macOS + Linux)
+            </button>
+          </div>
+        </div>
+
         {masterReady && (
           <div className="space-y-4 border-t border-stone-200 dark:border-stone-800 pt-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="text-sm font-mono text-stone-700 dark:text-stone-300">
                 {outputScope === "web"
                   ? "Web sizes"
-                  : "Android & iOS — all sizes"}
+                  : outputScope === "mobile"
+                    ? "Android & iOS — all sizes"
+                    : "Desktop app — all platform sizes"}
               </h3>
               <button
                 type="button"
@@ -867,6 +1056,135 @@ export default function FaviconGenerator({ onToast }) {
                         <div className="min-w-0 flex-1">
                           <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
                             {spec.label} × {spec.label}
+                          </p>
+                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <button
+                            type="button"
+                            onClick={() => downloadOne(spec)}
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                          >
+                            <DownloadSimple size={12} weight="thin" /> {spec.file}
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {outputScope === "electron" && (
+              <div className="space-y-6">
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => downloadElectronBundleFile("ico")}
+                    className="flex items-center gap-2 px-3 py-2 border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-[11px] transition-colors"
+                  >
+                    <DownloadSimple size={14} weight="thin" /> Download `icon.ico`
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => downloadElectronBundleFile("icns")}
+                    className="flex items-center gap-2 px-3 py-2 border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-[11px] transition-colors"
+                  >
+                    <DownloadSimple size={14} weight="thin" /> Download `icon.icns`
+                  </button>
+                  <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                    ZIP export includes both bundle files at root.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                    Windows (PNG set)
+                  </p>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {ELECTRON_WINDOWS_SPECS.map((spec) => (
+                      <li
+                        key={spec.file}
+                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                      >
+                        <SizePreview
+                          sourceRef={masterRef}
+                          spec={spec}
+                          maxPreviewPx={72}
+                          drawKey={drawKey}
+                          checkerboard={sourceKind === "generate" && transparentBg}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                            {spec.label} px
+                          </p>
+                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <button
+                            type="button"
+                            onClick={() => downloadOne(spec)}
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                          >
+                            <DownloadSimple size={12} weight="thin" /> {spec.file}
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                    macOS (PNG set for ICNS pipeline)
+                  </p>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {ELECTRON_MAC_SPECS.map((spec) => (
+                      <li
+                        key={spec.file}
+                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                      >
+                        <SizePreview
+                          sourceRef={masterRef}
+                          spec={spec}
+                          maxPreviewPx={spec.size > 256 ? 96 : 72}
+                          drawKey={drawKey}
+                          checkerboard={sourceKind === "generate" && transparentBg}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                            {spec.label} px
+                          </p>
+                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <button
+                            type="button"
+                            onClick={() => downloadOne(spec)}
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                          >
+                            <DownloadSimple size={12} weight="thin" /> {spec.file}
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                    Linux
+                  </p>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {ELECTRON_LINUX_SPECS.map((spec) => (
+                      <li
+                        key={spec.file}
+                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                      >
+                        <SizePreview
+                          sourceRef={masterRef}
+                          spec={spec}
+                          maxPreviewPx={spec.size > 256 ? 96 : 72}
+                          drawKey={drawKey}
+                          checkerboard={sourceKind === "generate" && transparentBg}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                            {spec.label} px
                           </p>
                           <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
                           <button

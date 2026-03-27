@@ -17,6 +17,7 @@ import WhatsMyIp from "./pages/WhatsMyIp";
 import Base64Image from "./pages/Base64Image";
 import HashGenerator from "./pages/HashGenerator";
 import CssGenerator from "./pages/CssGenerator";
+import GradientBuilder from "./pages/GradientBuilder";
 import CrontabGenerator from "./pages/CrontabGenerator";
 import TailwindSearch from "./pages/TailwindSearch";
 import RegexTester from "./pages/RegexTester";
@@ -82,6 +83,7 @@ export default function App() {
         <Route path="base64-image" element={<Base64Image onToast={showToast} />} />
         <Route path="hash" element={<HashGenerator onToast={showToast} />} />
         <Route path="css-generator" element={<CssGenerator onToast={showToast} />} />
+        <Route path="gradient-builder" element={<GradientBuilder onToast={showToast} />} />
         <Route path="crontab" element={<CrontabGenerator onToast={showToast} />} />
         <Route path="tailwind" element={<TailwindSearch onToast={showToast} />} />
         <Route path="regex" element={<RegexTester onToast={showToast} />} />
@@ -100,7 +102,7 @@ export default function App() {
         <Route path="meta-tags" element={<MetaTagGenerator onToast={showToast} />} />
         <Route path="sql-formatter" element={<SqlFormatter onToast={showToast} />} />
         <Route path="password-hash" element={<PasswordHash onToast={showToast} />} />
-        <Route path="favicon" element={<FaviconGenerator onToast={showToast} />} />
+        <Route path="icon" element={<FaviconGenerator onToast={showToast} />} />
         <Route path="hex-converter" element={<HexConverter onToast={showToast} />} />
         <Route path="escape" element={<EscapeUnescape onToast={showToast} />} />
         <Route path="ascii-table" element={<AsciiUnicodeTable onToast={showToast} />} />
