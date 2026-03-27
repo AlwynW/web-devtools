@@ -103,9 +103,15 @@ export const navGroups = [
     items: [
       {
         path: "/css-generator",
-        label: "CSS Shadow/Gradient",
+        label: "Drop Shadow",
         icon: Cube,
-        description: "Design shadows and gradients and copy the CSS.",
+        description: "Design single and layered box shadows.",
+      },
+      {
+        path: "/gradient-builder",
+        label: "Gradient Builder",
+        icon: Palette,
+        description: "Build layered gradients with stop opacity controls.",
       },
       {
         path: "/grid",
@@ -239,10 +245,10 @@ export const navGroups = [
         description: "Render Markdown for quick previews.",
       },
       {
-        path: "/favicon",
-        label: "Favicon",
+        path: "/icon",
+        label: "Icon",
         icon: Image,
-        description: "Generate favicons from text or emoji.",
+        description: "Generate icons from text, emoji or image.",
       },
       {
         path: "/url-parser",
