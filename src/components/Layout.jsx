@@ -92,7 +92,8 @@ export default function Layout({ toast }) {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  const outletWide = location.pathname === "/stopwatch";
+  const outletWide =
+    location.pathname === "/stopwatch" || location.pathname === "/json-editor";
 
   return (
     <div className="min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100 selection:bg-stone-200 flex flex-col">

@@ -42,6 +42,7 @@ import {
   GlobeStand,
   Timer,
   Alarm,
+  TreeStructure,
 } from "phosphor-react";
 
 export const navGroups = [
@@ -208,6 +209,13 @@ export const navGroups = [
         label: "JSON",
         icon: BracketsCurly,
         description: "Pretty-print, minify, and validate JSON.",
+      },
+      {
+        path: "/json-editor",
+        label: "JSON Editor",
+        icon: TreeStructure,
+        description:
+          "Edit JSON in a tree: keys, values, reorder, collapse, duplicate, delete.",
       },
       {
         path: "/markdown",

@@ -35,6 +35,7 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
 
 - **Convert / Validate**
   - **JSON**: Pretty-print, minify, and validate JSON.
+  - **JSON Editor**: Edit JSON in a tree with reorder, collapse, duplicate, and delete.
   - **Markdown/HTML**: Convert between Markdown and HTML.
   - **YAML/JSON**: Convert between YAML and JSON.
   - **CSV/JSON**: Convert between CSV and JSON.

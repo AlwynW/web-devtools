@@ -7,6 +7,7 @@ const UuidGenerator = lazy(() => import("./pages/UuidGenerator"));
 const TimestampGenerator = lazy(() => import("./pages/TimestampGenerator"));
 const PersonaGenerator = lazy(() => import("./pages/PersonaGenerator"));
 const JsonFormatter = lazy(() => import("./pages/JsonFormatter"));
+const JsonTreeEditor = lazy(() => import("./pages/JsonTreeEditor"));
 const Base64Encoder = lazy(() => import("./pages/Base64Encoder"));
 const UrlEncoder = lazy(() => import("./pages/UrlEncoder"));
 const JwtDebugger = lazy(() => import("./pages/JwtDebugger"));
@@ -70,6 +71,10 @@ export default function App() {
           element={<PersonaGenerator onToast={showToast} />}
         />
         <Route path="json" element={<JsonFormatter onToast={showToast} />} />
+        <Route
+          path="json-editor"
+          element={<JsonTreeEditor onToast={showToast} />}
+        />
         <Route path="base64" element={<Base64Encoder onToast={showToast} />} />
         <Route path="url" element={<UrlEncoder onToast={showToast} />} />
         <Route path="jwt" element={<JwtDebugger onToast={showToast} />} />
