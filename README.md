@@ -95,7 +95,15 @@ Then open the printed local URL in your browser (usually `http://localhost:5173`
 npm run build
 ```
 
-This outputs a static bundle. The build uses `--base=/dev/` by default, so deploy to a path like `/dev/` on your host (e.g. Netlify, Vercel, GitHub Pages).
+This outputs a static bundle in `dist/` with asset paths rooted at `/`, suitable for hosting at the site root (Apache with `public/.htaccess`, static hosts, or Node).
+
+#### Serve (production-style)
+
+```bash
+npm run serve
+```
+
+Serves `dist/` with SPA fallback (e.g. Combell Node after `npm run build`).
 
 #### Preview
 

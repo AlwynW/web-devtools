@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Check, Wrench, Command, MagnifyingGlass, Sun, Moon } from "phosphor-react";
 import { navGroups } from "./navConfig";
@@ -273,7 +273,15 @@ export default function Layout({ toast }) {
             outletWide ? "w-full max-w-none mx-auto" : "max-w-4xl mx-auto"
           }
         >
-          <Outlet />
+          <Suspense
+            fallback={
+              <div className="py-16 text-center text-sm font-mono text-stone-500 dark:text-stone-400 animate-pulse">
+                Loading…
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </div>
       </main>
 
