@@ -19,6 +19,7 @@ import {
   BookOpen,
   BracketsAngle,
   File,
+  FileMinus,
   DownloadSimple,
   SquaresFour,
   Square,
@@ -43,11 +44,37 @@ import {
   Timer,
   Alarm,
   TreeStructure,
+  AppWindow,
+  ArrowSquareOut,
+  FileLock,
+  FileSearch,
+  FileDotted,
+  Swap,
+  Equals,
+  CircleHalf,
+  FadersHorizontal,
+  ChartLineUp,
+  TextAa,
+  Terminal,
+  TrafficSign,
+  Path,
+  FileHtml,
+  ShieldCheck,
+  Fingerprint,
+  GitDiff,
+  Graph,
+  ListBullets,
+  Keyboard,
+  Robot,
+  Swatches,
+  Scroll,
+  CoinVertical,
+  DiceSix,
 } from "phosphor-react";
 
 export const navGroups = [
   {
-    name: "Generate",
+    name: "Generators",
     items: [
       {
         path: "/",
@@ -59,13 +86,7 @@ export const navGroups = [
         path: "/uuid",
         label: "UUID Gen",
         icon: Hash,
-        description: "Create RFC-compliant UUIDs.",
-      },
-      {
-        path: "/timestamp",
-        label: "Timestamp",
-        icon: Clock,
-        description: "Convert to/from Unix timestamps.",
+        description: "Create RFC-compliant UUIDs, including bulk generation.",
       },
       {
         path: "/persona",
@@ -80,27 +101,27 @@ export const navGroups = [
         description: "Generate lorem ipsum placeholder text.",
       },
       {
-        path: "/crontab",
-        label: "Crontab",
-        icon: CalendarCheck,
-        description: "Build and understand cron expressions.",
-      },
-      {
         path: "/slug",
         label: "Slug",
         icon: TextT,
         description: "Convert text to URL-friendly slugs.",
       },
       {
-        path: "/meta-tags",
-        label: "Meta Tags",
-        icon: Tag,
-        description: "Generate Open Graph and Twitter meta tags.",
+        path: "/qr",
+        label: "QR Code",
+        icon: QrCode,
+        description: "Generate QR codes from text/URLs.",
+      },
+      {
+        path: "/icon",
+        label: "Icon",
+        icon: Image,
+        description: "Generate icons from text, emoji or image.",
       },
     ],
   },
   {
-    name: "CSS tools",
+    name: "CSS & Design",
     items: [
       {
         path: "/css-generator",
@@ -126,24 +147,48 @@ export const navGroups = [
         icon: Square,
         description: "Tweak border radius until it looks just right.",
       },
-
       {
         path: "/color",
         label: "Color",
         icon: Palette,
         description: "Explore and convert colors for your UI.",
       },
+      {
+        path: "/contrast",
+        label: "Contrast",
+        icon: CircleHalf,
+        description: "Check WCAG text contrast between two colors.",
+      },
+      {
+        path: "/clamp",
+        label: "Clamp",
+        icon: FadersHorizontal,
+        description: "Generate fluid clamp() values from viewport bounds.",
+      },
+      {
+        path: "/easing",
+        label: "Easing",
+        icon: ChartLineUp,
+        description: "Edit cubic-bezier curves and copy timing CSS.",
+      },
+      {
+        path: "/color-shades",
+        label: "Shades",
+        icon: Swatches,
+        description:
+          "OKLCH ramp from darker to lighter; copy hex table or CSS variables.",
+      },
+      {
+        path: "/svg",
+        label: "SVG",
+        icon: Path,
+        description: "Optimize SVG, edit path d with preview, build sprites.",
+      },
     ],
   },
   {
     name: "Encode / Decode",
     items: [
-      {
-        path: "/qr",
-        label: "QR Code",
-        icon: QrCode,
-        description: "Generate QR codes from text/URLs.",
-      },
       {
         path: "/base64",
         label: "Base64",
@@ -163,22 +208,10 @@ export const navGroups = [
         description: "URL-encode and decode strings.",
       },
       {
-        path: "/jwt",
-        label: "JWT",
-        icon: Keyhole,
-        description: "Inspect JSON Web Tokens.",
-      },
-      {
         path: "/html-entity",
         label: "HTML Entity",
         icon: Code,
         description: "Convert text to/from HTML entities.",
-      },
-      {
-        path: "/hash",
-        label: "Hash",
-        icon: FingerprintSimple,
-        description: "Create hashes for strings.",
       },
       {
         path: "/escape",
@@ -192,17 +225,60 @@ export const navGroups = [
         icon: Hexagon,
         description: "Convert between hex, binary, decimal, octal.",
       },
-      
+      {
+        path: "/morse",
+        label: "Morse Code",
+        icon: Radio,
+        description: "Encode/decode Morse with reference table.",
+      },
+      {
+        path: "/unicode",
+        label: "Unicode",
+        icon: TextAa,
+        description:
+          "Inspect graphemes, code points, UTF-8, and normalization.",
+      },
+    ],
+  },
+  {
+    name: "Hashing & Security",
+    items: [
+      {
+        path: "/hash",
+        label: "Hash",
+        icon: FingerprintSimple,
+        description: "Create hashes for strings.",
+      },
+      {
+        path: "/hmac",
+        label: "HMAC",
+        icon: Fingerprint,
+        description:
+          "HMAC-SHA256 or HMAC-SHA512; hex and Base64 output in the browser.",
+      },
       {
         path: "/password-hash",
         label: "Password Hash",
         icon: LockKey,
         description: "Hash passwords with bcrypt.",
-      }
+      },
+      {
+        path: "/jwt",
+        label: "JWT",
+        icon: Keyhole,
+        description:
+          "Decode, verify HS256, and create HS256/RS256 signed JWTs.",
+      },
+      {
+        path: "/chmod",
+        label: "chmod",
+        icon: FileLock,
+        description: "Toggle Unix rwx permissions and copy octal chmod.",
+      },
     ],
   },
   {
-    name: "Convert / Validate",
+    name: "Format & Convert",
     items: [
       {
         path: "/json",
@@ -218,6 +294,12 @@ export const navGroups = [
           "Edit JSON in a tree: keys, values, reorder, collapse, duplicate, delete.",
       },
       {
+        path: "/xml",
+        label: "XML",
+        icon: FileHtml,
+        description: "Format, minify, and check well-formed XML in the browser.",
+      },
+      {
         path: "/markdown",
         label: "Markdown/HTML",
         icon: File,
@@ -230,15 +312,101 @@ export const navGroups = [
         description: "Convert between YAML and JSON.",
       },
       {
+        path: "/toml-json",
+        label: "TOML/JSON",
+        icon: ListBullets,
+        description: "Convert between TOML and JSON in the browser.",
+      },
+      {
         path: "/csv-json",
         label: "CSV/JSON",
         icon: Table,
         description: "Convert between CSV and JSON.",
       },
+      {
+        path: "/table-csv",
+        label: "Table/CSV",
+        icon: Table,
+        description: "Convert HTML tables to CSV and CSV to HTML tables.",
+      },
+      {
+        path: "/sql-formatter",
+        label: "SQL Formatter",
+        icon: Database,
+        description: "Format and minify SQL queries.",
+      },
+      {
+        path: "/graphql-format",
+        label: "GraphQL",
+        icon: Graph,
+        description: "Parse and print GraphQL documents. Validates syntax; no server.",
+      },
+      {
+        path: "/curl-convert",
+        label: "cURL → JS",
+        icon: Swap,
+        description: "Turn common curl commands into fetch or axios snippets.",
+      },
     ],
   },
   {
-    name: "Tools",
+    name: "Web & Config",
+    items: [
+      {
+        path: "/meta-tags",
+        label: "Meta Tags",
+        icon: Tag,
+        description: "Generate Open Graph and Twitter meta tags.",
+      },
+      {
+        path: "/crontab",
+        label: "Crontab",
+        icon: CalendarCheck,
+        description:
+          "Build cron expressions, humanize them, and preview next run times.",
+      },
+      {
+        path: "/env",
+        label: ".env",
+        icon: FileDotted,
+        description: "Parse and edit .env files locally, then copy export.",
+      },
+      {
+        path: "/nginx-format",
+        label: "Nginx",
+        icon: Terminal,
+        description: "Format nginx configs and run light lint checks.",
+      },
+      {
+        path: "/redirects",
+        label: "Redirects",
+        icon: TrafficSign,
+        description: "Generate redirect snippets for Netlify, Vercel, and more.",
+      },
+      {
+        path: "/csp",
+        label: "CSP",
+        icon: ShieldCheck,
+        description:
+          "Build a Content-Security-Policy header or meta tag. Empty fields are omitted.",
+      },
+      {
+        path: "/gitignore",
+        label: ".gitignore",
+        icon: FileMinus,
+        description: "Combine preset blocks and your own lines; duplicates removed.",
+      },
+      {
+        path: "/robots",
+        label: "Robots",
+        icon: Robot,
+        description:
+          "Build User-agent groups and Sitemap lines; copy the file body.",
+      },
+    ],
+  },
+  {
+    name: "Inspect & Analyze",
     items: [
       {
         path: "/regex",
@@ -247,40 +415,55 @@ export const navGroups = [
         description: "Build and test regular expressions.",
       },
       {
-        path: "/markdown-viewer",
-        label: "MarkDown Viewer",
-        icon: DownloadSimple,
-        description: "Render Markdown for quick previews.",
-      },
-      {
-        path: "/icon",
-        label: "Icon",
-        icon: Image,
-        description: "Generate icons from text, emoji or image.",
-      },
-      {
         path: "/url-parser",
         label: "URL Parser",
         icon: Link,
         description: "Parse and build URLs with query params.",
       },
       {
-        path: "/morse",
-        label: "Morse Code",
-        icon: Radio,
-        description: "Encode/decode Morse with reference table.",
+        path: "/url-expand",
+        label: "URL Redirects",
+        icon: ArrowSquareOut,
+        description:
+          "Inspect redirect chains from curl output or in-browser fetch.",
       },
       {
-        path: "/local-notes",
-        label: "Local Notes",
-        icon: NotePencil,
-        description: "Store notes in localStorage. Add and remove.",
+        path: "/diff",
+        label: "Diff",
+        icon: GitDiff,
+        description:
+          "Line-based unified or side-by-side diff with optional ignore trim and case.",
+      },
+      {
+        path: "/semver",
+        label: "Semver",
+        icon: Equals,
+        description: "Compare versions and test npm-style semver ranges.",
+      },
+      {
+        path: "/keycode",
+        label: "Keycode",
+        icon: Keyboard,
+        description:
+          "Focus a capture area; see key, code, which, and modifiers (keydown).",
+      },
+      {
+        path: "/markdown-viewer",
+        label: "MarkDown Viewer",
+        icon: DownloadSimple,
+        description: "Render Markdown for quick previews.",
       },
     ],
   },
   {
     name: "Time",
     items: [
+      {
+        path: "/timestamp",
+        label: "Timestamp",
+        icon: Clock,
+        description: "Convert to/from Unix timestamps.",
+      },
       {
         path: "/timezone-converter",
         label: "Timezones",
@@ -328,18 +511,30 @@ export const navGroups = [
         icon: GitBranch,
         description: "Quick reference for common Git commands.",
       },
-      
       {
-        path: "/sql-formatter",
-        label: "SQL Formatter",
-        icon: Database,
-        description: "Format and minify SQL queries.",
+        path: "/windows-cheat-sheet",
+        label: "Windows Cheat Sheet",
+        icon: AppWindow,
+        description:
+          "Explorer paths, environment variables, shell: folders, and Run dialog commands.",
       },
       {
         path: "/ascii-table",
         label: "ASCII Table",
         icon: ListNumbers,
         description: "Look up character codes and symbols.",
+      },
+      {
+        path: "/mime",
+        label: "MIME",
+        icon: FileSearch,
+        description: "Look up MIME types by file extension.",
+      },
+      {
+        path: "/local-notes",
+        label: "Local Notes",
+        icon: NotePencil,
+        description: "Store notes in localStorage. Add and remove.",
       },
     ],
   },
@@ -364,7 +559,25 @@ export const navGroups = [
         icon: HandPointing,
         description: "Count clicks. Button moves. Pointless.",
       },
+      {
+        path: "/scroll-sanctifier",
+        label: "Scroll sanctifier",
+        icon: Scroll,
+        description:
+          "Scroll for ceremony, get a fake certificate. Nothing is saved.",
+      },
+      {
+        path: "/coin-flip",
+        label: "Coin flip",
+        icon: CoinVertical,
+        description: "Fair 50/50 coin flip. No history, no stakes.",
+      },
+      {
+        path: "/dice",
+        label: "Dice",
+        icon: DiceSix,
+        description: "Roll one, two, or three d6 and see the total.",
+      },
     ],
   },
 ];
-

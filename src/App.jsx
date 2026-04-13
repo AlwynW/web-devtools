@@ -32,6 +32,7 @@ const SlugGenerator = lazy(() => import("./pages/SlugGenerator"));
 const YamlJsonConverter = lazy(() => import("./pages/YamlJsonConverter"));
 const CsvJsonConverter = lazy(() => import("./pages/CsvJsonConverter"));
 const GitCheatsheet = lazy(() => import("./pages/GitCheatsheet"));
+const WindowsCheatSheet = lazy(() => import("./pages/WindowsCheatSheet"));
 const MetaTagGenerator = lazy(() => import("./pages/MetaTagGenerator"));
 const SqlFormatter = lazy(() => import("./pages/SqlFormatter"));
 const PasswordHash = lazy(() => import("./pages/PasswordHash"));
@@ -48,6 +49,33 @@ const LocalNotes = lazy(() => import("./pages/LocalNotes"));
 const TimezoneConverter = lazy(() => import("./pages/TimezoneConverter"));
 const Stopwatch = lazy(() => import("./pages/Stopwatch"));
 const CountdownTimer = lazy(() => import("./pages/CountdownTimer"));
+const UrlExpand = lazy(() => import("./pages/UrlExpand"));
+const ChmodCalculator = lazy(() => import("./pages/ChmodCalculator"));
+const MimeLookup = lazy(() => import("./pages/MimeLookup"));
+const EnvEditor = lazy(() => import("./pages/EnvEditor"));
+const SemverComparator = lazy(() => import("./pages/SemverComparator"));
+const ColorContrast = lazy(() => import("./pages/ColorContrast"));
+const ClampGenerator = lazy(() => import("./pages/ClampGenerator"));
+const EasingEditor = lazy(() => import("./pages/EasingEditor"));
+const UnicodeInspector = lazy(() => import("./pages/UnicodeInspector"));
+const NginxFormatter = lazy(() => import("./pages/NginxFormatter"));
+const RedirectGenerator = lazy(() => import("./pages/RedirectGenerator"));
+const TableCsvConverter = lazy(() => import("./pages/TableCsvConverter"));
+const CurlConverter = lazy(() => import("./pages/CurlConverter"));
+const SvgTools = lazy(() => import("./pages/SvgTools"));
+const XmlTools = lazy(() => import("./pages/XmlTools"));
+const CspBuilder = lazy(() => import("./pages/CspBuilder"));
+const HmacGenerator = lazy(() => import("./pages/HmacGenerator"));
+const GitignoreComposer = lazy(() => import("./pages/GitignoreComposer"));
+const KeycodeInspector = lazy(() => import("./pages/KeycodeInspector"));
+const ColorShades = lazy(() => import("./pages/ColorShades"));
+const RobotsBuilder = lazy(() => import("./pages/RobotsBuilder"));
+const TextDiff = lazy(() => import("./pages/TextDiff"));
+const GraphqlFormat = lazy(() => import("./pages/GraphqlFormat"));
+const TomlJsonConverter = lazy(() => import("./pages/TomlJsonConverter"));
+const ScrollSanctifier = lazy(() => import("./pages/ScrollSanctifier"));
+const CoinFlip = lazy(() => import("./pages/CoinFlip"));
+const DiceRoller = lazy(() => import("./pages/DiceRoller"));
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -105,6 +133,10 @@ export default function App() {
         <Route path="yaml-json" element={<YamlJsonConverter onToast={showToast} />} />
         <Route path="csv-json" element={<CsvJsonConverter onToast={showToast} />} />
         <Route path="git-cheatsheet" element={<GitCheatsheet onToast={showToast} />} />
+        <Route
+          path="windows-cheat-sheet"
+          element={<WindowsCheatSheet onToast={showToast} />}
+        />
         <Route path="meta-tags" element={<MetaTagGenerator onToast={showToast} />} />
         <Route path="sql-formatter" element={<SqlFormatter onToast={showToast} />} />
         <Route path="password-hash" element={<PasswordHash onToast={showToast} />} />
@@ -117,10 +149,40 @@ export default function App() {
         <Route path="strobo" element={<Strobo />} />
         <Route path="existential-timer" element={<ExistentialTimer />} />
         <Route path="click-counter" element={<ClickCounter />} />
+        <Route
+          path="scroll-sanctifier"
+          element={<ScrollSanctifier onToast={showToast} />}
+        />
+        <Route path="coin-flip" element={<CoinFlip />} />
+        <Route path="dice" element={<DiceRoller />} />
         <Route path="local-notes" element={<LocalNotes onToast={showToast} />} />
         <Route path="timezone-converter" element={<TimezoneConverter />} />
         <Route path="stopwatch" element={<Stopwatch />} />
         <Route path="countdown" element={<CountdownTimer />} />
+        <Route path="url-expand" element={<UrlExpand />} />
+        <Route path="chmod" element={<ChmodCalculator onToast={showToast} />} />
+        <Route path="mime" element={<MimeLookup onToast={showToast} />} />
+        <Route path="env" element={<EnvEditor onToast={showToast} />} />
+        <Route path="semver" element={<SemverComparator />} />
+        <Route path="contrast" element={<ColorContrast />} />
+        <Route path="clamp" element={<ClampGenerator onToast={showToast} />} />
+        <Route path="easing" element={<EasingEditor onToast={showToast} />} />
+        <Route path="unicode" element={<UnicodeInspector />} />
+        <Route path="nginx-format" element={<NginxFormatter onToast={showToast} />} />
+        <Route path="redirects" element={<RedirectGenerator onToast={showToast} />} />
+        <Route path="table-csv" element={<TableCsvConverter onToast={showToast} />} />
+        <Route path="curl-convert" element={<CurlConverter onToast={showToast} />} />
+        <Route path="svg" element={<SvgTools onToast={showToast} />} />
+        <Route path="xml" element={<XmlTools onToast={showToast} />} />
+        <Route path="csp" element={<CspBuilder onToast={showToast} />} />
+        <Route path="hmac" element={<HmacGenerator onToast={showToast} />} />
+        <Route path="gitignore" element={<GitignoreComposer onToast={showToast} />} />
+        <Route path="keycode" element={<KeycodeInspector onToast={showToast} />} />
+        <Route path="color-shades" element={<ColorShades onToast={showToast} />} />
+        <Route path="robots" element={<RobotsBuilder onToast={showToast} />} />
+        <Route path="diff" element={<TextDiff onToast={showToast} />} />
+        <Route path="graphql-format" element={<GraphqlFormat onToast={showToast} />} />
+        <Route path="toml-json" element={<TomlJsonConverter onToast={showToast} />} />
       </Route>
     </Routes>
   );

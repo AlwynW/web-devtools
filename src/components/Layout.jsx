@@ -65,13 +65,12 @@ export default function Layout({ toast }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isMenuOpen]);
 
-  // Focus search when tools panel opens
+  // Focus search when tools panel opens (desktop only — skip on mobile to avoid keyboard + zoom)
   useEffect(() => {
-    if (isMenuOpen && searchInputRef.current) {
+    if (!isMenuOpen || !searchInputRef.current) return;
+    if (window.matchMedia("(min-width: 640px)").matches) {
       searchInputRef.current.focus();
-      if (searchInputRef.current.select) {
-        searchInputRef.current.select();
-      }
+      searchInputRef.current.select?.();
     }
   }, [isMenuOpen]);
 
@@ -193,7 +192,7 @@ export default function Layout({ toast }) {
       <div
         className={`fixed top-16 left-0 right-0 z-40 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-all duration-500 ease-out flex flex-col overflow-hidden ${
           isMenuOpen
-            ? "h-[60vh] opacity-100 translate-y-0"
+            ? "h-[calc(100dvh-4rem)] sm:h-[60vh] opacity-100 translate-y-0"
             : "h-0 opacity-0 -translate-y-4"
         }`}
       >
@@ -210,7 +209,7 @@ export default function Layout({ toast }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               ref={searchInputRef}
-              className="w-full pl-11 pr-4 py-2.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-sm font-mono text-stone-900 dark:text-stone-100"
+              className="w-full pl-11 pr-4 py-2.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-base sm:text-sm font-mono text-stone-900 dark:text-stone-100"
             />
           </div>
         </div>

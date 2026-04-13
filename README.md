@@ -6,48 +6,78 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
 
 ### Features
 
-- **Generate**
+- **Generators**
   - **Password**: Generate strong, random passwords.
-  - **UUID Gen**: Create RFC-compliant UUIDs.
-  - **Timestamp**: Convert to/from Unix timestamps.
+  - **UUID Gen**: Create RFC-compliant UUIDs, including bulk generation.
   - **Persona**: Quickly spin up fake personas for testing.
   - **Lorem**: Generate lorem ipsum placeholder text.
-  - **Crontab**: Build and understand cron expressions.
-  - **Slug**: Convert text to URL-friendly slugs with full options.
-  - **Meta Tags**: Generate Open Graph and Twitter Card meta tags.
+  - **Slug**: Convert text to URL-friendly slugs.
+  - **QR Code**: Generate QR codes from text/URLs.
+  - **Icon**: Generate icons from text, emoji or image.
 
-- **CSS tools**
-  - **CSS Shadow/Gradient**: Design shadows and gradients and copy the CSS.
+- **CSS & Design**
+  - **Drop Shadow**: Design single and layered box shadows.
+  - **Gradient Builder**: Build layered gradients with stop opacity controls.
   - **Grid**: Experiment with CSS grid layouts.
   - **Perfect Border**: Tweak border radius until it looks just right.
   - **Color**: Explore and convert colors for your UI.
+  - **Contrast**: Check WCAG text contrast between two colors.
+  - **Clamp**: Generate fluid clamp() values from viewport bounds.
+  - **Easing**: Edit cubic-bezier curves and copy timing CSS.
+  - **Shades**: OKLCH ramp from darker to lighter; copy hex table or CSS variables.
+  - **SVG**: Optimize SVG, edit path d with preview, build sprites.
 
 - **Encode / Decode**
-  - **QR Code**: Generate QR codes from text/URLs.
-  - **Base64 / Base64 Image**: Encode/decode text and images.
+  - **Base64**: Encode/decode text using Base64.
+  - **Base64 Image**: Encode/decode images using Base64.
   - **URL**: URL-encode and decode strings.
-  - **JWT**: Inspect JSON Web Tokens.
   - **HTML Entity**: Convert text to/from HTML entities.
-  - **Hash**: Create hashes for strings.
-  - **Escape/Unescape**: Escape strings for JSON, regex, SQL, HTML, shell.
+  - **Escape/Unescape**: Escape strings for JSON, regex, SQL, etc.
   - **Hex Converter**: Convert between hex, binary, decimal, octal.
-  - **Password Hash**: Hash passwords with bcrypt and verify.
+  - **Morse Code**: Encode/decode Morse with reference table.
+  - **Unicode**: Inspect graphemes, code points, UTF-8, and normalization.
 
-- **Convert / Validate**
+- **Hashing & Security**
+  - **Hash**: Create hashes for strings.
+  - **HMAC**: HMAC-SHA256 or HMAC-SHA512; hex and Base64 output in the browser.
+  - **Password Hash**: Hash passwords with bcrypt.
+  - **JWT**: Decode, verify HS256, and create HS256/RS256 signed JWTs.
+  - **chmod**: Toggle Unix rwx permissions and copy octal chmod.
+
+- **Format & Convert**
   - **JSON**: Pretty-print, minify, and validate JSON.
-  - **JSON Editor**: Edit JSON in a tree with reorder, collapse, duplicate, and delete.
+  - **JSON Editor**: Edit JSON in a tree: keys, values, reorder, collapse, duplicate, delete.
+  - **XML**: Format, minify, and check well-formed XML in the browser.
   - **Markdown/HTML**: Convert between Markdown and HTML.
   - **YAML/JSON**: Convert between YAML and JSON.
+  - **TOML/JSON**: Convert between TOML and JSON in the browser.
   - **CSV/JSON**: Convert between CSV and JSON.
+  - **Table/CSV**: Convert HTML tables to CSV and CSV to HTML tables.
+  - **SQL Formatter**: Format and minify SQL queries.
+  - **GraphQL**: Parse and print GraphQL documents. Validates syntax; no server.
+  - **cURL → JS**: Turn common curl commands into fetch or axios snippets.
 
-- **Tools**
+- **Web & Config**
+  - **Meta Tags**: Generate Open Graph and Twitter meta tags.
+  - **Crontab**: Build cron expressions, humanize them, and preview next run times.
+  - **.env**: Parse and edit .env files locally, then copy export.
+  - **Nginx**: Format nginx configs and run light lint checks.
+  - **Redirects**: Generate redirect snippets for Netlify, Vercel, and more.
+  - **CSP**: Build a Content-Security-Policy header or meta tag. Empty fields are omitted.
+  - **.gitignore**: Combine preset blocks and your own lines; duplicates removed.
+  - **Robots**: Build User-agent groups and Sitemap lines; copy the file body.
+
+- **Inspect & Analyze**
   - **Regex**: Build and test regular expressions.
-  - **Markdown Viewer**: Render Markdown for quick previews.
-  - **Favicon**: Generate favicons from text or emoji.
   - **URL Parser**: Parse and build URLs with query params.
-  - **Morse Code**: Encode/decode Morse with reference table and spacebar input.
+  - **URL Redirects**: Inspect redirect chains from curl output or in-browser fetch.
+  - **Diff**: Line-based unified or side-by-side diff with optional ignore trim and case.
+  - **Semver**: Compare versions and test npm-style semver ranges.
+  - **Keycode**: Focus a capture area; see key, code, which, and modifiers (keydown).
+  - **MarkDown Viewer**: Render Markdown for quick previews.
 
 - **Time**
+  - **Timestamp**: Convert to/from Unix timestamps.
   - **Timezones**: Compare the same instant across two IANA time zones.
   - **Stopwatch**: Lap-capable stopwatch with a wide high-resolution display.
   - **Countdown**: Count down with a full-screen flash when time hits zero.
@@ -57,8 +87,18 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **Tailwind**: Quick Tailwind CSS reference.
   - **My IP**: Show your public IP address.
   - **Git Cheatsheet**: Quick reference for common Git commands.
-  - **SQL Formatter**: Format and minify SQL queries.
+  - **Windows Cheat Sheet**: Explorer paths, environment variables, shell: folders, and Run dialog commands.
   - **ASCII Table**: Look up character codes and symbols.
+  - **MIME**: Look up MIME types by file extension.
+  - **Local Notes**: Store notes in localStorage. Add and remove.
+
+- **Pointless**
+  - **Strobo**: Flashing lights. Speed and color.
+  - **Existential Timer**: Counts seconds. Asks why. No answers.
+  - **Click Counter**: Count clicks. Button moves. Pointless.
+  - **Scroll sanctifier**: Scroll for ceremony, get a fake certificate. Nothing is saved.
+  - **Coin flip**: Fair 50/50 coin flip. No history, no stakes.
+  - **Dice**: Roll one, two, or three d6 and see the total.
 
 ### Tech Stack
 

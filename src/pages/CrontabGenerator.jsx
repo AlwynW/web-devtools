@@ -1,4 +1,6 @@
 import { useState, useMemo } from "react";
+import cronstrue from "cronstrue";
+import parser from "cron-parser";
 import CopyArea from "../components/CopyArea";
 
 const DAYS = [
@@ -20,6 +22,30 @@ const PRESETS = [
   { label: "Monthly on 1st at 00:00", cron: "0 0 1 * *" },
 ];
 
+const NEXT_COUNT = 10;
+
+function analyzeCron(expr) {
+  const trimmed = (expr || "").trim();
+  if (!trimmed) {
+    return { human: "", next: [], err: null };
+  }
+  try {
+    const human = cronstrue.toString(trimmed, { use24HourTimeFormat: true });
+    const interval = parser.parseExpression(trimmed, { currentDate: new Date() });
+    const next = [];
+    for (let i = 0; i < NEXT_COUNT; i++) {
+      next.push(interval.next().toDate());
+    }
+    return { human, next, err: null };
+  } catch (e) {
+    return {
+      human: "",
+      next: [],
+      err: e.message || "Invalid cron expression",
+    };
+  }
+}
+
 export default function CrontabGenerator({ onToast }) {
   const [preset, setPreset] = useState(null);
   const [minute, setMinute] = useState(0);
@@ -28,6 +54,7 @@ export default function CrontabGenerator({ onToast }) {
   const [month, setMonth] = useState("*");
   const [dayOfWeek, setDayOfWeek] = useState("1");
   const [custom, setCustom] = useState("");
+  const [humanOverride, setHumanOverride] = useState("");
 
   const cron = useMemo(() => {
     if (preset) return preset;
@@ -35,14 +62,15 @@ export default function CrontabGenerator({ onToast }) {
     return `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
   }, [preset, custom, minute, hour, dayOfMonth, month, dayOfWeek]);
 
+  const exprForHuman = humanOverride.trim() || cron;
+  const { human, next, err } = useMemo(
+    () => analyzeCron(exprForHuman),
+    [exprForHuman],
+  );
+
   const selectPreset = (p) => {
     setPreset(p.cron);
     setCustom("");
-  };
-
-  const useCustom = () => {
-    setPreset(null);
-    setCustom(cron);
   };
 
   return (
@@ -52,7 +80,7 @@ export default function CrontabGenerator({ onToast }) {
           Crontab Generator
         </h2>
         <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Build cron schedules in a human-friendly way.
+          Build cron schedules, humanize them, and preview next run times.
         </p>
       </header>
 
@@ -65,6 +93,7 @@ export default function CrontabGenerator({ onToast }) {
             {PRESETS.map((p) => (
               <button
                 key={p.cron}
+                type="button"
                 onClick={() => selectPreset(p)}
                 className={`p-3 border text-left text-sm font-mono transition-colors ${
                   preset === p.cron
@@ -197,6 +226,70 @@ export default function CrontabGenerator({ onToast }) {
         </div>
 
         <CopyArea text={cron} onCopySuccess={() => onToast("Cron copied!")} />
+
+        <div className="pt-4 border-t border-stone-200 dark:border-stone-800 space-y-4">
+          <h3 className="text-sm font-semibold text-stone-800 dark:text-stone-200 font-mono tracking-tight">
+            Humanizer & next runs
+          </h3>
+          <p className="text-xs font-mono text-stone-500">
+            Uses the built expression below unless you override. Standard 5-field
+            cron (minute hour dom month dow).
+          </p>
+          <div>
+            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              Current expression
+            </label>
+            <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-sm text-stone-800 dark:text-stone-200">
+              {cron}
+            </pre>
+            <button
+              type="button"
+              onClick={() => setHumanOverride("")}
+              className="mt-2 text-[11px] font-mono text-stone-600 dark:text-stone-400 underline hover:text-stone-900 dark:hover:text-stone-200"
+            >
+              Analyze built expression (clear override)
+            </button>
+          </div>
+          <div>
+            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              Override (optional)
+            </label>
+            <input
+              type="text"
+              value={humanOverride}
+              onChange={(e) => setHumanOverride(e.target.value)}
+              placeholder="Paste any 5-field cron to analyze…"
+              className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 text-stone-900 dark:text-stone-100"
+            />
+          </div>
+          {err && (
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm font-mono">
+              {err}
+            </div>
+          )}
+          {!err && human && (
+            <>
+              <div>
+                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                  Human-readable
+                </label>
+                <p className="p-4 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-200 text-sm leading-relaxed">
+                  {human}
+                </p>
+              </div>
+              <div>
+                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                  Next {NEXT_COUNT} runs (local time)
+                </label>
+                <ul className="font-mono text-xs text-stone-700 dark:text-stone-300 space-y-1 border border-stone-200 dark:border-stone-700 p-3 bg-white dark:bg-stone-900 max-h-48 overflow-y-auto">
+                  {next.map((d, i) => (
+                    <li key={i}>{d.toLocaleString()}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
