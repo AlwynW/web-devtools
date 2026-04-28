@@ -70,6 +70,8 @@ import {
   Scroll,
   CoinVertical,
   DiceSix,
+  Broadcast,
+  DotsSix,
 } from "phosphor-react";
 
 export const navGroups = [
@@ -187,6 +189,30 @@ export const navGroups = [
     ],
   },
   {
+    name: "Signals & spelling",
+    items: [
+      {
+        path: "/braille",
+        label: "Braille",
+        icon: DotsSix,
+        description:
+          "Grade 1 English Braille with Unicode patterns; number sign for digits.",
+      },
+      {
+        path: "/morse",
+        label: "Morse Code",
+        icon: Radio,
+        description: "Encode/decode Morse with reference table.",
+      },
+      {
+        path: "/nato",
+        label: "NATO Phonetic",
+        icon: Broadcast,
+        description: "Spell text with ICAO words and digit names.",
+      },
+    ],
+  },
+  {
     name: "Encode / Decode",
     items: [
       {
@@ -224,12 +250,6 @@ export const navGroups = [
         label: "Hex Converter",
         icon: Hexagon,
         description: "Convert between hex, binary, decimal, octal.",
-      },
-      {
-        path: "/morse",
-        label: "Morse Code",
-        icon: Radio,
-        description: "Encode/decode Morse with reference table.",
       },
       {
         path: "/unicode",

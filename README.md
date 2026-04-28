@@ -27,6 +27,11 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **Shades**: OKLCH ramp from darker to lighter; copy hex table or CSS variables.
   - **SVG**: Optimize SVG, edit path d with preview, build sprites.
 
+- **Signals & spelling**
+  - **Braille**: Grade 1 English Braille with Unicode patterns; number sign for digits.
+  - **Morse Code**: Encode/decode Morse with reference table.
+  - **NATO Phonetic**: Spell text with ICAO words and digit names.
+
 - **Encode / Decode**
   - **Base64**: Encode/decode text using Base64.
   - **Base64 Image**: Encode/decode images using Base64.
@@ -34,7 +39,6 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **HTML Entity**: Convert text to/from HTML entities.
   - **Escape/Unescape**: Escape strings for JSON, regex, SQL, etc.
   - **Hex Converter**: Convert between hex, binary, decimal, octal.
-  - **Morse Code**: Encode/decode Morse with reference table.
   - **Unicode**: Inspect graphemes, code points, UTF-8, and normalization.
 
 - **Hashing & Security**
@@ -137,14 +141,6 @@ npm run build
 ```
 
 This outputs a static bundle in `dist/` with asset paths rooted at `/`, suitable for hosting at the site root (Apache with `public/.htaccess`, static hosts, or Node).
-
-#### Serve (production-style)
-
-```bash
-npm run serve
-```
-
-Serves `dist/` with SPA fallback (e.g. Combell Node after `npm run build`).
 
 #### Preview
 

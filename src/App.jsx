@@ -42,6 +42,8 @@ const EscapeUnescape = lazy(() => import("./pages/EscapeUnescape"));
 const AsciiUnicodeTable = lazy(() => import("./pages/AsciiUnicodeTable"));
 const UrlParser = lazy(() => import("./pages/UrlParser"));
 const MorseCode = lazy(() => import("./pages/MorseCode"));
+const NatoPhonetic = lazy(() => import("./pages/NatoPhonetic"));
+const Braille = lazy(() => import("./pages/Braille"));
 const Strobo = lazy(() => import("./pages/Strobo"));
 const ExistentialTimer = lazy(() => import("./pages/ExistentialTimer"));
 const ClickCounter = lazy(() => import("./pages/ClickCounter"));
@@ -145,6 +147,8 @@ export default function App() {
         <Route path="escape" element={<EscapeUnescape onToast={showToast} />} />
         <Route path="ascii-table" element={<AsciiUnicodeTable onToast={showToast} />} />
         <Route path="url-parser" element={<UrlParser onToast={showToast} />} />
+        <Route path="nato" element={<NatoPhonetic onToast={showToast} />} />
+        <Route path="braille" element={<Braille onToast={showToast} />} />
         <Route path="morse" element={<MorseCode onToast={showToast} />} />
         <Route path="strobo" element={<Strobo />} />
         <Route path="existential-timer" element={<ExistentialTimer />} />
