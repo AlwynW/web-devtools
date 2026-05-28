@@ -35,6 +35,7 @@ const GitCheatsheet = lazy(() => import("./pages/GitCheatsheet"));
 const WindowsCheatSheet = lazy(() => import("./pages/WindowsCheatSheet"));
 const MetaTagGenerator = lazy(() => import("./pages/MetaTagGenerator"));
 const SqlFormatter = lazy(() => import("./pages/SqlFormatter"));
+const SqlSchemaVisualizer = lazy(() => import("./pages/SqlSchemaVisualizer"));
 const PasswordHash = lazy(() => import("./pages/PasswordHash"));
 const FaviconGenerator = lazy(() => import("./pages/FaviconGenerator"));
 const HexConverter = lazy(() => import("./pages/HexConverter"));
@@ -141,6 +142,7 @@ export default function App() {
         />
         <Route path="meta-tags" element={<MetaTagGenerator onToast={showToast} />} />
         <Route path="sql-formatter" element={<SqlFormatter onToast={showToast} />} />
+        <Route path="sql-schema" element={<SqlSchemaVisualizer onToast={showToast} />} />
         <Route path="password-hash" element={<PasswordHash onToast={showToast} />} />
         <Route path="icon" element={<FaviconGenerator onToast={showToast} />} />
         <Route path="hex-converter" element={<HexConverter onToast={showToast} />} />

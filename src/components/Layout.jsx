@@ -92,7 +92,9 @@ export default function Layout({ toast }) {
   };
 
   const outletWide =
-    location.pathname === "/stopwatch" || location.pathname === "/json-editor";
+    location.pathname === "/stopwatch" ||
+    location.pathname === "/json-editor" ||
+    location.pathname === "/sql-schema";
 
   return (
     <div className="min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100 selection:bg-stone-200 flex flex-col">

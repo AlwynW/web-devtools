@@ -58,6 +58,7 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **CSV/JSON**: Convert between CSV and JSON.
   - **Table/CSV**: Convert HTML tables to CSV and CSV to HTML tables.
   - **SQL Formatter**: Format and minify SQL queries.
+  - **SQL Schema**: Drop or paste DDL to explore tables, columns, and relationships.
   - **GraphQL**: Parse and print GraphQL documents. Validates syntax; no server.
   - **cURL → JS**: Turn common curl commands into fetch or axios snippets.
 

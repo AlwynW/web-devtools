@@ -13,6 +13,7 @@
     "@faker-js/faker": "^10.3.0",
     "@iarna/toml": "^2.2.5",
     "@tailwindcss/vite": "^4.2.1",
+    "@xyflow/react": "^12.10.2",
     "bcryptjs": "^2.4.3",
     "cron-parser": "^5.5.0",
     "cronstrue": "^3.14.0",

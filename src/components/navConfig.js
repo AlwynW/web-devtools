@@ -356,6 +356,12 @@ export const navGroups = [
         description: "Format and minify SQL queries.",
       },
       {
+        path: "/sql-schema",
+        label: "SQL Schema",
+        icon: TreeStructure,
+        description: "Drop or paste DDL to explore tables, columns, and relationships.",
+      },
+      {
         path: "/graphql-format",
         label: "GraphQL",
         icon: Graph,
