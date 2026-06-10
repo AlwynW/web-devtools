@@ -162,7 +162,7 @@ export default function App() {
         <Route path="coin-flip" element={<CoinFlip />} />
         <Route path="dice" element={<DiceRoller />} />
         <Route path="local-notes" element={<LocalNotes onToast={showToast} />} />
-        <Route path="timezone-converter" element={<TimezoneConverter />} />
+        <Route path="timezone-converter" element={<TimezoneConverter onToast={showToast} />} />
         <Route path="stopwatch" element={<Stopwatch />} />
         <Route path="countdown" element={<CountdownTimer />} />
         <Route path="url-expand" element={<UrlExpand />} />

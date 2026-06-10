@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Check, ClipboardText, MagnifyingGlass } from "phosphor-react";
+import { copyToClipboard } from "../utils/clipboard";
 
 /** Hints for IANA ids (abbreviations are location-dependent; shown as typical labels). */
 const IANA_EXTRA_LABELS = {
@@ -25,27 +27,6 @@ const IANA_EXTRA_LABELS = {
   "Europe/Helsinki": "EET/EEST — Eastern European",
   "Europe/Athens": "EET/EEST — Eastern European",
 };
-
-/** Quick picks: common US abbreviations → IANA */
-const US_PRESETS = [
-  { abbr: "ET", iana: "America/New_York", title: "Eastern" },
-  { abbr: "CT", iana: "America/Chicago", title: "Central" },
-  { abbr: "MT", iana: "America/Denver", title: "Mountain" },
-  { abbr: "PT", iana: "America/Los_Angeles", title: "Pacific" },
-  { abbr: "AK", iana: "America/Anchorage", title: "Alaska" },
-  { abbr: "HI", iana: "Pacific/Honolulu", title: "Hawaii" },
-  { abbr: "AZ", iana: "America/Phoenix", title: "Arizona (MST)" },
-  { abbr: "AST", iana: "America/Puerto_Rico", title: "Atlantic" },
-];
-
-/** Quick picks: common European abbreviations → IANA */
-const EU_PRESETS = [
-  { abbr: "CET", iana: "Europe/Berlin", title: "Central European" },
-  { abbr: "GMT", iana: "Europe/London", title: "Greenwich / UK" },
-  { abbr: "WET", iana: "Europe/Lisbon", title: "Western European" },
-  { abbr: "EET", iana: "Europe/Helsinki", title: "Eastern European" },
-  { abbr: "UTC", iana: "UTC", title: "Coordinated Universal" },
-];
 
 function getTimeZoneList() {
   try {
@@ -115,6 +96,199 @@ function optionLabel(iana) {
   return extra ? `${iana} — ${extra}` : iana;
 }
 
+/** Higher score = better match; -1 = no match. */
+function fuzzyScore(query, text) {
+  const q = query.trim().toLowerCase();
+  if (!q) return 0;
+  const t = text.toLowerCase();
+
+  const idx = t.indexOf(q);
+  if (idx >= 0) {
+    let score = 1000 - idx;
+    if (idx === 0 || "/-— ·".includes(t[idx - 1])) score += 50;
+    return score;
+  }
+
+  const tokens = q.split(/\s+/).filter(Boolean);
+  if (tokens.length > 1 && tokens.every((tok) => t.includes(tok))) {
+    return 500 - tokens.reduce((sum, tok) => sum + t.indexOf(tok), 0);
+  }
+
+  let qi = 0;
+  let consecutive = 0;
+  let score = 0;
+  for (let i = 0; i < t.length && qi < q.length; i++) {
+    if (t[i] === q[qi]) {
+      consecutive += 1;
+      score += consecutive * 2;
+      qi += 1;
+    } else {
+      consecutive = 0;
+    }
+  }
+  if (qi === q.length) return score;
+  return -1;
+}
+
+function TimezoneSelect({ value, onChange, zones, id }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const rootRef = useRef(null);
+  const inputRef = useRef(null);
+  const listRef = useRef(null);
+
+  const options = useMemo(
+    () => zones.map((z) => ({ value: z, label: optionLabel(z) })),
+    [zones],
+  );
+
+  const filtered = useMemo(() => {
+    const q = query.trim();
+    if (!q) return options;
+    return options
+      .map((o) => ({ ...o, score: fuzzyScore(q, o.label) }))
+      .filter((o) => o.score >= 0)
+      .sort((a, b) => b.score - a.score || a.label.localeCompare(b.label));
+  }, [options, query]);
+
+  const close = () => {
+    setOpen(false);
+    setQuery("");
+    setActiveIndex(0);
+  };
+
+  const openDropdown = () => {
+    setOpen(true);
+    setQuery("");
+    const selectedIdx = options.findIndex((o) => o.value === value);
+    setActiveIndex(selectedIdx >= 0 ? selectedIdx : 0);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  };
+
+  const pick = (iana) => {
+    onChange(iana);
+    close();
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e) => {
+      if (rootRef.current && !rootRef.current.contains(e.target)) close();
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !listRef.current) return;
+    const el = listRef.current.querySelector(`[data-index="${activeIndex}"]`);
+    el?.scrollIntoView({ block: "nearest" });
+  }, [open, activeIndex, filtered.length]);
+
+  const onSearchKeyDown = (e) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      close();
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, Math.max(filtered.length - 1, 0)));
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, 0));
+      return;
+    }
+    if (e.key === "Enter" && filtered[activeIndex]) {
+      e.preventDefault();
+      pick(filtered[activeIndex].value);
+    }
+  };
+
+  const triggerClass =
+    "w-full p-2.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100 text-left flex items-center justify-between gap-2";
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        id={id}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => (open ? close() : openDropdown())}
+        className={triggerClass}
+      >
+        <span className="truncate">{optionLabel(value)}</span>
+        <span className="text-stone-400 dark:text-stone-500 shrink-0" aria-hidden>
+          ▾
+        </span>
+      </button>
+
+      {open && (
+        <div className="absolute z-20 left-0 right-0 mt-1 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 shadow-lg">
+          <div className="relative border-b border-stone-200 dark:border-stone-800">
+            <MagnifyingGlass
+              size={14}
+              weight="thin"
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
+            />
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setActiveIndex(0);
+              }}
+              onKeyDown={onSearchKeyDown}
+              placeholder="Search (e.g. CET, New York, Berlin)"
+              className="w-full pl-8 pr-2.5 py-2 bg-white dark:bg-stone-900 font-mono text-xs sm:text-sm focus:outline-none text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
+              aria-controls={`${id}-listbox`}
+              aria-autocomplete="list"
+            />
+          </div>
+          <ul
+            id={`${id}-listbox`}
+            ref={listRef}
+            role="listbox"
+            aria-labelledby={id}
+            className="max-h-56 overflow-y-auto custom-scrollbar"
+          >
+            {filtered.length === 0 ? (
+              <li className="px-2.5 py-3 font-mono text-xs text-stone-500 dark:text-stone-400">
+                No timezones match &ldquo;{query.trim()}&rdquo;
+              </li>
+            ) : (
+              filtered.map((o, i) => (
+                <li
+                  key={o.value}
+                  data-index={i}
+                  role="option"
+                  aria-selected={o.value === value}
+                  onMouseEnter={() => setActiveIndex(i)}
+                  onClick={() => pick(o.value)}
+                  className={`px-2.5 py-2 font-mono text-xs sm:text-sm cursor-pointer truncate ${
+                    i === activeIndex
+                      ? "bg-stone-200 dark:bg-stone-800 text-stone-900 dark:text-stone-100"
+                      : o.value === value
+                        ? "bg-stone-100 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200"
+                        : "text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  }`}
+                >
+                  {o.label}
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function wallClockPartsInZone(date, timeZone) {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone,
@@ -176,23 +350,46 @@ function parseWallClockInZone(isoLocal, timeZone) {
   return new Date(utcMs);
 }
 
-function PresetButtons({ presets, presetTarget, onApply }) {
+function CopyButton({ text, onCopySuccess, title = "Copy to clipboard" }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    copyToClipboard(text, () => {
+      setCopied(true);
+      onCopySuccess?.();
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
-    <div className="flex flex-wrap gap-1.5 justify-center sm:justify-start">
-      {presets.map((p) => (
-        <button
-          key={p.iana + p.abbr}
-          type="button"
-          title={p.title}
-          onClick={() => onApply(p.iana)}
-          className="px-2.5 py-1 font-mono text-[11px] border border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-950 text-stone-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-stone-800"
-        >
-          <span className="font-bold">{p.abbr}</span>
-          <span className="text-stone-500 dark:text-stone-500 ml-1 hidden sm:inline">
-            {p.title}
-          </span>
-        </button>
-      ))}
+    <button
+      type="button"
+      onClick={handleCopy}
+      title={title}
+      className="shrink-0 p-1.5 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
+    >
+      {copied ? (
+        <Check size={16} weight="thin" className="text-emerald-500" />
+      ) : (
+        <ClipboardText size={16} weight="thin" />
+      )}
+    </button>
+  );
+}
+
+function ZoneTimeDisplay({ instant, timeZone, onCopySuccess }) {
+  const displayed = formatInZone(instant, timeZone);
+
+  return (
+    <div className="flex items-start gap-2">
+      <div className="font-mono text-lg sm:text-xl text-stone-800 dark:text-stone-200 leading-snug break-words flex-1 min-w-0">
+        {displayed}
+      </div>
+      <CopyButton
+        text={displayed}
+        onCopySuccess={onCopySuccess}
+        title="Copy time as displayed"
+      />
     </div>
   );
 }
@@ -213,14 +410,13 @@ function ZoneAbbrevRow({ instant, timeZone }) {
   );
 }
 
-export default function TimezoneConverter() {
+export default function TimezoneConverter({ onToast }) {
   const zones = useMemo(() => getTimeZoneList(), []);
   const defaultTz =
     Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
   const [zoneA, setZoneA] = useState(defaultTz);
   const [zoneB, setZoneB] = useState("UTC");
-  const [presetTarget, setPresetTarget] = useState("A");
   const [mode, setMode] = useState("live");
   const [customLocal, setCustomLocal] = useState("");
   const [customTimeSource, setCustomTimeSource] = useState("A");
@@ -250,11 +446,8 @@ export default function TimezoneConverter() {
             return Number.isNaN(d.getTime()) ? new Date() : d;
           })();
 
-  const applyPreset = (iana) =>
-    presetTarget === "A" ? setZoneA(iana) : setZoneB(iana);
-
-  const selectClass =
-    "w-full p-2.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100";
+  const unixMs = String(instant.getTime());
+  const copyToast = () => onToast?.("Copied!");
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -264,43 +457,10 @@ export default function TimezoneConverter() {
         </h2>
         <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           One moment, two zones. Pick a moment and say whether it is wall-clock
-          time in zone A or B. US and European quick picks; dropdowns show
-          typical abbreviations (ET, CET, PST/PDT, etc.).
+          time in zone A or B. Searchable zone pickers with typical abbreviations
+          (ET, CET, PST/PDT, etc.).
         </p>
       </header>
-
-      <div className="mb-8 p-4 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 max-w-2xl mx-auto">
-        <div className="flex flex-wrap items-center gap-2 mb-3 font-mono text-[11px] text-stone-600 dark:text-stone-400">
-          <span className="uppercase tracking-[0.14em] text-stone-500 dark:text-stone-500">
-            US presets
-          </span>
-          <span className="text-stone-400 dark:text-stone-600">→</span>
-          <label className="sr-only">Apply preset to zone</label>
-          <select
-            value={presetTarget}
-            onChange={(e) => setPresetTarget(e.target.value)}
-            className="bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 px-2 py-1 text-[11px] text-stone-800 dark:text-stone-200"
-          >
-            <option value="A">Zone A</option>
-            <option value="B">Zone B</option>
-          </select>
-        </div>
-        <PresetButtons
-          presets={US_PRESETS}
-          presetTarget={presetTarget}
-          onApply={applyPreset}
-        />
-        <div className="flex flex-wrap items-center gap-2 mt-4 mb-3 font-mono text-[11px] text-stone-600 dark:text-stone-400">
-          <span className="uppercase tracking-[0.14em] text-stone-500 dark:text-stone-500">
-            Europe presets
-          </span>
-        </div>
-        <PresetButtons
-          presets={EU_PRESETS}
-          presetTarget={presetTarget}
-          onApply={applyPreset}
-        />
-      </div>
 
       <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max mb-8 mx-auto font-mono text-[11px]">
         <button
@@ -367,20 +527,17 @@ export default function TimezoneConverter() {
           <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
             Zone A
           </label>
-          <select
+          <TimezoneSelect
+            id="zone-a-select"
             value={zoneA}
-            onChange={(e) => setZoneA(e.target.value)}
-            className={selectClass}
-          >
-            {zones.map((z) => (
-              <option key={z} value={z}>
-                {optionLabel(z)}
-              </option>
-            ))}
-          </select>
-          <div className="font-mono text-lg sm:text-xl text-stone-800 dark:text-stone-200 leading-snug break-words">
-            {formatInZone(instant, zoneA)}
-          </div>
+            onChange={setZoneA}
+            zones={zones}
+          />
+          <ZoneTimeDisplay
+            instant={instant}
+            timeZone={zoneA}
+            onCopySuccess={copyToast}
+          />
           <ZoneAbbrevRow instant={instant} timeZone={zoneA} />
         </div>
 
@@ -388,27 +545,29 @@ export default function TimezoneConverter() {
           <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
             Zone B
           </label>
-          <select
+          <TimezoneSelect
+            id="zone-b-select"
             value={zoneB}
-            onChange={(e) => setZoneB(e.target.value)}
-            className={selectClass}
-          >
-            {zones.map((z) => (
-              <option key={z} value={z}>
-                {optionLabel(z)}
-              </option>
-            ))}
-          </select>
-          <div className="font-mono text-lg sm:text-xl text-stone-800 dark:text-stone-200 leading-snug break-words">
-            {formatInZone(instant, zoneB)}
-          </div>
+            onChange={setZoneB}
+            zones={zones}
+          />
+          <ZoneTimeDisplay
+            instant={instant}
+            timeZone={zoneB}
+            onCopySuccess={copyToast}
+          />
           <ZoneAbbrevRow instant={instant} timeZone={zoneB} />
         </div>
       </div>
 
-      <p className="mt-6 text-center text-[11px] font-mono text-stone-500 dark:text-stone-500">
-        Unix ms: {instant.getTime()}
-      </p>
+      <div className="mt-6 flex items-center justify-center gap-2 text-[11px] font-mono text-stone-500 dark:text-stone-500">
+        <span>Unix ms: {unixMs}</span>
+        <CopyButton
+          text={unixMs}
+          onCopySuccess={copyToast}
+          title="Copy Unix timestamp (ms)"
+        />
+      </div>
     </div>
   );
 }
