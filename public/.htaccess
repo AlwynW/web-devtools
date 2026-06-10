@@ -1,11 +1,13 @@
-RewriteEngine On
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
 
-RewriteBase /
+  # Avoid rewriting the actual index.html file
+  RewriteRule ^index\.html$ - [L]
 
-RewriteRule ^$ index.html [L]
-
-# SPA: non-file requests fall back to index.html
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.html [L]
+  # SPA: non-file requests fall back to index.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
 
