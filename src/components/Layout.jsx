@@ -1,7 +1,21 @@
-import React, { useEffect, useRef, useState, Suspense } from "react";
+import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Check, Wrench, Command, MagnifyingGlass, Sun, Moon } from "phosphor-react";
+import {
+  Check,
+  Wrench,
+  Command,
+  MagnifyingGlass,
+  Sun,
+  Moon,
+  Star,
+} from "phosphor-react";
 import { navGroups } from "./navConfig";
+import {
+  FAVORITES_STORAGE_KEY,
+  loadFavoriteToolPaths,
+  saveFavoriteToolPaths,
+  toggleFavoritePath,
+} from "../utils/favoriteTools";
 
 export default function Layout({ toast }) {
   const location = useLocation();
@@ -18,7 +32,23 @@ export default function Layout({ toast }) {
 
   const searchInputRef = useRef(null);
 
-  const allItems = navGroups.flatMap((g) => g.items);
+  const [favoritePaths, setFavoritePaths] = useState(loadFavoriteToolPaths);
+
+  const allItems = useMemo(() => navGroups.flatMap((g) => g.items), []);
+  const validPathSet = useMemo(
+    () => new Set(allItems.map((i) => i.path)),
+    [allItems],
+  );
+
+  const pathToMeta = useMemo(() => {
+    const map = new Map();
+    for (const g of navGroups) {
+      for (const item of g.items) {
+        map.set(item.path, { item, groupName: g.name });
+      }
+    }
+    return map;
+  }, []);
   const activeItem =
     allItems.find((item) => item.path === location.pathname) ||
     allItems.find((item) => item.path === "/");
@@ -51,6 +81,24 @@ export default function Layout({ toast }) {
   }, []);
 
   useEffect(() => {
+    setFavoritePaths((prev) => {
+      const next = prev.filter((p) => validPathSet.has(p));
+      if (next.length === prev.length) return prev;
+      saveFavoriteToolPaths(next);
+      return next;
+    });
+  }, [validPathSet]);
+
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key !== FAVORITES_STORAGE_KEY) return;
+      setFavoritePaths(loadFavoriteToolPaths());
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
@@ -74,18 +122,62 @@ export default function Layout({ toast }) {
     }
   }, [isMenuOpen]);
 
-  const filteredGroups = navGroups
-    .map((group) => ({
-      ...group,
-      items: group.items.filter((item) => {
-        const q = searchQuery.toLowerCase();
-        return (
-          item.label.toLowerCase().includes(q) ||
-          (group.name || "").toLowerCase().includes(q)
-        );
-      }),
-    }))
-    .filter((group) => group.items.length > 0);
+  const displayedGroups = useMemo(() => {
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = (item, groupName) => {
+      if (!q) return true;
+      return (
+        item.label.toLowerCase().includes(q) ||
+        (groupName || "").toLowerCase().includes(q)
+      );
+    };
+
+    if (favoritePaths.length === 0) {
+      return navGroups
+        .map((group) => ({
+          ...group,
+          items: group.items.filter((item) =>
+            matchesSearch(item, group.name),
+          ),
+        }))
+        .filter((group) => group.items.length > 0);
+    }
+
+    const favSet = new Set(favoritePaths);
+    const favouriteItems = favoritePaths
+      .map((p) => pathToMeta.get(p))
+      .filter(
+        (meta) =>
+          meta !== undefined && matchesSearch(meta.item, meta.groupName),
+      )
+      .map((meta) => meta.item);
+
+    const otherGroups = navGroups
+      .map((group) => ({
+        ...group,
+        items: group.items.filter(
+          (item) =>
+            matchesSearch(item, group.name) && !favSet.has(item.path),
+        ),
+      }))
+      .filter((group) => group.items.length > 0);
+
+    if (favouriteItems.length === 0) {
+      return otherGroups;
+    }
+
+    return [{ name: "Favourites", items: favouriteItems }, ...otherGroups];
+  }, [searchQuery, favoritePaths, pathToMeta]);
+
+  const toggleFavorite = (path, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFavoritePaths((prev) => {
+      const next = toggleFavoritePath(prev, path);
+      saveFavoriteToolPaths(next);
+      return next;
+    });
+  };
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
@@ -216,47 +308,74 @@ export default function Layout({ toast }) {
 
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
           <div className="max-w-5xl mx-auto space-y-8">
-            {filteredGroups.length === 0 ? (
+            {displayedGroups.length === 0 ? (
               <div className="text-center py-10 text-stone-500 dark:text-stone-400 text-sm font-mono">
                 No utilities found matching "{searchQuery}"
               </div>
             ) : (
-              filteredGroups.map((group) => (
+              displayedGroups.map((group) => (
                 <div key={group.name} className="space-y-2">
                   <h3 className="text-[11px] font-mono tracking-[0.18em] text-stone-500 dark:text-stone-500 uppercase">
                     //<span className="ml-2">{group.name}</span>
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 border p-2 border-stone-200/60 dark:border-stone-900/80">
-                    {group.items.map((item) => (
-                      <NavLink
-                        key={item.path}
-                        to={item.path}
-                        end={item.path === "/"}
-                        onClick={() => {
-                          localStorage.setItem("lastToolPath", item.path);
-                          setIsMenuOpen(false);
-                          setSearchQuery("");
-                        }}
-                        className={`flex items-start gap-3 p-3 text-left transition-all duration-150 group text-sm border border-stone-200 dark:border-stone-800 ${
-                          location.pathname === item.path
-                             ? "bg-stone-700 text-stone-100 dark:bg-stone-300 dark:text-stone-900"
-                              : "bg-white text-slate-700 dark:bg-stone-900 dark:text-stone-300 hover:bg-stone-200 hover:text-stone-900"
-                        }`}
-                      >
-                        <div
-                          className={`px-2 py-1 flex-shrink-0 aspect-square justify-center items-center flex transition-colors border border-stone-300 dark:border-stone-700 text-[11px] font-mono `}
+                    {group.items.map((item) => {
+                      const isFav = favoritePaths.includes(item.path);
+                      const subtitleSource =
+                        group.name === "Favourites"
+                          ? pathToMeta.get(item.path)?.groupName ?? group.name
+                          : group.name;
+                      return (
+                        
+                          <NavLink
+                            to={item.path}
+                            end={item.path === "/"}
+                            onClick={() => {
+                              localStorage.setItem("lastToolPath", item.path);
+                              setIsMenuOpen(false);
+                              setSearchQuery("");
+                            }}
+                            className={`relative flex items-start gap-3 p-3 pr-11 text-left transition-all duration-150 group text-sm border border-stone-200 dark:border-stone-800 ${
+                              location.pathname === item.path
+                                ? "bg-stone-700 text-stone-100 dark:bg-stone-300 dark:text-stone-900"
+                                : "bg-white text-slate-700 dark:bg-stone-900 dark:text-stone-300 hover:bg-stone-200 hover:text-stone-900"
+                            }`}
+                          ><button
+                          type="button"
+                          onClick={(e) => toggleFavorite(item.path, e)}
+                          className="absolute top-2 right-2 z-10 p-1 rounded border border-transparent hover:border-stone-300 dark:hover:border-stone-600 hover:bg-stone-100/80 dark:hover:bg-stone-800/80 transition-colors"
+                          aria-label={
+                            isFav
+                              ? "Remove from favourites"
+                              : "Add to favourites"
+                          }
                         >
-                          <item.icon size={14} weight="thin" />
+                          <Star
+                            size={16}
+                            weight={isFav ? "fill" : "thin"}
+                            className={
+                              isFav
+                                ? "text-amber-500 dark:text-amber-400"
+                                : "text-stone-400 dark:text-stone-500"
+                            }
+                          />
+                        </button>
+                            <div
+                              className={`px-2 py-1 flex-shrink-0 aspect-square justify-center items-center flex transition-colors border border-stone-300 dark:border-stone-700 text-[11px] font-mono `}
+                            >
+                              <item.icon size={14} weight="thin" />
+                            </div>
+                            <div className="min-w-0">
+                              {item.label}
+                              <div className="text-[11px] font-mono  leading-snug line-clamp-2">
+                                {item.description || subtitleSource}
+                              </div>
+                            </div>
+                          </NavLink>
                           
-                        </div>
-                        <div className="min-w-0">
-                        {item.label}
-                          <div className="text-[11px] font-mono  leading-snug line-clamp-2">
-                            {item.description || group.name}
-                          </div>
-                        </div>
-                      </NavLink>
-                    ))}
+                        
+                      );
+                    })}
                   </div>
                 </div>
               ))
