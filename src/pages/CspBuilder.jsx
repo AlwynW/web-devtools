@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyPre from "../components/CopyPre";
 
 const DIRECTIVES = [
   { key: "defaultSrc", name: "default-src", placeholder: "'self'" },
@@ -92,45 +92,30 @@ export default function CspBuilder({ onToast }) {
         </div>
 
         <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
-              Header value
-            </span>
-            <button
-              type="button"
-              onClick={() =>
-                headerValue &&
-                copyToClipboard(headerValue, () => onToast("Copied!"))
-              }
-              className="text-[11px] font-mono underline text-stone-600 dark:text-stone-400"
-            >
-              Copy
-            </button>
-          </div>
-          <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-xs break-all text-stone-800 dark:text-stone-200 min-h-[3rem]">
+          <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            Header value
+          </span>
+          <CopyPre
+            text={headerValue || ""}
+            onCopySuccess={() => onToast("Copied!")}
+            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 min-h-[3rem]"
+            preClassName="p-3 font-mono text-xs break-all text-stone-800 dark:text-stone-200"
+          >
             {headerValue || "—"}
-          </pre>
+          </CopyPre>
         </div>
 
         {metaTag && (
           <div>
-            <div className="flex justify-between mb-1">
-              <span className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
-                Meta tag
-              </span>
-              <button
-                type="button"
-                onClick={() =>
-                  copyToClipboard(metaTag, () => onToast("Copied!"))
-                }
-                className="text-[11px] font-mono underline text-stone-600 dark:text-stone-400"
-              >
-                Copy
-              </button>
-            </div>
-            <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-xs break-all text-stone-800 dark:text-stone-200">
-              {metaTag}
-            </pre>
+            <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+              Meta tag
+            </span>
+            <CopyPre
+              text={metaTag}
+              onCopySuccess={() => onToast("Copied!")}
+              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+              preClassName="p-3 font-mono text-xs break-all text-stone-800 dark:text-stone-200"
+            />
           </div>
         )}
       </div>

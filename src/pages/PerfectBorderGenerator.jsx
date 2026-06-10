@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import CopyArea from "../components/CopyArea";
-import Button from "../components/Button";
 
 /**
  * Adaptive harmony: linear R − P for small padding, then blend toward a
@@ -466,16 +465,6 @@ export default function PerfectBorderGenerator({ onToast }) {
                 <h4 className="text-sm font-mono font-semibold text-stone-700 dark:text-stone-200">
                   HTML with inline CSS variables
                 </h4>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    navigator.clipboard?.writeText(inlineSnippet);
-                    onToast?.("Snippet copied!");
-                  }}
-                  className="text-xs py-1 px-3"
-                >
-                  Copy snippet
-                </Button>
               </div>
               <CopyArea
                 text={inlineSnippet}
@@ -492,18 +481,6 @@ export default function PerfectBorderGenerator({ onToast }) {
                 <h4 className="text-sm font-mono font-semibold text-stone-700 dark:text-stone-200">
                   Tailwind v4
                 </h4>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    navigator.clipboard?.writeText(
-                      tailwindSnippet,
-                    );
-                    onToast?.("Tailwind snippet copied!");
-                  }}
-                  className="text-xs py-1 px-3"
-                >
-                  Copy snippet
-                </Button>
               </div>
               <CopyArea
                 text={tailwindSnippet}

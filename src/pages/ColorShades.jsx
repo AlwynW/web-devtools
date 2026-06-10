@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { parse, formatHex, oklch, interpolate } from "culori";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
+import CopyPre from "../components/CopyPre";
 
 export default function ColorShades({ onToast }) {
   const [hex, setHex] = useState("#6366f1");
@@ -133,43 +134,32 @@ export default function ColorShades({ onToast }) {
                 {rows.map((r) => (
                   <tr
                     key={r.step}
-                    className="border-t border-stone-100 dark:border-stone-800"
+                    className="border-t border-stone-100 dark:border-stone-800 group"
                   >
                     <td className="p-2">{r.step}</td>
                     <td className="p-2">{r.hex}</td>
                     <td className="p-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          copyToClipboard(r.hex, () => onToast("Copied!"))
-                        }
-                        className="underline text-stone-500"
-                      >
-                        Copy
-                      </button>
+                      <CopyButton
+                        text={r.hex}
+                        onCopySuccess={() => onToast("Copied!")}
+                        size={16}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
-                  CSS variables
-                </span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    copyToClipboard(cssVars, () => onToast("Copied!"))
-                  }
-                  className="text-[11px] font-mono underline text-stone-600 dark:text-stone-400"
-                >
-                  Copy
-                </button>
-              </div>
-              <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-xs text-stone-800 dark:text-stone-200 overflow-x-auto">
-                {cssVars}
-              </pre>
+              <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+                CSS variables
+              </span>
+              <CopyPre
+                text={cssVars}
+                onCopySuccess={() => onToast("Copied!")}
+                className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 overflow-x-auto"
+                preClassName="p-3 font-mono text-xs text-stone-800 dark:text-stone-200"
+              />
             </div>
           </>
         )}

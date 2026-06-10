@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { ClipboardText } from "phosphor-react";
 import * as jose from "jose";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyPre from "../components/CopyPre";
 
 const base64UrlDecode = (str) => {
   try {
@@ -106,9 +105,6 @@ export default function JwtDebugger({ onToast }) {
       setVerifyResult(null);
     }
   }, [input, decode]);
-
-  const copy = (text, msg) =>
-    copyToClipboard(text, () => onToast(msg || "Copied!"));
 
   const applyExpiryPreset = (secondsFromNow) => {
     setError(null);
@@ -282,39 +278,27 @@ export default function JwtDebugger({ onToast }) {
             {decoded && (
               <div className="space-y-4">
                 <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
-                      Header
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => copy(decoded.header, "Header copied!")}
-                      className="p-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
-                    >
-                      <ClipboardText size={16} weight="thin" />
-                    </button>
-                  </div>
-                  <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-sm overflow-x-auto text-stone-800 dark:text-stone-200">
-                    {decoded.header}
-                  </pre>
+                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
+                    Header
+                  </label>
+                  <CopyPre
+                    text={decoded.header}
+                    onCopySuccess={() => onToast("Header copied!")}
+                    className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 overflow-x-auto"
+                    preClassName="p-4 font-mono text-sm text-stone-800 dark:text-stone-200"
+                  />
                 </div>
 
                 <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
-                      Payload
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => copy(decoded.payload, "Payload copied!")}
-                      className="p-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
-                    >
-                      <ClipboardText size={16} weight="thin" />
-                    </button>
-                  </div>
-                  <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-sm overflow-x-auto text-stone-800 dark:text-stone-200">
-                    {decoded.payload}
-                  </pre>
+                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
+                    Payload
+                  </label>
+                  <CopyPre
+                    text={decoded.payload}
+                    onCopySuccess={() => onToast("Payload copied!")}
+                    className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 overflow-x-auto"
+                    preClassName="p-4 font-mono text-sm text-stone-800 dark:text-stone-200"
+                  />
                   {(decoded.exp || decoded.iat || decoded.sub) && (
                     <div className="mt-2 text-xs text-stone-500 space-y-1 font-mono">
                       {decoded.exp && (
@@ -338,9 +322,12 @@ export default function JwtDebugger({ onToast }) {
                   <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
                     Signature (Base64URL)
                   </label>
-                  <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-xs break-all text-stone-800 dark:text-stone-200">
-                    {decoded.signature}
-                  </pre>
+                  <CopyPre
+                    text={decoded.signature}
+                    onCopySuccess={() => onToast("Copied!")}
+                    className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900"
+                    preClassName="p-4 font-mono text-xs break-all text-stone-800 dark:text-stone-200"
+                  />
                 </div>
               </div>
             )}
@@ -426,21 +413,15 @@ export default function JwtDebugger({ onToast }) {
             </button>
             {createdToken && (
               <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
-                    Created Token
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => copy(createdToken, "Token copied!")}
-                    className="p-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
-                  >
-                    <ClipboardText size={16} weight="thin" />
-                  </button>
-                </div>
-                <pre className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-xs break-all overflow-x-auto text-stone-800 dark:text-stone-200">
-                  {createdToken}
-                </pre>
+                <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
+                  Created Token
+                </label>
+                <CopyPre
+                  text={createdToken}
+                  onCopySuccess={() => onToast("Token copied!")}
+                  className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 overflow-x-auto"
+                  preClassName="p-4 font-mono text-xs break-all text-stone-800 dark:text-stone-200"
+                />
               </div>
             )}
           </>

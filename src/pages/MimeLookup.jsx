@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { MIME_BY_EXT } from "../data/mimeTypes";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 
 const entries = Object.entries(MIME_BY_EXT).sort(([a], [b]) =>
   a.localeCompare(b),
@@ -64,7 +64,7 @@ export default function MimeLookup({ onToast }) {
               {filtered.map(([ext, mime]) => (
                 <tr
                   key={ext}
-                  className="border-t border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-950"
+                  className="border-t border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-950 group"
                 >
                   <td className="p-2 pl-3 text-stone-800 dark:text-stone-200">
                     .{ext}
@@ -73,15 +73,12 @@ export default function MimeLookup({ onToast }) {
                     {mime}
                   </td>
                   <td className="p-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        copyToClipboard(mime, () => onToast("MIME copied!"))
-                      }
-                      className="text-[11px] text-stone-500 underline"
-                    >
-                      Copy
-                    </button>
+                    <CopyButton
+                      text={mime}
+                      onCopySuccess={() => onToast("MIME copied!")}
+                      size={16}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
                   </td>
                 </tr>
               ))}

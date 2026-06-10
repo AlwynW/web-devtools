@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { ArrowsClockwise } from "phosphor-react";
 import Button from "../components/Button";
 import CopyArea from "../components/CopyArea";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 import { generateUUIDv1, generateUUIDv4, generateUUIDv7 } from "../utils/uuid";
 
 const MAX_BULK = 500;
@@ -54,12 +54,6 @@ export default function UuidGenerator({ onToast }) {
     ],
     [],
   );
-
-  const copyAll = () => {
-    const text = safeCount <= 1 ? uuid : bulkText;
-    if (!text) return;
-    copyToClipboard(text, () => onToast("Copied!"));
-  };
 
   const regenerate = () => setRefreshKey((k) => k + 1);
 
@@ -119,13 +113,12 @@ export default function UuidGenerator({ onToast }) {
               <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
                 Output ({safeCount} lines)
               </label>
-              <button
-                type="button"
-                onClick={copyAll}
-                className="text-[11px] font-mono px-3 py-1 border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300"
-              >
-                Copy all
-              </button>
+              <CopyButton
+                text={bulkText}
+                onCopySuccess={() => onToast("Copied!")}
+                title="Copy all"
+                size={16}
+              />
             </div>
             <textarea
               readOnly

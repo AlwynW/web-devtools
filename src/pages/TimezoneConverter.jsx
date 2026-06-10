@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ClipboardText, MagnifyingGlass } from "phosphor-react";
-import { copyToClipboard } from "../utils/clipboard";
+import { MagnifyingGlass } from "phosphor-react";
+import CopyButton from "../components/CopyButton";
 
 /** Hints for IANA ids (abbreviations are location-dependent; shown as typical labels). */
 const IANA_EXTRA_LABELS = {
@@ -348,33 +348,6 @@ function parseWallClockInZone(isoLocal, timeZone) {
   }
 
   return new Date(utcMs);
-}
-
-function CopyButton({ text, onCopySuccess, title = "Copy to clipboard" }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    copyToClipboard(text, () => {
-      setCopied(true);
-      onCopySuccess?.();
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      title={title}
-      className="shrink-0 p-1.5 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
-    >
-      {copied ? (
-        <Check size={16} weight="thin" className="text-emerald-500" />
-      ) : (
-        <ClipboardText size={16} weight="thin" />
-      )}
-    </button>
-  );
 }
 
 function ZoneTimeDisplay({ instant, timeZone, onCopySuccess }) {

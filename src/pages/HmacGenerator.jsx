@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import CryptoJS from "crypto-js";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyPre from "../components/CopyPre";
 
 export default function HmacGenerator({ onToast }) {
   const [secret, setSecret] = useState("");
@@ -30,9 +30,6 @@ export default function HmacGenerator({ onToast }) {
       return { hex: "", b64: "", err: e.message || "Error" };
     }
   }, [secret, message, alg]);
-
-  const copy = (text) =>
-    text && copyToClipboard(text, () => onToast("Copied!"));
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -90,34 +87,22 @@ export default function HmacGenerator({ onToast }) {
         {secret && (
           <div className="space-y-3 font-mono text-sm">
             <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-stone-500 text-xs">Hex</span>
-                <button
-                  type="button"
-                  onClick={() => copy(hex)}
-                  className="text-[11px] underline text-stone-600 dark:text-stone-400"
-                >
-                  Copy
-                </button>
-              </div>
-              <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 text-xs break-all text-stone-800 dark:text-stone-200">
-                {hex}
-              </pre>
+              <span className="block text-stone-500 text-xs mb-2">Hex</span>
+              <CopyPre
+                text={hex}
+                onCopySuccess={() => onToast("Copied!")}
+                className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+                preClassName="p-3 text-xs break-all text-stone-800 dark:text-stone-200"
+              />
             </div>
             <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-stone-500 text-xs">Base64</span>
-                <button
-                  type="button"
-                  onClick={() => copy(b64)}
-                  className="text-[11px] underline text-stone-600 dark:text-stone-400"
-                >
-                  Copy
-                </button>
-              </div>
-              <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 text-xs break-all text-stone-800 dark:text-stone-200">
-                {b64}
-              </pre>
+              <span className="block text-stone-500 text-xs mb-2">Base64</span>
+              <CopyPre
+                text={b64}
+                onCopySuccess={() => onToast("Copied!")}
+                className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+                preClassName="p-3 text-xs break-all text-stone-800 dark:text-stone-200"
+              />
             </div>
           </div>
         )}

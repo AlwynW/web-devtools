@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
+import CopyPre from "../components/CopyPre";
 
 export default function ClampGenerator({ onToast }) {
   const [minPx, setMinPx] = useState(16);
@@ -142,23 +143,15 @@ export default function ClampGenerator({ onToast }) {
         </div>
 
         <div>
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-[11px] text-stone-500 uppercase tracking-[0.18em]">
-              Result
-            </label>
-            <button
-              type="button"
-              onClick={() =>
-                copyToClipboard(clampCss, () => onToast("Copied!"))
-              }
-              className="text-[11px] underline text-stone-600 dark:text-stone-400"
-            >
-              Copy
-            </button>
-          </div>
-          <pre className="p-4 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-200 text-xs break-all whitespace-pre-wrap">
-            {clampCss}
-          </pre>
+          <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-2">
+            Result
+          </label>
+          <CopyPre
+            text={clampCss}
+            onCopySuccess={() => onToast("Copied!")}
+            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+            preClassName="p-4 text-stone-800 dark:text-stone-200 text-xs break-all whitespace-pre-wrap"
+          />
           <p className="text-[11px] text-stone-500 mt-2">
             vw slope ≈ {preferredVw.toFixed(3)} (linear interpolation in px
             space)

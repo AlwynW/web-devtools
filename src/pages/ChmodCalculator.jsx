@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from "react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 
 const labels = [
   { key: "r", name: "Read" },
@@ -93,8 +93,7 @@ export default function ChmodCalculator({ onToast }) {
     return `${sym(owner)}${sym(group)}${sym(other)}`;
   }, [owner, group, other]);
 
-  const copy = (text) =>
-    copyToClipboard(text, () => onToast("Copied!"));
+  const copyToast = () => onToast("Copied!");
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -154,35 +153,37 @@ export default function ChmodCalculator({ onToast }) {
             </div>
           </div>
           <div className="space-y-2 font-mono text-sm">
-            <div className="flex justify-between border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950">
+            <div className="flex justify-between items-center border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950">
               <span className="text-stone-500">Octal</span>
-              <button
-                type="button"
-                onClick={() => copy(octStr)}
-                className="text-stone-900 dark:text-stone-100 font-semibold hover:underline"
-              >
-                {octStr}
-              </button>
+              <div className="flex items-center gap-2">
+                <span className="text-stone-900 dark:text-stone-100 font-semibold font-mono">
+                  {octStr}
+                </span>
+                <CopyButton text={octStr} onCopySuccess={copyToast} size={16} />
+              </div>
             </div>
-            <div className="flex justify-between border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950">
+            <div className="flex justify-between items-center border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950">
               <span className="text-stone-500">Symbolic</span>
-              <button
-                type="button"
-                onClick={() => copy(symbolic)}
-                className="text-stone-900 dark:text-stone-100 hover:underline"
-              >
-                {symbolic}
-              </button>
+              <div className="flex items-center gap-2">
+                <span className="text-stone-900 dark:text-stone-100 font-mono">
+                  {symbolic}
+                </span>
+                <CopyButton text={symbolic} onCopySuccess={copyToast} size={16} />
+              </div>
             </div>
-            <div className="flex justify-between border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950">
-              <span className="text-stone-500">chmod</span>
-              <button
-                type="button"
-                onClick={() => copy(`chmod ${octStr} file`)}
-                className="text-xs text-left text-stone-800 dark:text-stone-200 hover:underline break-all"
-              >
-                chmod {octStr} file
-              </button>
+            <div className="flex justify-between items-center border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950 gap-2">
+              <span className="text-stone-500 shrink-0">chmod</span>
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-xs text-left text-stone-800 dark:text-stone-200 font-mono break-all">
+                  chmod {octStr} file
+                </span>
+                <CopyButton
+                  text={`chmod ${octStr} file`}
+                  onCopySuccess={copyToast}
+                  size={16}
+                  className="shrink-0"
+                />
+              </div>
             </div>
           </div>
         </div>

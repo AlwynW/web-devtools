@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { MagnifyingGlass } from "phosphor-react";
+import CopyButton from "../components/CopyButton";
 import { ASCII_CHARS } from "../data/asciiChars";
-import { copyToClipboard } from "../utils/clipboard";
 
 export default function AsciiUnicodeTable({ onToast }) {
   const [search, setSearch] = useState("");
@@ -17,10 +17,6 @@ export default function AsciiUnicodeTable({ onToast }) {
         c.name.toLowerCase().includes(q)
     );
   }, [search]);
-
-  const copyChar = (char) => {
-    if (char) copyToClipboard(char, () => onToast("Copied!"));
-  };
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -64,7 +60,7 @@ export default function AsciiUnicodeTable({ onToast }) {
               {filtered.map((c) => (
                 <tr
                   key={c.code}
-                  className="border-b border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-900"
+                  className="border-b border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-900 group"
                 >
                   <td className="p-2 font-bold text-stone-800 dark:text-stone-200 w-12">
                     {c.char || "—"}
@@ -74,12 +70,12 @@ export default function AsciiUnicodeTable({ onToast }) {
                   <td className="p-2 text-stone-500 dark:text-stone-400 text-xs">{c.name}</td>
                   <td className="p-2">
                     {c.char && c.char !== "—" && (
-                      <button
-                        onClick={() => copyChar(c.char)}
-                        className="px-2 py-1 border border-stone-300 dark:border-stone-700 text-xs text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800"
-                      >
-                        Copy
-                      </button>
+                      <CopyButton
+                        text={c.char}
+                        onCopySuccess={() => onToast("Copied!")}
+                        size={16}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      />
                     )}
                   </td>
                 </tr>

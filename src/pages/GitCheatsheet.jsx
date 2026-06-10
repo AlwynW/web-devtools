@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { MagnifyingGlass } from "phosphor-react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 
 const GIT_COMMANDS = [
   { category: "Basics", commands: [
@@ -61,10 +61,6 @@ export default function GitCheatsheet({ onToast }) {
     })).filter((g) => g.commands.length > 0);
   }, [search]);
 
-  const copy = (cmd) => {
-    copyToClipboard(cmd, () => onToast("Copied!"));
-  };
-
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
@@ -112,12 +108,12 @@ export default function GitCheatsheet({ onToast }) {
                         {c.description}
                       </div>
                     </div>
-                    <button
-                      onClick={() => copy(c.example || c.command)}
-                      className="ml-3 px-3 py-1.5 border border-stone-300 dark:border-stone-700 text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      Copy
-                    </button>
+                    <CopyButton
+                      text={c.example || c.command}
+                      onCopySuccess={() => onToast("Copied!")}
+                      size={16}
+                      className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
                   </div>
                 ))}
               </div>

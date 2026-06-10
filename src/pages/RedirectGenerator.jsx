@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyPre from "../components/CopyPre";
 
 export default function RedirectGenerator({ onToast }) {
   const [path, setPath] = useState("/old");
@@ -24,9 +24,6 @@ export default function RedirectGenerator({ onToast }) {
     const apache = `Redirect ${c} ${p} ${t}`;
     return { netlify, vercel, nginxLoc, apache, p, t, c };
   }, [path, target, code]);
-
-  const copy = (text) =>
-    copyToClipboard(text, () => onToast("Copied!"));
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -81,21 +78,15 @@ export default function RedirectGenerator({ onToast }) {
           { title: "Apache mod_alias", body: blocks.apache },
         ].map((sec) => (
           <div key={sec.title}>
-            <div className="flex justify-between mb-1">
-              <span className="text-[11px] text-stone-500 uppercase tracking-[0.18em]">
-                {sec.title}
-              </span>
-              <button
-                type="button"
-                onClick={() => copy(sec.body)}
-                className="text-[11px] underline text-stone-600 dark:text-stone-400"
-              >
-                Copy
-              </button>
-            </div>
-            <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 text-xs whitespace-pre-wrap break-all text-stone-800 dark:text-stone-200">
-              {sec.body}
-            </pre>
+            <span className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-2">
+              {sec.title}
+            </span>
+            <CopyPre
+              text={sec.body}
+              onCopySuccess={() => onToast("Copied!")}
+              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+              preClassName="p-3 text-xs whitespace-pre-wrap break-all text-stone-800 dark:text-stone-200"
+            />
           </div>
         ))}
       </div>

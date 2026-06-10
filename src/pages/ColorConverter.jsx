@@ -7,7 +7,7 @@ import {
   parse,
   oklch,
 } from "culori";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 
 const detectFormat = (str) => {
   const s = str.trim();
@@ -67,9 +67,6 @@ export default function ColorConverter({ onToast }) {
   useEffect(() => {
     convert();
   }, [convert]);
-
-  const copy = (text, msg) =>
-    copyToClipboard(text, () => onToast(msg || "Copied!"));
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -138,13 +135,12 @@ export default function ColorConverter({ onToast }) {
                     <code className="font-mono text-sm text-stone-800 dark:text-stone-200">
                       {formats[key]}
                     </code>
-                    <button
-                      onClick={() => copy(formats[key], `${label} copied!`)}
-                      className="p-1.5 border border-stone-300 dark:border-stone-700 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-500 font-mono text-xs"
-                      title="Copy"
-                    >
-                      Copy
-                    </button>
+                    <CopyButton
+                      text={formats[key]}
+                      onCopySuccess={() => onToast(`${label} copied!`)}
+                      title={`Copy ${label}`}
+                      size={16}
+                    />
                   </div>
                 </div>
               ))}

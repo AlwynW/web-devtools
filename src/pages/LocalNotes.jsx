@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 
 const STORAGE_KEY = "devkit-local-notes";
 
@@ -34,10 +34,6 @@ export default function LocalNotes({ onToast }) {
   const remove = (id) => {
     setNotes((prev) => prev.filter((n) => n.id !== id));
     onToast?.("Note removed");
-  };
-
-  const copy = (text) => {
-    copyToClipboard(text, () => onToast?.("Copied!"));
   };
 
   return (
@@ -83,12 +79,11 @@ export default function LocalNotes({ onToast }) {
               <span className="flex-1 font-mono text-sm text-stone-800 dark:text-stone-200">
                 {note.text}
               </span>
-              <button
-                onClick={() => copy(note.text)}
-                className="px-3 py-1 font-mono text-xs text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 border border-stone-300 dark:border-stone-600 hover:border-stone-400 transition-colors"
-              >
-                Copy
-              </button>
+              <CopyButton
+                text={note.text}
+                onCopySuccess={() => onToast?.("Copied!")}
+                size={16}
+              />
               <button
                 onClick={() => remove(note.id)}
                 className="px-3 py-1 font-mono text-xs text-stone-500 hover:text-red-600 dark:hover:text-red-400 border border-stone-300 dark:border-stone-600 hover:border-red-400 transition-colors"

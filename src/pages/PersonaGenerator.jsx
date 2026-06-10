@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { ClipboardText, ArrowsClockwise } from "phosphor-react";
+import { ArrowsClockwise } from "phosphor-react";
 import { faker } from "@faker-js/faker";
 import Button from "../components/Button";
+import CopyButton from "../components/CopyButton";
 import { copyToClipboard } from "../utils/clipboard";
 
 export default function PersonaGenerator({ onToast }) {
@@ -39,8 +40,6 @@ export default function PersonaGenerator({ onToast }) {
     copyToClipboard(text, () => onToast("Persona copied!"));
   };
 
-  const copyField = (val, label) =>
-    copyToClipboard(val, () => onToast(`${label} copied!`));
 
   if (!persona)
     return <div className="text-center p-12 font-mono text-stone-500">Loading persona generator...</div>;
@@ -61,13 +60,12 @@ export default function PersonaGenerator({ onToast }) {
           <div className="w-40 h-40 border-4 border-stone-200 dark:border-stone-700 overflow-hidden bg-stone-50 dark:bg-stone-900">
             <img src={persona.avatar} alt="Profile" className="w-full h-full" />
           </div>
-          <Button
-            variant="outline"
-            className="w-full text-xs"
-            onClick={() => copyField(persona.avatar, "Avatar URL")}
-          >
-            Copy URL
-          </Button>
+          <CopyButton
+            text={persona.avatar}
+            onCopySuccess={() => onToast("Avatar URL copied!")}
+            title="Copy URL"
+            className="w-full justify-center"
+          />
         </div>
 
         <div className="flex-1 w-full space-y-4">
@@ -84,12 +82,12 @@ export default function PersonaGenerator({ onToast }) {
                 <span className="text-lg font-mono truncate pr-4 text-stone-800 dark:text-stone-100">
                   {field.val}
                 </span>
-                <button
-                  onClick={() => copyField(field.val, field.label)}
-                  className="p-2 border border-stone-300 dark:border-stone-700 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-                >
-                  <ClipboardText size={16} weight="thin" />
-                </button>
+                <CopyButton
+                  text={field.val}
+                  onCopySuccess={() => onToast(`${field.label} copied!`)}
+                  title={`Copy ${field.label}`}
+                  size={16}
+                />
               </div>
             </div>
           ))}
@@ -97,11 +95,7 @@ export default function PersonaGenerator({ onToast }) {
       </div>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-end">
-        <Button
-          variant="outline"
-          onClick={copyFullPersona}
-          icon={ClipboardText}
-        >
+        <Button variant="outline" onClick={copyFullPersona}>
           Full Report
         </Button>
         <Button onClick={generatePersona} icon={ArrowsClockwise}>

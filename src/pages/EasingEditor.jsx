@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyPre from "../components/CopyPre";
 
 const PRESETS = [
   { name: "ease", v: [0.25, 0.1, 0.25, 1] },
@@ -251,23 +251,16 @@ export default function EasingEditor({ onToast }) {
         </div>
 
         <div className="space-y-2">
-          <div className="flex justify-between">
-            <span className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
-              CSS
-            </span>
-            <button
-              type="button"
-              onClick={() =>
-                copyToClipboard(css, () => onToast("Copied!"))
-              }
-              className="text-[11px] font-mono underline text-stone-600 dark:text-stone-400"
-            >
-              Copy cubic-bezier
-            </button>
-          </div>
-          <pre className="p-4 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-sm text-stone-800 dark:text-stone-200">
-            transition-timing-function: {css};
-          </pre>
+          <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
+            CSS
+          </span>
+          <CopyPre
+            text={`transition-timing-function: ${css};`}
+            onCopySuccess={() => onToast("Copied!")}
+            title="Copy cubic-bezier"
+            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+            preClassName="p-4 font-mono text-sm text-stone-800 dark:text-stone-200"
+          />
         </div>
 
         <div className="relative h-14 border border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-950 rounded overflow-hidden">

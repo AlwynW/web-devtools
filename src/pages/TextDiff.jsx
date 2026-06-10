@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { diffLines } from "diff";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyPre from "../components/CopyPre";
 
 function prepare(text, ignoreTrim, ignoreCase) {
   let lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -155,27 +155,19 @@ export default function TextDiff({ onToast }) {
         </div>
 
         <div className="bg-white dark:bg-stone-900 p-4 border border-stone-200 dark:border-stone-800">
-          <div className="flex justify-between mb-2">
-            <span className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
-              {mode === "unified" ? "Unified" : "Side by side"}
-            </span>
-            {mode === "unified" && (
-              <button
-                type="button"
-                onClick={() =>
-                  unified &&
-                  copyToClipboard(unified, () => onToast("Copied!"))
-                }
-                className="text-[11px] font-mono underline text-stone-600 dark:text-stone-400"
-              >
-                Copy unified
-              </button>
-            )}
-          </div>
+          <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            {mode === "unified" ? "Unified" : "Side by side"}
+          </span>
           {mode === "unified" ? (
-            <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-xs overflow-x-auto whitespace-pre text-stone-800 dark:text-stone-200 max-h-[28rem] overflow-y-auto">
+            <CopyPre
+              text={unified || ""}
+              onCopySuccess={() => onToast("Copied!")}
+              title="Copy unified"
+              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-[28rem] overflow-y-auto overflow-x-auto"
+              preClassName="p-3 font-mono text-xs whitespace-pre text-stone-800 dark:text-stone-200"
+            >
               {unified || "—"}
-            </pre>
+            </CopyPre>
           ) : (
             <div className="grid grid-cols-2 gap-0 border border-stone-200 dark:border-stone-700 max-h-[28rem] overflow-y-auto font-mono text-xs">
               <div className="border-r border-stone-200 dark:border-stone-700">

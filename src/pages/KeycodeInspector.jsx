@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyPre from "../components/CopyPre";
 
 export default function KeycodeInspector({ onToast }) {
   const [last, setLast] = useState(null);
@@ -66,18 +66,13 @@ export default function KeycodeInspector({ onToast }) {
                 {String(last.altKey)} meta={String(last.metaKey)}
               </dd>
             </dl>
-            <button
-              type="button"
-              onClick={() =>
-                copyToClipboard(json, () => onToast("JSON copied!"))
-              }
-              className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900"
-            >
-              Copy as JSON
-            </button>
-            <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-xs text-stone-700 dark:text-stone-300">
-              {json}
-            </pre>
+            <CopyPre
+              text={json}
+              onCopySuccess={() => onToast("JSON copied!")}
+              title="Copy as JSON"
+              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
+              preClassName="p-3 font-mono text-xs text-stone-700 dark:text-stone-300"
+            />
           </>
         )}
       </div>

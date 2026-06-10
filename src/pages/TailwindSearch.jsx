@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { MagnifyingGlass } from "phosphor-react";
+import CopyButton from "../components/CopyButton";
 import { TAILWIND_CLASSES } from "../data/tailwindClasses";
-import { copyToClipboard } from "../utils/clipboard";
 
 export default function TailwindSearch({ onToast }) {
   const [query, setQuery] = useState("");
@@ -16,10 +16,6 @@ export default function TailwindSearch({ onToast }) {
         c.value.toLowerCase().includes(q),
     );
   }, [query]);
-
-  const copy = (cls) => {
-    copyToClipboard(cls, () => onToast("Class copied!"));
-  };
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -66,12 +62,12 @@ export default function TailwindSearch({ onToast }) {
                   <span className="font-mono text-xs">{c.value}</span>
                 </div>
               </div>
-              <button
-                onClick={() => copy(c.class)}
-                className="ml-3 px-3 py-1.5 border border-stone-300 dark:border-stone-700 text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                Copy
-              </button>
+              <CopyButton
+                text={c.class}
+                onCopySuccess={() => onToast("Class copied!")}
+                size={16}
+                className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity"
+              />
             </div>
           ))}
         </div>

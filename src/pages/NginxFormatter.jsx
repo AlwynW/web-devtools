@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { formatNginxConfig, lintNginxConfig } from "../utils/nginxFormat";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 
 const SAMPLE = `server {
 listen 80;
@@ -54,15 +54,11 @@ export default function NginxFormatter({ onToast }) {
               <label className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
                 Formatted
               </label>
-              <button
-                type="button"
-                onClick={() =>
-                  copyToClipboard(formatted, () => onToast("Copied!"))
-                }
-                className="text-[11px] font-mono underline text-stone-600 dark:text-stone-400"
-              >
-                Copy
-              </button>
+              <CopyButton
+                text={formatted}
+                onCopySuccess={() => onToast("Copied!")}
+                size={16}
+              />
             </div>
             <textarea
               readOnly

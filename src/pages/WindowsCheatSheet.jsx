@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { MagnifyingGlass } from "phosphor-react";
-import { copyToClipboard } from "../utils/clipboard";
+import CopyButton from "../components/CopyButton";
 
 const SECTIONS = [
   {
@@ -251,7 +251,7 @@ function filterSection(section, q) {
   return null;
 }
 
-function CheatRow({ item, onCopy }) {
+function CheatRow({ item, onCopySuccess }) {
   return (
     <div className="flex items-center justify-between p-3 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors group">
       <div className="min-w-0 flex-1">
@@ -262,13 +262,12 @@ function CheatRow({ item, onCopy }) {
           {item.description}
         </div>
       </div>
-      <button
-        type="button"
-        onClick={() => onCopy(item.token)}
-        className="ml-3 shrink-0 px-3 py-1.5 border border-stone-300 dark:border-stone-700 text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-      >
-        Copy
-      </button>
+      <CopyButton
+        text={item.token}
+        onCopySuccess={onCopySuccess}
+        size={16}
+        className="ml-3 shrink-0 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"
+      />
     </div>
   );
 }
@@ -282,9 +281,7 @@ export default function WindowsCheatSheet({ onToast }) {
     return SECTIONS.map((s) => filterSection(s, q)).filter(Boolean);
   }, [search]);
 
-  const copy = (text) => {
-    copyToClipboard(text, () => onToast("Copied!"));
-  };
+  const copyToast = () => onToast("Copied!");
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -345,7 +342,7 @@ export default function WindowsCheatSheet({ onToast }) {
                           <CheatRow
                             key={`${idx}-${item.token}`}
                             item={item}
-                            onCopy={copy}
+                            onCopySuccess={copyToast}
                           />
                         ))}
                       </div>
@@ -359,7 +356,7 @@ export default function WindowsCheatSheet({ onToast }) {
                       <CheatRow
                         key={item.token}
                         item={item}
-                        onCopy={copy}
+                        onCopySuccess={copyToast}
                       />
                     ))}
                   </div>
