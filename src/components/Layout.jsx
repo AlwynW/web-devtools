@@ -16,6 +16,8 @@ import {
   saveFavoriteToolPaths,
   toggleFavoritePath,
 } from "../utils/favoriteTools";
+import { subscribeToolModuleLoading, isToolModuleLoading } from "../utils/lazyTool";
+import ToolLoadingFallback from "./ToolLoadingFallback";
 
 export default function Layout({ toast }) {
   const location = useLocation();
@@ -33,6 +35,33 @@ export default function Layout({ toast }) {
   const searchInputRef = useRef(null);
 
   const [favoritePaths, setFavoritePaths] = useState(loadFavoriteToolPaths);
+  const [isToolLoading, setIsToolLoading] = useState(false);
+  const [loadingToolPath, setLoadingToolPath] = useState(null);
+
+  const beginToolNavigation = (path) => {
+    setLoadingToolPath(path);
+    setIsToolLoading(true);
+  };
+
+  useEffect(() => {
+    return subscribeToolModuleLoading((loading) => {
+      setIsToolLoading(loading);
+      if (!loading) {
+        setLoadingToolPath(null);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    setLoadingToolPath(location.pathname);
+    setIsToolLoading(true);
+    queueMicrotask(() => {
+      if (!isToolModuleLoading()) {
+        setIsToolLoading(false);
+        setLoadingToolPath(null);
+      }
+    });
+  }, [location.pathname]);
 
   const allItems = useMemo(() => navGroups.flatMap((g) => g.items), []);
   const validPathSet = useMemo(
@@ -52,6 +81,10 @@ export default function Layout({ toast }) {
   const activeItem =
     allItems.find((item) => item.path === location.pathname) ||
     allItems.find((item) => item.path === "/");
+  const loadingItem = loadingToolPath
+    ? pathToMeta.get(loadingToolPath)?.item
+    : null;
+  const displayItem = (isToolLoading && loadingItem) || activeItem;
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -74,6 +107,7 @@ export default function Layout({ toast }) {
   useEffect(() => {
     const lastTool = localStorage.getItem("lastToolPath");
     if (lastTool && lastTool !== location.pathname) {
+      beginToolNavigation(lastTool);
       navigate(lastTool);
     }
     // run only once on mount
@@ -211,11 +245,11 @@ export default function Layout({ toast }) {
             <div className="hidden sm:flex items-center text-xs sm:text-sm font-mono text-stone-600 dark:text-stone-400 truncate">
               <span className="mx-1 text-stone-400 dark:text-stone-700">/</span>
               <span className="text-stone-900 dark:text-stone-100 flex items-center gap-1.5 min-w-0">
-                {activeItem && (
-                  <activeItem.icon size={14} className="text-stone-500 shrink-0" />
+                {displayItem && (
+                  <displayItem.icon size={14} className="text-stone-500 shrink-0" />
                 )}
                 <span className="truncate">
-                  {activeItem?.label || "Select a tool"}
+                  {displayItem?.label || "Select a tool"}
                 </span>
               </span>
             </div>
@@ -333,6 +367,7 @@ export default function Layout({ toast }) {
                             to={item.path}
                             end={item.path === "/"}
                             onClick={() => {
+                              beginToolNavigation(item.path);
                               localStorage.setItem("lastToolPath", item.path);
                               setIsMenuOpen(false);
                               setSearchQuery("");
@@ -394,15 +429,16 @@ export default function Layout({ toast }) {
             outletWide ? "w-full max-w-none mx-auto" : "max-w-4xl mx-auto"
           }
         >
-          <Suspense
-            fallback={
-              <div className="py-16 text-center text-sm font-mono text-stone-500 dark:text-stone-400 animate-pulse">
-                Loading…
+          <div className="relative min-h-[12rem]">
+            {isToolLoading && (
+              <div className="absolute inset-0 z-10 flex items-start justify-center bg-stone-100 dark:bg-stone-900">
+                <ToolLoadingFallback label={loadingItem?.label ?? displayItem?.label} />
               </div>
-            }
-          >
-            <Outlet />
-          </Suspense>
+            )}
+            <Suspense fallback={null}>
+              <Outlet key={location.pathname} />
+            </Suspense>
+          </div>
         </div>
       </main>
 

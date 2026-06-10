@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import cronstrue from "cronstrue";
-import parser from "cron-parser";
+import { CronExpressionParser } from "cron-parser";
 import CopyArea from "../components/CopyArea";
 
 const DAYS = [
@@ -31,11 +31,10 @@ function analyzeCron(expr) {
   }
   try {
     const human = cronstrue.toString(trimmed, { use24HourTimeFormat: true });
-    const interval = parser.parseExpression(trimmed, { currentDate: new Date() });
-    const next = [];
-    for (let i = 0; i < NEXT_COUNT; i++) {
-      next.push(interval.next().toDate());
-    }
+    const interval = CronExpressionParser.parse(trimmed, {
+      currentDate: new Date(),
+    });
+    const next = interval.take(NEXT_COUNT).map((d) => d.toDate());
     return { human, next, err: null };
   } catch (e) {
     return {
