@@ -19,6 +19,7 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **Drop Shadow**: Design single and layered box shadows.
   - **Gradient Builder**: Build layered gradients with stop opacity controls.
   - **Grid**: Experiment with CSS grid layouts.
+  - **Asset Grid**: Compose multiple images on one canvas and export PNG or JPG.
   - **Perfect Border**: Tweak border radius until it looks just right.
   - **Color**: Explore and convert colors for your UI.
   - **Contrast**: Check WCAG text contrast between two colors.

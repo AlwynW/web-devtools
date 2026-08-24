@@ -80,6 +80,7 @@ const TomlJsonConverter = lazyTool(() => import("./pages/TomlJsonConverter"));
 const ScrollSanctifier = lazyTool(() => import("./pages/ScrollSanctifier"));
 const CoinFlip = lazyTool(() => import("./pages/CoinFlip"));
 const DiceRoller = lazyTool(() => import("./pages/DiceRoller"));
+const AssetGridComposer = lazyTool(() => import("./pages/AssetGridComposer"));
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -128,6 +129,7 @@ export default function App() {
         <Route path="markdown" element={<MarkdownConverter onToast={showToast} />} />
         <Route path="markdown-viewer" element={<MarkdownViewer />} />
         <Route path="grid" element={<GridTemplateBuilder onToast={showToast} />} />
+        <Route path="asset-grid" element={<AssetGridComposer onToast={showToast} />} />
         <Route
           path="perfect-border"
           element={<PerfectBorderGenerator onToast={showToast} />}

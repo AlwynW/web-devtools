@@ -23,6 +23,7 @@ import {
   DownloadSimple,
   SquaresFour,
   Square,
+  GridFour,
   QrCode,
   TextT,
   Table,
@@ -142,6 +143,12 @@ export const navGroups = [
         label: "Grid",
         icon: SquaresFour,
         description: "Experiment with CSS grid layouts.",
+      },
+      {
+        path: "/asset-grid",
+        label: "Asset Grid",
+        icon: GridFour,
+        description: "Compose multiple images on one canvas and export PNG or JPG.",
       },
       {
         path: "/perfect-border",
