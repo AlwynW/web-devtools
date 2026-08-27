@@ -565,37 +565,37 @@ export default function AssetGridComposer({ onToast }) {
                 role="slider"
                 aria-label="Trim top"
                 onPointerDown={(e) => startHandleDrag(e, "top")}
-                className="absolute left-0 right-0 z-20 h-1.5 bg-stone-800 dark:bg-stone-200 cursor-ns-resize touch-none"
+                className="absolute left-0 right-0 z-20 h-1 bg-stone-800 dark:bg-stone-200 cursor-ns-resize touch-none"
                 style={{ top: handlePx.top }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-3.5 rounded-full border-2 border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
                 aria-label="Trim bottom"
                 onPointerDown={(e) => startHandleDrag(e, "bottom")}
-                className="absolute left-0 right-0 z-20 h-1.5 bg-stone-800 dark:bg-stone-200 cursor-ns-resize touch-none"
+                className="absolute left-0 right-0 z-20 h-1 bg-stone-800 dark:bg-stone-200 cursor-ns-resize touch-none"
                 style={{ bottom: handlePx.bottom }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-3.5 rounded-full border-2 border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
                 aria-label="Trim left"
                 onPointerDown={(e) => startHandleDrag(e, "left")}
-                className="absolute top-0 bottom-0 z-20 w-1.5 bg-stone-800 dark:bg-stone-200 cursor-ew-resize touch-none"
+                className="absolute top-0 bottom-0 z-20 w-1 bg-stone-800 dark:bg-stone-200 cursor-ew-resize touch-none"
                 style={{ left: handlePx.left }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-14 w-3.5 rounded-full border-2 border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-14 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
                 aria-label="Trim right"
                 onPointerDown={(e) => startHandleDrag(e, "right")}
-                className="absolute top-0 bottom-0 z-20 w-1.5 bg-stone-800 dark:bg-stone-200 cursor-ew-resize touch-none"
+                className="absolute top-0 bottom-0 z-20 w-1 bg-stone-800 dark:bg-stone-200 cursor-ew-resize touch-none"
                 style={{ right: handlePx.right }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-14 w-3.5 rounded-full border-2 border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-14 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
             </div>
           </div>
