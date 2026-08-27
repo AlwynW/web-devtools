@@ -6,7 +6,7 @@ const Button = ({
   icon: Icon,
 }) => {
   const baseStyle =
-    "flex items-center justify-center gap-2 px-4 py-2 border font-mono text-xs tracking-tight transition-colors focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400";
+    "flex cursor-pointer items-center justify-center gap-2 px-4 py-2 border font-mono text-xs tracking-tight transition-colors focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400";
   const variants = {
     primary:
       "bg-stone-900 hover:bg-stone-800 text-stone-50 border-stone-900 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-950 dark:border-stone-200",
