@@ -527,7 +527,7 @@ export default function AssetGridComposer({ onToast }) {
             <Button onClick={() => save("png")} icon={DownloadSimple}>
               Save PNG
             </Button>
-            <Button onClick={() => save("jpeg")} icon={DownloadSimple} variant="secondary">
+            <Button onClick={() => save("jpeg")} icon={DownloadSimple} >
               Save JPG
             </Button>
             <span className="text-[10px] font-mono text-stone-400 uppercase tracking-tighter">
@@ -565,37 +565,41 @@ export default function AssetGridComposer({ onToast }) {
                 role="slider"
                 aria-label="Trim top"
                 onPointerDown={(e) => startHandleDrag(e, "top")}
-                className="absolute left-0 right-0 z-20 h-1 bg-stone-800 dark:bg-stone-200 cursor-ns-resize touch-none"
-                style={{ top: handlePx.top }}
+                className="absolute z-20 h-6 -translate-y-1/2 cursor-ns-resize touch-none"
+                style={{ top: handlePx.top, left: handlePx.left, right: handlePx.right }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-stone-800 dark:bg-stone-200" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
                 aria-label="Trim bottom"
                 onPointerDown={(e) => startHandleDrag(e, "bottom")}
-                className="absolute left-0 right-0 z-20 h-1 bg-stone-800 dark:bg-stone-200 cursor-ns-resize touch-none"
-                style={{ bottom: handlePx.bottom }}
+                className="absolute z-20 h-6 translate-y-1/2 cursor-ns-resize touch-none"
+                style={{ bottom: handlePx.bottom, left: handlePx.left, right: handlePx.right }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-stone-800 dark:bg-stone-200" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
                 aria-label="Trim left"
                 onPointerDown={(e) => startHandleDrag(e, "left")}
-                className="absolute top-0 bottom-0 z-20 w-1 bg-stone-800 dark:bg-stone-200 cursor-ew-resize touch-none"
-                style={{ left: handlePx.left }}
+                className="absolute z-20 w-6 -translate-x-1/2 cursor-ew-resize touch-none"
+                style={{ left: handlePx.left, top: handlePx.top, bottom: handlePx.bottom }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-14 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-stone-800 dark:bg-stone-200" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3.5 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
                 aria-label="Trim right"
                 onPointerDown={(e) => startHandleDrag(e, "right")}
-                className="absolute top-0 bottom-0 z-20 w-1 bg-stone-800 dark:bg-stone-200 cursor-ew-resize touch-none"
-                style={{ right: handlePx.right }}
+                className="absolute z-20 w-6 translate-x-1/2 cursor-ew-resize touch-none"
+                style={{ right: handlePx.right, top: handlePx.top, bottom: handlePx.bottom }}
               >
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-14 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-stone-800 dark:bg-stone-200" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3.5 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
             </div>
           </div>
