@@ -81,6 +81,7 @@ const ScrollSanctifier = lazyTool(() => import("./pages/ScrollSanctifier"));
 const CoinFlip = lazyTool(() => import("./pages/CoinFlip"));
 const DiceRoller = lazyTool(() => import("./pages/DiceRoller"));
 const AssetGridComposer = lazyTool(() => import("./pages/AssetGridComposer"));
+const FontConverter = lazyTool(() => import("./pages/FontConverter"));
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -182,6 +183,7 @@ export default function App() {
         <Route path="table-csv" element={<TableCsvConverter onToast={showToast} />} />
         <Route path="curl-convert" element={<CurlConverter onToast={showToast} />} />
         <Route path="svg" element={<SvgTools onToast={showToast} />} />
+        <Route path="font-converter" element={<FontConverter onToast={showToast} />} />
         <Route path="xml" element={<XmlTools onToast={showToast} />} />
         <Route path="csp" element={<CspBuilder onToast={showToast} />} />
         <Route path="hmac" element={<HmacGenerator onToast={showToast} />} />

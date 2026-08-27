@@ -27,6 +27,7 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **Easing**: Edit cubic-bezier curves and copy timing CSS.
   - **Shades**: OKLCH ramp from darker to lighter; copy hex table or CSS variables.
   - **SVG**: Optimize SVG, edit path d with preview, build sprites.
+  - **Font Converter**: Convert TTF/OTF/WOFF/WOFF2, group families, set weights, and copy @font-face CSS.
 
 - **Signals & spelling**
   - **Braille**: Grade 1 English Braille with Unicode patterns; number sign for digits.

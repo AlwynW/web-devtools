@@ -193,6 +193,13 @@ export const navGroups = [
         icon: Path,
         description: "Optimize SVG, edit path d with preview, build sprites.",
       },
+      {
+        path: "/font-converter",
+        label: "Font Converter",
+        icon: TextT,
+        description:
+          "Convert TTF/OTF/WOFF/WOFF2, group families, set weights, and copy @font-face CSS.",
+      },
     ],
   },
   {
