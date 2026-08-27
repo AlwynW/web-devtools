@@ -13,14 +13,16 @@ export default function CopyPre({
 
   return (
     <div className={`relative ${className}`}>
-      <div className="absolute top-2 right-2 z-10 flex justify-end pr-2 pt-2 pointer-events-none">
-        <CopyButton
-          text={copyText}
-          onCopySuccess={onCopySuccess}
-          title={title}
-          disabled={!copyText}
-          className="pointer-events-auto shadow-sm"
-        />
+      <div className="sticky top-0 z-10 h-0 overflow-visible pointer-events-none">
+        <div className="absolute top-2 right-2">
+          <CopyButton
+            text={copyText}
+            onCopySuccess={onCopySuccess}
+            title={title}
+            disabled={!copyText}
+            className="pointer-events-auto shadow-sm"
+          />
+        </div>
       </div>
       <pre className={preClassName}>{content}</pre>
     </div>
