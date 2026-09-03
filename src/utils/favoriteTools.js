@@ -13,9 +13,11 @@ export function loadFavoriteToolPaths() {
     const seen = new Set();
     const out = [];
     for (const p of parsed) {
-      if (typeof p === "string" && p.length > 0 && !seen.has(p)) {
-        seen.add(p);
-        out.push(p);
+      if (typeof p !== "string" || p.length === 0) continue;
+      const path = p === "/asset-grid" ? "/image-composition" : p;
+      if (!seen.has(path)) {
+        seen.add(path);
+        out.push(path);
       }
     }
     return out;

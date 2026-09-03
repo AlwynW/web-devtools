@@ -13,21 +13,27 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **Lorem**: Generate lorem ipsum placeholder text.
   - **Slug**: Convert text to URL-friendly slugs.
   - **QR Code**: Generate QR codes from text/URLs.
-  - **Icon**: Generate icons from text, emoji or image.
 
 - **CSS & Design**
   - **Drop Shadow**: Design single and layered box shadows.
   - **Gradient Builder**: Build layered gradients with stop opacity controls.
+  - **Text Gradient**: Clip a gradient to text with background-clip using system fonts.
+  - **Gradient Border**: Masked gradient ring so the fill can stay independently translucent.
   - **Grid**: Experiment with CSS grid layouts.
-  - **Asset Grid**: Compose multiple images on one canvas and export PNG or JPG.
+  - **Grid Composer**: Perspective grids with repeating-linear-gradient lines and CSS transforms.
   - **Perfect Border**: Tweak border radius until it looks just right.
   - **Color**: Explore and convert colors for your UI.
   - **Contrast**: Check WCAG text contrast between two colors.
   - **Clamp**: Generate fluid clamp() values from viewport bounds.
   - **Easing**: Edit cubic-bezier curves and copy timing CSS.
   - **Shades**: OKLCH ramp from darker to lighter; copy hex table or CSS variables.
-  - **SVG**: Optimize SVG, edit path d with preview, build sprites.
   - **Font Converter**: Convert TTF/OTF/WOFF/WOFF2, group families, set weights, and copy @font-face CSS.
+
+- **Image manipulation**
+  - **Icon**: Generate icons from text, emoji or image.
+  - **SVG**: Optimize SVG, recolor or currentColor, edit path d, build sprites.
+  - **Composition**: Compose multiple images on one canvas and export PNG or JPG.
+  - **Editor**: Greyscale, invert, and hue/saturation tweaks; download PNG or JPG.
 
 - **Signals & spelling**
   - **Braille**: Grade 1 English Braille with Unicode patterns; number sign for digits.

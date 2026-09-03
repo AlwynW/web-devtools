@@ -263,7 +263,7 @@ export default function AssetGridComposer({ onToast }) {
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
         <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Asset Grid
+          Composition
         </h2>
         <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
           Compose multiple images on one canvas and export PNG or JPG.

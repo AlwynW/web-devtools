@@ -362,8 +362,8 @@ export default function Layout({ toast }) {
                           ? pathToMeta.get(item.path)?.groupName ?? group.name
                           : group.name;
                       return (
-                        
                           <NavLink
+                            key={item.path}
                             to={item.path}
                             end={item.path === "/"}
                             onClick={() => {

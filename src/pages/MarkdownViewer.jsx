@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
 import { marked } from "marked";
 import { FileArrowDown, CornersOut, CornersIn } from "phosphor-react";
+import CopyButton from "../components/CopyButton";
 
-export default function MarkdownViewer() {
+export default function MarkdownViewer({ onToast }) {
   const [markdownInput, setMarkdownInput] = useState("");
   const [content, setContent] = useState(null);
   const [fileName, setFileName] = useState(null);
@@ -162,16 +163,24 @@ export default function MarkdownViewer() {
 
         {content && (
           <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 overflow-hidden">
-            <div className="px-4 py-3 border-b border-stone-200 dark:border-stone-700 flex items-center justify-between bg-stone-50 dark:bg-stone-900/50">
+            <div className="px-4 py-3 border-b border-stone-200 dark:border-stone-700 flex items-center justify-between gap-2 bg-stone-50 dark:bg-stone-900/50">
               <span className="font-mono text-sm text-stone-600 dark:text-stone-300 truncate">
                 {fileName || "Direct input"}
               </span>
-              <button
-                onClick={clear}
-                className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 shrink-0 ml-2"
-              >
-                Clear
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <CopyButton
+                  text={markdownInput}
+                  onCopySuccess={() => onToast?.("Markdown copied!")}
+                  title="Copy markdown"
+                  size={16}
+                />
+                <button
+                  onClick={clear}
+                  className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+                >
+                  Clear
+                </button>
+              </div>
             </div>
             <div
               className="p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-stone-100 [&_code]:dark:bg-stone-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-stone-100 [&_pre]:dark:bg-stone-800 [&_pre]:mb-4 [&_a]:text-stone-700 [&_a]:dark:text-stone-300 [&_a]:underline [&_blockquote]:border-l-stone-500 [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"

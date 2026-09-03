@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import { lazyTool } from "./utils/lazyTool";
 
@@ -21,12 +21,15 @@ const Base64Image = lazyTool(() => import("./pages/Base64Image"));
 const HashGenerator = lazyTool(() => import("./pages/HashGenerator"));
 const CssGenerator = lazyTool(() => import("./pages/CssGenerator"));
 const GradientBuilder = lazyTool(() => import("./pages/GradientBuilder"));
+const TextGradientCreator = lazyTool(() => import("./pages/TextGradientCreator"));
+const GradientBorderGenerator = lazyTool(() => import("./pages/GradientBorderGenerator"));
 const CrontabGenerator = lazyTool(() => import("./pages/CrontabGenerator"));
 const TailwindSearch = lazyTool(() => import("./pages/TailwindSearch"));
 const RegexTester = lazyTool(() => import("./pages/RegexTester"));
 const MarkdownConverter = lazyTool(() => import("./pages/MarkdownConverter"));
 const MarkdownViewer = lazyTool(() => import("./pages/MarkdownViewer"));
 const GridTemplateBuilder = lazyTool(() => import("./pages/GridTemplateBuilder"));
+const CssGridComposer = lazyTool(() => import("./pages/CssGridComposer"));
 const PerfectBorderGenerator = lazyTool(() => import("./pages/PerfectBorderGenerator"));
 const QrCodeGenerator = lazyTool(() => import("./pages/QrCodeGenerator"));
 const SlugGenerator = lazyTool(() => import("./pages/SlugGenerator"));
@@ -82,6 +85,7 @@ const CoinFlip = lazyTool(() => import("./pages/CoinFlip"));
 const DiceRoller = lazyTool(() => import("./pages/DiceRoller"));
 const AssetGridComposer = lazyTool(() => import("./pages/AssetGridComposer"));
 const FontConverter = lazyTool(() => import("./pages/FontConverter"));
+const ImageEditor = lazyTool(() => import("./pages/ImageEditor"));
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -124,13 +128,18 @@ export default function App() {
         <Route path="hash" element={<HashGenerator onToast={showToast} />} />
         <Route path="css-generator" element={<CssGenerator onToast={showToast} />} />
         <Route path="gradient-builder" element={<GradientBuilder onToast={showToast} />} />
+        <Route path="text-gradient" element={<TextGradientCreator onToast={showToast} />} />
+        <Route path="gradient-border" element={<GradientBorderGenerator onToast={showToast} />} />
         <Route path="crontab" element={<CrontabGenerator onToast={showToast} />} />
         <Route path="tailwind" element={<TailwindSearch onToast={showToast} />} />
         <Route path="regex" element={<RegexTester onToast={showToast} />} />
         <Route path="markdown" element={<MarkdownConverter onToast={showToast} />} />
-        <Route path="markdown-viewer" element={<MarkdownViewer />} />
+        <Route path="markdown-viewer" element={<MarkdownViewer onToast={showToast} />} />
         <Route path="grid" element={<GridTemplateBuilder onToast={showToast} />} />
-        <Route path="asset-grid" element={<AssetGridComposer onToast={showToast} />} />
+        <Route path="grid-composer" element={<CssGridComposer onToast={showToast} />} />
+        <Route path="image-composition" element={<AssetGridComposer onToast={showToast} />} />
+        <Route path="asset-grid" element={<Navigate to="/image-composition" replace />} />
+        <Route path="image-editor" element={<ImageEditor onToast={showToast} />} />
         <Route
           path="perfect-border"
           element={<PerfectBorderGenerator onToast={showToast} />}

@@ -73,6 +73,10 @@ import {
   DiceSix,
   Broadcast,
   DotsSix,
+  PaintBrush,
+  Perspective,
+  Drop,
+  FrameCorners,
 } from "phosphor-react";
 
 export const navGroups = [
@@ -115,12 +119,6 @@ export const navGroups = [
         icon: QrCode,
         description: "Generate QR codes from text/URLs.",
       },
-      {
-        path: "/icon",
-        label: "Icon",
-        icon: Image,
-        description: "Generate icons from text, emoji or image.",
-      },
     ],
   },
   {
@@ -139,16 +137,31 @@ export const navGroups = [
         description: "Build layered gradients with stop opacity controls.",
       },
       {
+        path: "/text-gradient",
+        label: "Text Gradient",
+        icon: Drop,
+        description:
+          "Clip a gradient to text with background-clip using system fonts.",
+      },
+      {
+        path: "/gradient-border",
+        label: "Gradient Border",
+        icon: FrameCorners,
+        description:
+          "Masked gradient ring so the fill can stay independently translucent.",
+      },
+      {
         path: "/grid",
         label: "Grid",
         icon: SquaresFour,
         description: "Experiment with CSS grid layouts.",
       },
       {
-        path: "/asset-grid",
-        label: "Asset Grid",
-        icon: GridFour,
-        description: "Compose multiple images on one canvas and export PNG or JPG.",
+        path: "/grid-composer",
+        label: "Grid Composer",
+        icon: Perspective,
+        description:
+          "Perspective grids with repeating-linear-gradient lines and CSS transforms.",
       },
       {
         path: "/perfect-border",
@@ -188,17 +201,41 @@ export const navGroups = [
           "OKLCH ramp from darker to lighter; copy hex table or CSS variables.",
       },
       {
-        path: "/svg",
-        label: "SVG",
-        icon: Path,
-        description: "Optimize SVG, edit path d with preview, build sprites.",
-      },
-      {
         path: "/font-converter",
         label: "Font Converter",
         icon: TextT,
         description:
           "Convert TTF/OTF/WOFF/WOFF2, group families, set weights, and copy @font-face CSS.",
+      },
+    ],
+  },
+  {
+    name: "Image manipulation",
+    items: [
+      {
+        path: "/icon",
+        label: "Icon",
+        icon: Image,
+        description: "Generate icons from text, emoji or image.",
+      },
+      {
+        path: "/svg",
+        label: "SVG",
+        icon: Path,
+        description: "Optimize SVG, recolor or currentColor, edit path d, build sprites.",
+      },
+      {
+        path: "/image-composition",
+        label: "Composition",
+        icon: GridFour,
+        description: "Compose multiple images on one canvas and export PNG or JPG.",
+      },
+      {
+        path: "/image-editor",
+        label: "Editor",
+        icon: PaintBrush,
+        description:
+          "Greyscale, invert, and hue/saturation tweaks; download PNG or JPG.",
       },
     ],
   },
