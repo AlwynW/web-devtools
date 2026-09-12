@@ -77,6 +77,7 @@ import {
   Perspective,
   Drop,
   FrameCorners,
+  Crop,
 } from "phosphor-react";
 
 export const navGroups = [
@@ -236,6 +237,13 @@ export const navGroups = [
         icon: PaintBrush,
         description:
           "Greyscale, invert, and hue/saturation tweaks; download PNG or JPG.",
+      },
+      {
+        path: "/image-crop",
+        label: "Crop",
+        icon: Crop,
+        description:
+          "Free-form crop with rect, circle, and polygon; fill outside with color or transparency.",
       },
     ],
   },

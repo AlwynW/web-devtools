@@ -34,6 +34,7 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **SVG**: Optimize SVG, recolor or currentColor, edit path d, build sprites.
   - **Composition**: Compose multiple images on one canvas and export PNG or JPG.
   - **Editor**: Greyscale, invert, and hue/saturation tweaks; download PNG or JPG.
+  - **Crop**: Free-form crop with rect, circle, and polygon; fill outside with color or transparency.
 
 - **Signals & spelling**
   - **Braille**: Grade 1 English Braille with Unicode patterns; number sign for digits.

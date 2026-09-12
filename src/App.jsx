@@ -86,6 +86,7 @@ const DiceRoller = lazyTool(() => import("./pages/DiceRoller"));
 const AssetGridComposer = lazyTool(() => import("./pages/AssetGridComposer"));
 const FontConverter = lazyTool(() => import("./pages/FontConverter"));
 const ImageEditor = lazyTool(() => import("./pages/ImageEditor"));
+const ImageCrop = lazyTool(() => import("./pages/ImageCrop"));
 
 export default function App() {
   const [toast, setToast] = useState(null);
@@ -140,6 +141,7 @@ export default function App() {
         <Route path="image-composition" element={<AssetGridComposer onToast={showToast} />} />
         <Route path="asset-grid" element={<Navigate to="/image-composition" replace />} />
         <Route path="image-editor" element={<ImageEditor onToast={showToast} />} />
+        <Route path="image-crop" element={<ImageCrop onToast={showToast} />} />
         <Route
           path="perfect-border"
           element={<PerfectBorderGenerator onToast={showToast} />}
