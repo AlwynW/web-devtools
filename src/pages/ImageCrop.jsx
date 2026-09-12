@@ -111,17 +111,35 @@ function clientToImage(event, svgEl, imgW, imgH) {
   };
 }
 
-function Handle({ cx, cy, r, cursor = "pointer" }) {
+const KNOB_CLASS =
+  "pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-stone-500 dark:border-stone-400 shadow-sm";
+
+function pct(n, total) {
+  if (!total) return "0%";
+  return `${(n / total) * 100}%`;
+}
+
+function circleScalePoint(circle, unit) {
+  const { rx, ry } = ellipseRadii(circle);
+  const pad = Math.max(unit * 22, 16);
+  return {
+    x: circle.cx + rx + pad,
+    y: circle.cy + ry + pad,
+  };
+}
+
+function CornerHandle({ x, y, imgW, imgH, cursor, label, onPointerDown, onDoubleClick }) {
   return (
-    <circle
-      cx={cx}
-      cy={cy}
-      r={r}
-      fill="#fafaf9"
-      stroke="#1c1917"
-      strokeWidth={r * 0.22}
-      style={{ cursor }}
-    />
+    <div
+      role="slider"
+      aria-label={label}
+      onPointerDown={onPointerDown}
+      onDoubleClick={onDoubleClick}
+      className={`absolute z-20 w-6 h-6 -translate-x-1/2 -translate-y-1/2 touch-none ${cursor}`}
+      style={{ left: pct(x, imgW), top: pct(y, imgH) }}
+    >
+      <span className={KNOB_CLASS} />
+    </div>
   );
 }
 
@@ -137,14 +155,12 @@ function CropOverlay({
   fillColor,
   maskId,
   onPointerDown,
-  onPointerMove,
-  onPointerUp,
-  onDoubleClick,
+  onHandleDown,
+  onPointDoubleClick,
 }) {
   const rect = rectFromSides(sides, imgW, imgH);
   const { rx, ry } = ellipseRadii(circle);
-  const handleR = Math.max(unit * 6, 4 * unit);
-  const stroke = Math.max(unit * 1.5, unit);
+  const stroke = Math.max(unit * 1.25, unit);
   const livePolygon = points.length >= 3;
   const overlayFill =
     fillMode === "color" ? fillColor : "rgba(12, 10, 9, 0.55)";
@@ -165,35 +181,31 @@ function CropOverlay({
   }
 
   return (
-    <svg
-      className="absolute inset-0 w-full h-full touch-none select-none"
-      viewBox={`0 0 ${imgW} ${imgH}`}
-      preserveAspectRatio="none"
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      onDoubleClick={onDoubleClick}
-    >
-      <defs>
-        <mask id={maskId}>
-          <rect x="0" y="0" width={imgW} height={imgH} fill="white" />
-          {hole}
-        </mask>
-      </defs>
-      <rect
-        x="0"
-        y="0"
-        width={imgW}
-        height={imgH}
-        fill={overlayFill}
-        opacity={overlayOpacity}
-        mask={`url(#${maskId})`}
-        style={{ pointerEvents: "none" }}
-      />
+    <>
+      <svg
+        className="absolute inset-0 w-full h-full touch-none select-none"
+        viewBox={`0 0 ${imgW} ${imgH}`}
+        preserveAspectRatio="none"
+        onPointerDown={onPointerDown}
+      >
+        <defs>
+          <mask id={maskId}>
+            <rect x="0" y="0" width={imgW} height={imgH} fill="white" />
+            {hole}
+          </mask>
+        </defs>
+        <rect
+          x="0"
+          y="0"
+          width={imgW}
+          height={imgH}
+          fill={overlayFill}
+          opacity={overlayOpacity}
+          mask={`url(#${maskId})`}
+          style={{ pointerEvents: "none" }}
+        />
 
-      {mode === "rect" && (
-        <>
+        {mode === "rect" && (
           <rect
             x={rect.x}
             y={rect.y}
@@ -204,29 +216,9 @@ function CropOverlay({
             strokeWidth={stroke}
             style={{ cursor: "move" }}
           />
-          <Handle cx={rect.x} cy={rect.y + rect.h / 2} r={handleR} cursor="ew-resize" />
-          <Handle cx={rect.x + rect.w} cy={rect.y + rect.h / 2} r={handleR} cursor="ew-resize" />
-          <Handle cx={rect.x + rect.w / 2} cy={rect.y} r={handleR} cursor="ns-resize" />
-          <Handle
-            cx={rect.x + rect.w / 2}
-            cy={rect.y + rect.h}
-            r={handleR}
-            cursor="ns-resize"
-          />
-          <Handle cx={rect.x} cy={rect.y} r={handleR} cursor="nwse-resize" />
-          <Handle cx={rect.x + rect.w} cy={rect.y} r={handleR} cursor="nesw-resize" />
-          <Handle cx={rect.x} cy={rect.y + rect.h} r={handleR} cursor="nesw-resize" />
-          <Handle
-            cx={rect.x + rect.w}
-            cy={rect.y + rect.h}
-            r={handleR}
-            cursor="nwse-resize"
-          />
-        </>
-      )}
+        )}
 
-      {mode === "circle" && (
-        <>
+        {mode === "circle" && (
           <ellipse
             cx={circle.cx}
             cy={circle.cy}
@@ -237,47 +229,180 @@ function CropOverlay({
             strokeWidth={stroke}
             style={{ cursor: "move" }}
           />
-          <Handle cx={circle.cx - rx} cy={circle.cy} r={handleR} cursor="ew-resize" />
-          <Handle cx={circle.cx + rx} cy={circle.cy} r={handleR} cursor="ew-resize" />
-          <Handle cx={circle.cx} cy={circle.cy - ry} r={handleR} cursor="ns-resize" />
-          <Handle cx={circle.cx} cy={circle.cy + ry} r={handleR} cursor="ns-resize" />
-          <Handle
-            cx={circle.cx + rx}
-            cy={circle.cy + ry}
-            r={handleR}
-            cursor="nwse-resize"
+        )}
+
+        {mode === "polygon" && (
+          <>
+            {points.length >= 2 && (
+              <polyline
+                points={points.map((p) => `${p.x},${p.y}`).join(" ")}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={stroke}
+                strokeLinejoin="round"
+                className="text-stone-50"
+              />
+            )}
+            {livePolygon && (
+              <line
+                x1={points[points.length - 1].x}
+                y1={points[points.length - 1].y}
+                x2={points[0].x}
+                y2={points[0].y}
+                stroke="currentColor"
+                strokeWidth={stroke}
+                strokeDasharray={`${stroke * 4} ${stroke * 3}`}
+                className="text-stone-50"
+              />
+            )}
+          </>
+        )}
+      </svg>
+
+      {mode === "rect" && (
+        <>
+          <CornerHandle
+            x={rect.x + rect.w / 2}
+            y={rect.y}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ns-resize"
+            label="Resize top"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "n" })}
+          />
+          <CornerHandle
+            x={rect.x + rect.w / 2}
+            y={rect.y + rect.h}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ns-resize"
+            label="Resize bottom"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "s" })}
+          />
+          <CornerHandle
+            x={rect.x}
+            y={rect.y + rect.h / 2}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ew-resize"
+            label="Resize left"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "w" })}
+          />
+          <CornerHandle
+            x={rect.x + rect.w}
+            y={rect.y + rect.h / 2}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ew-resize"
+            label="Resize right"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "e" })}
+          />
+          <CornerHandle
+            x={rect.x}
+            y={rect.y}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-nwse-resize"
+            label="Resize top-left"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "nw" })}
+          />
+          <CornerHandle
+            x={rect.x + rect.w}
+            y={rect.y}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-nesw-resize"
+            label="Resize top-right"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "ne" })}
+          />
+          <CornerHandle
+            x={rect.x}
+            y={rect.y + rect.h}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-nesw-resize"
+            label="Resize bottom-left"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "sw" })}
+          />
+          <CornerHandle
+            x={rect.x + rect.w}
+            y={rect.y + rect.h}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-nwse-resize"
+            label="Resize bottom-right"
+            onPointerDown={(e) => onHandleDown(e, { kind: "rect", type: "se" })}
           />
         </>
       )}
 
-      {mode === "polygon" && (
+      {mode === "circle" && (
         <>
-          {points.length >= 2 && (
-            <polyline
-              points={points.map((p) => `${p.x},${p.y}`).join(" ")}
-              fill="none"
-              stroke="#fafaf9"
-              strokeWidth={stroke}
-              strokeLinejoin="round"
-            />
-          )}
-          {livePolygon && (
-            <line
-              x1={points[points.length - 1].x}
-              y1={points[points.length - 1].y}
-              x2={points[0].x}
-              y2={points[0].y}
-              stroke="#fafaf9"
-              strokeWidth={stroke}
-              strokeDasharray={`${stroke * 4} ${stroke * 3}`}
-            />
-          )}
-          {points.map((p, i) => (
-            <Handle key={`${p.x}-${p.y}-${i}`} cx={p.x} cy={p.y} r={handleR} />
-          ))}
+          <CornerHandle
+            x={circle.cx}
+            y={circle.cy - ry}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ns-resize"
+            label="Resize height"
+            onPointerDown={(e) => onHandleDown(e, { kind: "circle", type: "n" })}
+          />
+          <CornerHandle
+            x={circle.cx}
+            y={circle.cy + ry}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ns-resize"
+            label="Resize height"
+            onPointerDown={(e) => onHandleDown(e, { kind: "circle", type: "s" })}
+          />
+          <CornerHandle
+            x={circle.cx - rx}
+            y={circle.cy}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ew-resize"
+            label="Resize width"
+            onPointerDown={(e) => onHandleDown(e, { kind: "circle", type: "w" })}
+          />
+          <CornerHandle
+            x={circle.cx + rx}
+            y={circle.cy}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-ew-resize"
+            label="Resize width"
+            onPointerDown={(e) => onHandleDown(e, { kind: "circle", type: "e" })}
+          />
+          <CornerHandle
+            x={circleScalePoint(circle, unit).x}
+            y={circleScalePoint(circle, unit).y}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-nwse-resize"
+            label="Scale uniformly"
+            onPointerDown={(e) => onHandleDown(e, { kind: "circle", type: "scale" })}
+          />
         </>
       )}
-    </svg>
+
+      {mode === "polygon" &&
+        points.map((p, i) => (
+          <CornerHandle
+            key={`${p.x}-${p.y}-${i}`}
+            x={p.x}
+            y={p.y}
+            imgW={imgW}
+            imgH={imgH}
+            cursor="cursor-move"
+            label={`Point ${i + 1}`}
+            onPointerDown={(e) =>
+              onHandleDown(e, { kind: "poly", type: "point", index: i })
+            }
+            onDoubleClick={(e) => onPointDoubleClick(e, i)}
+          />
+        ))}
+    </>
   );
 }
 
@@ -302,7 +427,6 @@ export default function ImageCrop({ onToast }) {
     height: 100,
     scale: 1,
   });
-  const [lockCircle, setLockCircle] = useState(true);
   const [points, setPoints] = useState([]);
   const [fillMode, setFillMode] = useState("transparent");
   const [fillColor, setFillColor] = useState("#ffffff");
@@ -342,7 +466,6 @@ export default function ImageCrop({ onToast }) {
     const nextSides = defaultSides(w, h);
     setSides(nextSides);
     setCircle(defaultCircle(w, h));
-    setLockCircle(true);
     setPoints(nextMode === "polygon" ? rectToPoints(nextSides, w, h) : []);
   }, []);
 
@@ -421,7 +544,7 @@ export default function ImageCrop({ onToast }) {
         { type: "e", x: circle.cx + rx, y: circle.cy },
         { type: "n", x: circle.cx, y: circle.cy - ry },
         { type: "s", x: circle.cx, y: circle.cy + ry },
-        { type: "scale", x: circle.cx + rx, y: circle.cy + ry },
+        { type: "scale", ...circleScalePoint(circle, unit) },
       ];
       for (const h of handles) {
         if (dist(p, h) <= hitSlop) return { kind: "circle", type: h.type };
@@ -444,22 +567,32 @@ export default function ImageCrop({ onToast }) {
     return { kind: "poly", type: "add" };
   };
 
-  const onOverlayPointerDown = (e) => {
-    if (!asset) return;
+  const beginDrag = (e, hit, boxEl) => {
+    const el = boxEl || wrapRef.current;
+    if (!el || !asset) return;
     e.preventDefault();
-    e.currentTarget.setPointerCapture?.(e.pointerId);
-    const p = clientToImage(e, e.currentTarget, imgW, imgH);
+    e.stopPropagation();
+    const p = clientToImage(e, el, imgW, imgH);
     movedRef.current = false;
-    const hit = hitTest(p);
     dragRef.current = {
-      svg: e.currentTarget,
+      svg: el,
       start: p,
       sides,
       circle,
       points,
-      lockCircle,
       hit,
     };
+    document.body.style.userSelect = "none";
+  };
+
+  const onOverlayPointerDown = (e) => {
+    if (!asset) return;
+    const p = clientToImage(e, e.currentTarget, imgW, imgH);
+    beginDrag(e, hitTest(p), wrapRef.current);
+  };
+
+  const onHandleDown = (e, hit) => {
+    beginDrag(e, hit, wrapRef.current);
   };
 
   const onOverlayPointerMove = (e) => {
@@ -498,22 +631,24 @@ export default function ImageCrop({ onToast }) {
         return;
       }
       if (hit.type === "scale") {
-        const { rx, ry } = ellipseRadii(drag.circle);
-        const startR = Math.hypot(rx, ry) || 1;
-        const nowR = Math.hypot(p.x - drag.circle.cx, p.y - drag.circle.cy);
-        const scale = (drag.circle.scale * nowR) / startR;
-        setCircle(clampCircle({ ...drag.circle, scale }, imgW, imgH));
+        const startR =
+          dist(drag.start, { x: drag.circle.cx, y: drag.circle.cy }) || 1;
+        const nowR = dist(p, { x: drag.circle.cx, y: drag.circle.cy });
+        setCircle(
+          clampCircle(
+            { ...drag.circle, scale: (drag.circle.scale * nowR) / startR },
+            imgW,
+            imgH,
+          ),
+        );
         return;
       }
       const next = { ...drag.circle };
+      const scale = drag.circle.scale || 1;
       if (hit.type === "e" || hit.type === "w") {
-        const width = (Math.abs(p.x - drag.circle.cx) * 2) / drag.circle.scale;
-        next.width = width;
-        if (drag.lockCircle) next.height = width;
+        next.width = (Math.abs(p.x - drag.circle.cx) * 2) / scale;
       } else if (hit.type === "n" || hit.type === "s") {
-        const height = (Math.abs(p.y - drag.circle.cy) * 2) / drag.circle.scale;
-        next.height = height;
-        if (drag.lockCircle) next.width = height;
+        next.height = (Math.abs(p.y - drag.circle.cy) * 2) / scale;
       }
       setCircle(clampCircle(next, imgW, imgH));
       return;
@@ -552,14 +687,31 @@ export default function ImageCrop({ onToast }) {
     }
   };
 
-  const onOverlayDoubleClick = (e) => {
-    if (mode !== "polygon") return;
-    const p = clientToImage(e, e.currentTarget, imgW, imgH);
-    const idx = points.findIndex((pt) => dist(p, pt) <= hitSlop);
-    if (idx >= 0) {
-      setPoints((prev) => prev.filter((_, i) => i !== idx));
-    }
+  const onPointDoubleClick = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setPoints((prev) => prev.filter((_, i) => i !== index));
   };
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (!dragRef.current) return;
+      onOverlayPointerMove(e);
+    };
+    const onUp = (e) => {
+      if (!dragRef.current) return;
+      onOverlayPointerUp(e);
+      document.body.style.userSelect = "";
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  });
 
   const cropOptions = useMemo(
     () => ({
@@ -617,13 +769,8 @@ export default function ImageCrop({ onToast }) {
     }
   };
 
-  const setCircleLocked = (patch) => {
-    setCircle((prev) => {
-      const next = { ...prev, ...patch };
-      if (lockCircle && patch.width != null) next.height = patch.width;
-      if (lockCircle && patch.height != null) next.width = patch.height;
-      return clampCircle(next, imgW, imgH);
-    });
+  const patchCircle = (patch) => {
+    setCircle((prev) => clampCircle({ ...prev, ...patch }, imgW, imgH));
   };
 
   const maxSideX = Math.max(MIN_SLIDER, imgW - 8);
@@ -769,27 +916,7 @@ export default function ImageCrop({ onToast }) {
 
               {mode === "circle" && (
                 <div>
-                  <div className="flex items-center justify-between gap-3 mb-2">
-                    <p className={LABEL_CLASS}>Ellipse</p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setLockCircle((v) => !v);
-                        if (!lockCircle) {
-                          setCircle(
-                            clampCircle(
-                              { ...circle, height: circle.width },
-                              imgW,
-                              imgH,
-                            ),
-                          );
-                        }
-                      }}
-                      className="text-[10px] font-mono uppercase tracking-wider text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"
-                    >
-                      {lockCircle ? "Unlock width / height" : "Lock circle"}
-                    </button>
-                  </div>
+                  <p className={LABEL_CLASS}>Ellipse</p>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     <NumberField
                       id="crop-circle-width"
@@ -797,7 +924,7 @@ export default function ImageCrop({ onToast }) {
                       value={Math.round(circle.width)}
                       min={8}
                       max={maxDiameter}
-                      onChange={(v) => setCircleLocked({ width: v })}
+                      onChange={(v) => patchCircle({ width: v })}
                     />
                     <NumberField
                       id="crop-circle-height"
@@ -805,7 +932,7 @@ export default function ImageCrop({ onToast }) {
                       value={Math.round(circle.height)}
                       min={8}
                       max={maxDiameter}
-                      onChange={(v) => setCircleLocked({ height: v })}
+                      onChange={(v) => patchCircle({ height: v })}
                     />
                     <NumberField
                       id="crop-circle-scale"
@@ -814,11 +941,11 @@ export default function ImageCrop({ onToast }) {
                       min={0.2}
                       max={3}
                       step={0.01}
-                      onChange={(v) => setCircleLocked({ scale: v })}
+                      onChange={(v) => patchCircle({ scale: v })}
                     />
                   </div>
                   <p className="mt-2 text-[10px] font-mono text-stone-500 dark:text-stone-400">
-                    Drag the ellipse to move. Side handles change width or height; corner handle scales.
+                    Side handles change width or height. The outer handle scales uniformly.
                   </p>
                 </div>
               )}
@@ -969,9 +1096,8 @@ export default function ImageCrop({ onToast }) {
                       fillColor={fillColor}
                       maskId={maskId}
                       onPointerDown={onOverlayPointerDown}
-                      onPointerMove={onOverlayPointerMove}
-                      onPointerUp={onOverlayPointerUp}
-                      onDoubleClick={onOverlayDoubleClick}
+                      onHandleDown={onHandleDown}
+                      onPointDoubleClick={onPointDoubleClick}
                     />
                   )}
                 </div>
