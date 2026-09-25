@@ -8,6 +8,13 @@ body {
     "Segoe UI", sans-serif;
 }
 
+html[data-live-page-gradient="on"] [data-app-shell] {
+  background-image: var(--live-page-gradient);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
 .font-mono {
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;

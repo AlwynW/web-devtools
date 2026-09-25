@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { ArrowDown, ArrowUp, Plus, Trash } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
@@ -6,9 +7,10 @@ import Button from "../components/Button";
 const DEFAULT_LAYER = () => ({
   type: "linear",
   angle: 120,
+  offsetX: 50,
+  offsetY: 50,
   radialShape: "ellipse",
   radialSize: "farthest-corner",
-  radialPos: "center",
   stops: [
     { color: "#3b82f6", alpha: 100, pos: 0 },
     { color: "#8b5cf6", alpha: 100, pos: 100 },
@@ -40,18 +42,47 @@ function stopToCss(stop) {
   return `${hexToRgba(stop.color, stop.alpha)} ${stop.pos}%`;
 }
 
+function linearOffsetShift(angle, offsetX, offsetY) {
+  const rad = ((angle % 360) * Math.PI) / 180;
+  const dirX = Math.sin(rad);
+  const dirY = -Math.cos(rad);
+  const dx = offsetX - 50;
+  const dy = offsetY - 50;
+  return Math.round((dx * dirX + dy * dirY) * 2);
+}
+
 function layerToCss(layer) {
+  const offsetX = layer.offsetX ?? 50;
+  const offsetY = layer.offsetY ?? 50;
   if (layer.type === "radial") {
-    return `radial-gradient(${layer.radialShape} ${layer.radialSize} at ${layer.radialPos}, ${layer.stops
+    return `radial-gradient(${layer.radialShape} ${layer.radialSize} at ${offsetX}% ${offsetY}%, ${layer.stops
       .map(stopToCss)
       .join(", ")})`;
   }
-  return `linear-gradient(${layer.angle}deg, ${layer.stops.map(stopToCss).join(", ")})`;
+  const shift = linearOffsetShift(layer.angle, offsetX, offsetY);
+  const stops = layer.stops
+    .map((stop) => `${hexToRgba(stop.color, stop.alpha)} ${stop.pos + shift}%`)
+    .join(", ");
+  return `linear-gradient(${layer.angle}deg, ${stops})`;
 }
+
+const PREVIEW_MODES = [
+  { id: "strip", label: "Current" },
+  { id: "square", label: "Square" },
+  { id: "wide", label: "16:9" },
+  { id: "page", label: "Page" },
+];
+
+const PREVIEW_FRAME = {
+  strip: "w-full h-28",
+  square: "w-full aspect-square",
+  wide: "w-full aspect-video",
+};
 
 export default function GradientBuilder({ onToast }) {
   const [layers, setLayers] = useState([DEFAULT_LAYER()]);
   const [applyToPage, setApplyToPage] = useState(false);
+  const [previewMode, setPreviewMode] = useState("strip");
 
   const backgroundImage = useMemo(
     () => layers.map(layerToCss).reverse().join(", "),
@@ -60,17 +91,22 @@ export default function GradientBuilder({ onToast }) {
 
   const cssOutput = `background-image: ${backgroundImage};`;
 
+  const pagePreview = previewMode === "page";
+
   useEffect(() => {
-    const previous = document.body.style.backgroundImage;
-    if (applyToPage) {
-      document.body.style.backgroundImage = backgroundImage;
+    const root = document.documentElement;
+    if (applyToPage || pagePreview) {
+      root.style.setProperty("--live-page-gradient", backgroundImage);
+      root.dataset.livePageGradient = "on";
     } else {
-      document.body.style.backgroundImage = "";
+      root.style.removeProperty("--live-page-gradient");
+      delete root.dataset.livePageGradient;
     }
     return () => {
-      document.body.style.backgroundImage = previous;
+      root.style.removeProperty("--live-page-gradient");
+      delete root.dataset.livePageGradient;
     };
-  }, [applyToPage, backgroundImage]);
+  }, [applyToPage, pagePreview, backgroundImage]);
 
   const addLayer = () => setLayers((prev) => [...prev, DEFAULT_LAYER()]);
 
@@ -138,20 +174,28 @@ export default function GradientBuilder({ onToast }) {
     );
   };
 
-  return (
-    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Gradient Builder
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Multi-layer gradients with stop opacity and live page background preview.
-        </p>
-      </header>
+  const previewModeSwitch = (
+    <div className="flex flex-wrap gap-2 p-1 bg-stone-100 dark:bg-stone-800 w-max text-xs font-mono">
+      {PREVIEW_MODES.map((mode) => (
+        <button
+          key={mode.id}
+          type="button"
+          onClick={() => setPreviewMode(mode.id)}
+          className={`px-3 py-1.5 ${
+            previewMode === mode.id
+              ? "bg-white dark:bg-stone-700 text-stone-700 dark:text-stone-200"
+              : "text-stone-500"
+          }`}
+        >
+          {mode.label}
+        </button>
+      ))}
+    </div>
+  );
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
-        <div className="w-full h-28 border border-stone-200 dark:border-stone-700" style={{ backgroundImage }} />
-
+  const controls = (
+    <>
+      {!pagePreview && (
         <label className="flex items-center gap-2 text-sm font-mono text-stone-700 dark:text-stone-300">
           <input
             type="checkbox"
@@ -161,6 +205,7 @@ export default function GradientBuilder({ onToast }) {
           />
           Apply gradient to page background (live)
         </label>
+      )}
 
         <div className="space-y-4">
           {layers.map((layer, layerIndex) => (
@@ -238,7 +283,7 @@ export default function GradientBuilder({ onToast }) {
               )}
 
               {layer.type === "radial" && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <select
                     value={layer.radialShape}
                     onChange={(e) => updateLayer(layerIndex, "radialShape", e.target.value)}
@@ -257,23 +302,49 @@ export default function GradientBuilder({ onToast }) {
                     <option value="farthest-side">farthest-side</option>
                     <option value="farthest-corner">farthest-corner</option>
                   </select>
-                  <select
-                    value={layer.radialPos}
-                    onChange={(e) => updateLayer(layerIndex, "radialPos", e.target.value)}
-                    className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm dark:text-white"
-                  >
-                    <option value="center">center</option>
-                    <option value="top">top</option>
-                    <option value="bottom">bottom</option>
-                    <option value="left">left</option>
-                    <option value="right">right</option>
-                    <option value="top left">top left</option>
-                    <option value="top right">top right</option>
-                    <option value="bottom left">bottom left</option>
-                    <option value="bottom right">bottom right</option>
-                  </select>
                 </div>
               )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  ["offsetX", "Offset X"],
+                  ["offsetY", "Offset Y"],
+                ].map(([field, label]) => (
+                  <div key={field}>
+                    <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+                      <span>{label}</span>
+                      <span className="font-mono">−100–200%</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="range"
+                        min={-100}
+                        max={200}
+                        value={layer[field]}
+                        onChange={(e) =>
+                          updateLayer(layerIndex, field, Number.parseInt(e.target.value, 10))
+                        }
+                        className="flex-1 h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                      />
+                      <input
+                        type="number"
+                        min={-100}
+                        max={200}
+                        value={layer[field]}
+                        onChange={(e) =>
+                          updateLayer(
+                            layerIndex,
+                            field,
+                            clamp(Number.parseInt(e.target.value || "0", 10), -100, 200),
+                          )
+                        }
+                        className="w-16 px-2 py-1 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs dark:text-white"
+                      />
+                      <span className="text-xs text-stone-500">%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -384,6 +455,45 @@ export default function GradientBuilder({ onToast }) {
         </Button>
 
         <CopyArea text={cssOutput} onCopySuccess={() => onToast("CSS copied!")} />
+    </>
+  );
+
+  if (pagePreview) {
+    return createPortal(
+      <aside className="fixed top-16 right-0 bottom-0 z-20 w-[min(100vw-2.5rem,24rem)] overflow-y-auto border-l border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-950/95 p-4 space-y-4 shadow-xl">
+        <div>
+          <h2 className="text-lg font-black tracking-tight text-stone-900 dark:text-stone-50">
+            Gradient Builder
+          </h2>
+          <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+            Page preview. Controls stay in this sidebar.
+          </p>
+        </div>
+        {previewModeSwitch}
+        {controls}
+      </aside>,
+      document.body,
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <header className="mb-12 text-center">
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
+          Gradient Builder
+        </h2>
+        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
+          Multi-layer gradients with stop opacity, position offset, and a live page background.
+        </p>
+      </header>
+
+      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+        {previewModeSwitch}
+        <div
+          className={`${PREVIEW_FRAME[previewMode]} border border-stone-200 dark:border-stone-700`}
+          style={{ backgroundImage }}
+        />
+        {controls}
       </div>
     </div>
   );
