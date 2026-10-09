@@ -18,6 +18,7 @@ import {
 } from "../utils/favoriteTools";
 import { subscribeToolModuleLoading, isToolModuleLoading } from "../utils/lazyTool";
 import ToolLoadingFallback from "./ToolLoadingFallback";
+import ToolErrorBoundary from "./ToolErrorBoundary";
 
 export default function Layout({ toast }) {
   const location = useLocation();
@@ -440,7 +441,9 @@ export default function Layout({ toast }) {
               </div>
             )}
             <Suspense fallback={null}>
-              <Outlet key={location.pathname} />
+              <ToolErrorBoundary resetKey={location.pathname}>
+                <Outlet key={location.pathname} />
+              </ToolErrorBoundary>
             </Suspense>
           </div>
         </div>
