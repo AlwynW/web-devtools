@@ -74,25 +74,25 @@ export default function WhatsMyIp({ onToast }) {
       </header>
 
       <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-        {!online && !loading && (
+        {!online && (
           <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-sm font-mono">
             Needs network. Connect to look up your public IP.
           </div>
         )}
 
-        {loading && (
+        {online && loading && (
           <div className="text-center py-8 text-stone-500">
             Fetching your IP...
           </div>
         )}
 
-        {error && online && (
+        {online && error && !loading && (
           <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
 
-        {!loading && !error && (
+        {online && !loading && !error && (
           <>
             <div className="space-y-4">
               {ipv4 && (
@@ -120,16 +120,16 @@ export default function WhatsMyIp({ onToast }) {
             </div>
 
             <div className="mt-4 flex justify-end">
-              <Button onClick={load} icon={ArrowsClockwise} disabled={!online}>
+              <Button onClick={load} icon={ArrowsClockwise}>
                 Refresh
               </Button>
             </div>
           </>
         )}
 
-        {!loading && error && (
+        {online && !loading && error && (
           <div className="mt-2 flex justify-end">
-            <Button onClick={load} icon={ArrowsClockwise} disabled={!online}>
+            <Button onClick={load} icon={ArrowsClockwise}>
               Retry
             </Button>
           </div>
