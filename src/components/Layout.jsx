@@ -102,6 +102,11 @@ export default function Layout({ toast }) {
       body.classList.remove("dark");
     }
 
+    const themeColor = shouldUseDark ? "#1c1917" : "#f5f5f4";
+    document
+      .querySelectorAll('meta[name="theme-color"]')
+      .forEach((meta) => meta.setAttribute("content", themeColor));
+
     localStorage.setItem("theme", theme);
   }, [theme]);
 
