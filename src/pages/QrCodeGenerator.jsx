@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import QRCode from "qrcode";
 import { DownloadSimple, QrCode } from "phosphor-react";
+import QrReader from "../components/QrReader";
 
 const MODES = [
   { id: "text", label: "Text" },
@@ -50,7 +51,13 @@ function buildWifiString(fields) {
   return `WIFI:${parts.join(";")};;`;
 }
 
+const DIRECTIONS = [
+  { id: "generate", label: "Generate" },
+  { id: "read", label: "Read" },
+];
+
 export default function QrCodeGenerator({ onToast }) {
+  const [direction, setDirection] = useState("generate");
   const [mode, setMode] = useState("text");
   const [text, setText] = useState("");
   const [vcard, setVcard] = useState({
@@ -154,14 +161,36 @@ export default function QrCodeGenerator({ onToast }) {
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-12 text-center">
         <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          QR Code Generator
+          QR Code
         </h2>
         <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Generate QR codes for text, vCards, or WiFi credentials.
+          Generate a code from text, or read one from an image, clipboard, or camera.
         </p>
       </header>
 
       <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+          {DIRECTIONS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setDirection(item.id)}
+              aria-pressed={direction === item.id}
+              className={`px-3 py-1.5 transition-colors ${
+                direction === item.id
+                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
+                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {direction === "read" ? (
+          <QrReader onToast={onToast} />
+        ) : (
+        <>
         <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
           {MODES.map((m) => (
             <button
@@ -372,6 +401,8 @@ export default function QrCodeGenerator({ onToast }) {
             <QrCode size={24} weight="thin" className="shrink-0" />
             <span className="text-sm font-mono">Generating QR code...</span>
           </div>
+        )}
+        </>
         )}
       </div>
     </div>
