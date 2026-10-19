@@ -118,7 +118,7 @@ export const navGroups = [
         path: "/qr",
         label: "QR Code",
         icon: QrCode,
-        description: "Generate QR codes from text/URLs.",
+        description: "Generate QR codes, or read them from an image, clipboard, or camera.",
       },
     ],
   },
