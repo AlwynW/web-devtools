@@ -72,3 +72,47 @@ html[data-live-page-gradient="on"] [data-app-shell] {
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
 }
+
+.markdown-preview .mermaid-diagram {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}
+
+.markdown-preview .mermaid-diagram :where(p, pre, code) {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.markdown-preview .mermaid-diagram svg {
+  height: auto;
+  max-width: 100%;
+}
+
+.markdown-preview .mermaid-diagram-error {
+  border: 1px solid var(--color-red-200);
+  background: var(--color-red-50);
+  color: var(--color-red-700);
+  padding: 0.75rem 1rem;
+}
+
+.dark .markdown-preview .mermaid-diagram-error {
+  border-color: var(--color-red-800);
+  background: color-mix(in srgb, var(--color-red-900) 20%, transparent);
+  color: var(--color-red-300);
+}
+
+.markdown-preview .mermaid-error-title {
+  margin: 0 0 0.5rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.markdown-preview .mermaid-error-message {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+}

@@ -536,7 +536,7 @@ export const navGroups = [
         path: "/markdown-viewer",
         label: "MarkDown Viewer",
         icon: DownloadSimple,
-        description: "Render Markdown for quick previews.",
+        description: "Render Markdown for quick previews, including Mermaid diagrams.",
       },
     ],
   },

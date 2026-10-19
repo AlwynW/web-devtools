@@ -88,7 +88,7 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
   - **Diff**: Line-based unified or side-by-side diff with optional ignore trim and case.
   - **Semver**: Compare versions and test npm-style semver ranges.
   - **Keycode**: Focus a capture area; see key, code, which, and modifiers (keydown).
-  - **MarkDown Viewer**: Render Markdown for quick previews.
+  - **MarkDown Viewer**: Render Markdown for quick previews, including Mermaid diagrams.
 
 - **Time**
   - **Timestamp**: Convert to/from Unix timestamps.
