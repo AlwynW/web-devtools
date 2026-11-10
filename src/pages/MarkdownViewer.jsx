@@ -1,7 +1,21 @@
-import { useState, useCallback, useEffect } from "react";
-import { marked } from "marked";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { FileArrowDown, CornersOut, CornersIn } from "phosphor-react";
 import CopyButton from "../components/CopyButton";
+import { renderMarkdownWithMermaid } from "../utils/markdownWithMermaid";
+
+function readDarkTheme() {
+  try {
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark") return true;
+    if (saved === "light") return false;
+  } catch {
+    /* ignore */
+  }
+  return (
+    document.documentElement.classList.contains("dark") ||
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
+}
 
 export default function MarkdownViewer({ onToast }) {
   const [markdownInput, setMarkdownInput] = useState("");
@@ -10,25 +24,35 @@ export default function MarkdownViewer({ onToast }) {
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [fullWidth, setFullWidth] = useState(false);
+  const [dark, setDark] = useState(readDarkTheme);
+  const requestId = useRef(0);
 
-  const parseMarkdown = useCallback(async (text, sourceName = null) => {
+  useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => setDark(root.classList.contains("dark"));
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  const parseMarkdown = useCallback(async (text) => {
+    const id = ++requestId.current;
     setError(null);
     const raw = String(text ?? "");
     if (!raw.trim()) {
       setContent(null);
-      setFileName(sourceName);
       return;
     }
     try {
-      const html = await marked.parse(raw);
+      const html = await renderMarkdownWithMermaid(raw, { dark });
+      if (id !== requestId.current) return;
       setContent(html);
-      setFileName(sourceName);
     } catch (e) {
+      if (id !== requestId.current) return;
       setError(e.message || "Failed to parse markdown");
       setContent(null);
-      setFileName(sourceName);
     }
-  }, []);
+  }, [dark]);
 
   const processFile = useCallback((file) => {
     setError(null);
@@ -43,18 +67,13 @@ export default function MarkdownViewer({ onToast }) {
     }
 
     const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const text = reader.result;
-        setMarkdownInput(String(text ?? ""));
-        await parseMarkdown(text, file.name);
-      } catch (e) {
-        setError(e.message || "Failed to parse markdown");
-      }
+    reader.onload = () => {
+      setFileName(file.name);
+      setMarkdownInput(String(reader.result ?? ""));
     };
     reader.onerror = () => setError("Failed to read file");
     reader.readAsText(file);
-  }, [parseMarkdown]);
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -98,7 +117,7 @@ export default function MarkdownViewer({ onToast }) {
             Markdown Viewer
           </h2>
           <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-            Drop a .md file or type markdown directly to preview it.
+            Drop a .md file or type markdown. Fenced mermaid blocks render as diagrams.
           </p>
         </div>
         <button
@@ -183,7 +202,7 @@ export default function MarkdownViewer({ onToast }) {
               </div>
             </div>
             <div
-              className="p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-stone-100 [&_code]:dark:bg-stone-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-stone-100 [&_pre]:dark:bg-stone-800 [&_pre]:mb-4 [&_a]:text-stone-700 [&_a]:dark:text-stone-300 [&_a]:underline [&_blockquote]:border-l-stone-500 [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
+              className="markdown-preview p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-stone-100 [&_code]:dark:bg-stone-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-stone-100 [&_pre]:dark:bg-stone-800 [&_pre]:mb-4 [&_a]:text-stone-700 [&_a]:dark:text-stone-300 [&_a]:underline [&_blockquote]:border-l-stone-500 [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>

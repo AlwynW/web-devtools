@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import useOnlineStatus from "../hooks/useOnlineStatus";
 
 function parseCurlTrace(text) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -23,6 +24,7 @@ function parseCurlTrace(text) {
 }
 
 export default function UrlExpand() {
+  const online = useOnlineStatus();
   const [curlPaste, setCurlPaste] = useState("");
   const [url, setUrl] = useState("https://example.com");
   const [fetchLog, setFetchLog] = useState([]);
@@ -35,6 +37,10 @@ export default function UrlExpand() {
   );
 
   const runFetch = async () => {
+    if (!navigator.onLine) {
+      setFetchErr("Needs network for live fetch. Paste curl -IL output instead.");
+      return;
+    }
     setFetchBusy(true);
     setFetchErr(null);
     setFetchLog([]);
@@ -74,7 +80,11 @@ export default function UrlExpand() {
         );
       }
     } catch (e) {
-      setFetchErr(e.message || "fetch failed");
+      setFetchErr(
+        !navigator.onLine
+          ? "Needs network for live fetch. Paste curl -IL output instead."
+          : e.message || "fetch failed",
+      );
     } finally {
       setFetchBusy(false);
     }
@@ -140,16 +150,22 @@ export default function UrlExpand() {
             <code className="text-stone-600 dark:text-stone-300">Location</code>{" "}
             (rare for third-party shorteners).
           </p>
+          {!online && (
+            <p className="text-xs font-mono text-amber-800 dark:text-amber-300">
+              Offline — live fetch needs network. Paste curl -IL output above.
+            </p>
+          )}
           <div className="flex flex-col sm:flex-row gap-2">
             <input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              className="flex-1 p-3 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              disabled={!online}
+              className="flex-1 p-3 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 disabled:opacity-50"
             />
             <button
               type="button"
               onClick={runFetch}
-              disabled={fetchBusy}
+              disabled={fetchBusy || !online}
               className="px-4 py-3 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900 disabled:opacity-50"
             >
               {fetchBusy ? "…" : "Follow"}

@@ -38,6 +38,7 @@ export default function Layout({ toast }) {
   const [favoritePaths, setFavoritePaths] = useState(loadFavoriteToolPaths);
   const [isToolLoading, setIsToolLoading] = useState(false);
   const [loadingToolPath, setLoadingToolPath] = useState(null);
+  const [installPrompt, setInstallPrompt] = useState(null);
 
   const beginToolNavigation = (path) => {
     setLoadingToolPath(path);
@@ -101,6 +102,11 @@ export default function Layout({ toast }) {
       body.classList.remove("dark");
     }
 
+    const themeColor = shouldUseDark ? "#1c1917" : "#f5f5f4";
+    document
+      .querySelectorAll('meta[name="theme-color"]')
+      .forEach((meta) => meta.setAttribute("content", themeColor));
+
     localStorage.setItem("theme", theme);
   }, [theme]);
 
@@ -156,6 +162,26 @@ export default function Layout({ toast }) {
       searchInputRef.current.select?.();
     }
   }, [isMenuOpen]);
+
+  useEffect(() => {
+    const onBeforeInstall = (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", onBeforeInstall);
+    return () =>
+      window.removeEventListener("beforeinstallprompt", onBeforeInstall);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    try {
+      await installPrompt.userChoice;
+    } finally {
+      setInstallPrompt(null);
+    }
+  };
 
   const displayedGroups = useMemo(() => {
     const q = searchQuery.toLowerCase();
@@ -282,6 +308,15 @@ export default function Layout({ toast }) {
           </div>
 
           <div className="flex items-center justify-end gap-2 sm:gap-3">
+            {installPrompt && (
+              <button
+                type="button"
+                onClick={handleInstall}
+                className="hidden sm:inline-flex items-center px-2.5 py-1.5 border border-stone-300 dark:border-stone-700 text-[11px] font-mono text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+              >
+                Install
+              </button>
+            )}
             <button
               type="button"
               onClick={toggleTheme}

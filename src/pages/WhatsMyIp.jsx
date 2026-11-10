@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ArrowsClockwise } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
+import useOnlineStatus from "../hooks/useOnlineStatus";
 
 const fetchIp = async (version = "4") => {
   const url =
@@ -15,12 +16,20 @@ const fetchIp = async (version = "4") => {
 };
 
 export default function WhatsMyIp({ onToast }) {
+  const online = useOnlineStatus();
   const [ipv4, setIpv4] = useState(null);
   const [ipv6, setIpv6] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const load = useCallback(async () => {
+    if (!navigator.onLine) {
+      setLoading(false);
+      setError("Needs network. Connect to look up your public IP.");
+      setIpv4(null);
+      setIpv6(null);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -31,7 +40,11 @@ export default function WhatsMyIp({ onToast }) {
       setIpv4(v4);
       setIpv6(v6);
     } catch (e) {
-      setError(e.message || "Could not fetch your IP address");
+      setError(
+        !navigator.onLine
+          ? "Needs network. Connect to look up your public IP."
+          : e.message || "Could not fetch your IP address",
+      );
       setIpv4(null);
       setIpv6(null);
     } finally {
@@ -42,6 +55,12 @@ export default function WhatsMyIp({ onToast }) {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (online && error) {
+      load();
+    }
+  }, [online]); // eslint-disable-line react-hooks/exhaustive-deps -- retry once when coming back online
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -55,19 +74,25 @@ export default function WhatsMyIp({ onToast }) {
       </header>
 
       <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-        {loading && (
+        {!online && (
+          <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-sm font-mono">
+            Needs network. Connect to look up your public IP.
+          </div>
+        )}
+
+        {online && loading && (
           <div className="text-center py-8 text-stone-500">
             Fetching your IP...
           </div>
         )}
 
-        {error && (
+        {online && error && !loading && (
           <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
 
-        {!loading && !error && (
+        {online && !loading && !error && (
           <>
             <div className="space-y-4">
               {ipv4 && (
@@ -100,6 +125,14 @@ export default function WhatsMyIp({ onToast }) {
               </Button>
             </div>
           </>
+        )}
+
+        {online && !loading && error && (
+          <div className="mt-2 flex justify-end">
+            <Button onClick={load} icon={ArrowsClockwise}>
+              Retry
+            </Button>
+          </div>
         )}
       </div>
     </div>
