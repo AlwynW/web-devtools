@@ -2,6 +2,8 @@ import { useState, useMemo } from "react";
 import { MagnifyingGlass } from "phosphor-react";
 import CopyButton from "../components/CopyButton";
 import { TAILWIND_CLASSES } from "../data/tailwindClasses";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 export default function TailwindSearch({ onToast }) {
   const [query, setQuery] = useState("");
@@ -19,28 +21,21 @@ export default function TailwindSearch({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Tailwind Class Search
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Quick reference for z-index, flex-basis, and other utilities.
-        </p>
-      </header>
+      <PageHeader title="Tailwind Class Search" description="Quick reference for z-index, flex-basis, and other utilities." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div className="relative">
           <MagnifyingGlass
             size={16}
             weight="thin"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-subtle"
           />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="> search classes (e.g. z-50, flex-basis, justify)"
-            className="w-full pl-11 pr-4 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full pl-11 pr-4 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
@@ -48,14 +43,14 @@ export default function TailwindSearch({ onToast }) {
           {results.map((c) => (
             <div
               key={c.class}
-              className="flex items-center justify-between p-3 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors group"
+              className="flex items-center justify-between p-3 border border-border hover:bg-hover transition-colors group"
             >
               <div className="min-w-0 flex-1">
-                <code className="font-mono font-bold text-stone-800 dark:text-stone-200">
+                <code className="font-mono font-bold text-fg-soft">
                   {c.class}
                 </code>
-                <div className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
-                  <span className="font-mono text-stone-600 dark:text-stone-300">
+                <div className="text-sm text-fg-muted mt-0.5">
+                  <span className="font-mono text-fg-muted">
                     {c.property}
                   </span>
                   {" → "}
@@ -73,11 +68,11 @@ export default function TailwindSearch({ onToast }) {
         </div>
 
         {results.length === 0 && (
-          <div className="text-center py-12 text-stone-500 font-mono text-sm">
+          <div className="text-center py-12 text-fg-muted font-mono text-sm">
             No matching classes found.
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

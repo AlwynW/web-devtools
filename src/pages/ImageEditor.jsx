@@ -1,9 +1,13 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { UploadSimple, DownloadSimple, X } from "phosphor-react";
 import { downloadCanvas } from "../utils/assetGridComposer";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const RANGE_CLASS =
-  "w-full h-2 bg-stone-200 dark:bg-stone-700 appearance-none cursor-pointer accent-stone-800 dark:accent-stone-200";
+  "w-full h-2 bg-secondary-hover appearance-none cursor-pointer accent-fg";
 
 function buildFilter({ greyscale, invert, hue, saturation }) {
   const parts = [];
@@ -111,22 +115,15 @@ export default function ImageEditor({ onToast }) {
   const toggleClass = (active) =>
     `px-3 py-1.5 font-mono text-xs border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
       active
-        ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border-stone-900 dark:border-stone-100"
-        : "bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-300 border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800"
+        ? "bg-primary text-primary-fg rounded-button border-inverse-border"
+        : "bg-surface text-fg-muted border-border-strong hover:bg-hover-muted"
     }`;
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Editor
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Greyscale, invert, and hue/saturation tweaks — then download.
-        </p>
-      </header>
+      <PageHeader title="Editor" description="Greyscale, invert, and hue/saturation tweaks — then download." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div
           onDrop={handleDrop}
           onDragOver={(e) => {
@@ -136,8 +133,8 @@ export default function ImageEditor({ onToast }) {
           onDragLeave={() => setDragOver(false)}
           className={`border-2 border-dashed p-10 text-center transition-colors ${
             dragOver
-              ? "border-stone-500 bg-stone-100/50 dark:bg-stone-900/50"
-              : "border-stone-300 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-500"
+              ? "border-focus bg-shell/50"
+              : "border-border-strong hover:border-border-muted"
           }`}
         >
           <input
@@ -151,36 +148,36 @@ export default function ImageEditor({ onToast }) {
             htmlFor="image-editor-file-input"
             className="cursor-pointer flex flex-col items-center gap-3"
           >
-            <UploadSimple size={48} weight="thin" className="text-stone-400" />
-            <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
+            <UploadSimple size={48} weight="thin" className="text-fg-subtle" />
+            <span className="font-mono text-sm text-fg-muted">
               Drop an image here or click to browse
             </span>
           </label>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {src && (
           <>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="font-mono text-sm text-stone-600 dark:text-stone-300 truncate">
+              <span className="font-mono text-sm text-fg-muted truncate">
                 {fileName}
               </span>
               <button
                 type="button"
                 onClick={clearImage}
-                className="flex items-center gap-1.5 text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+                className="flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-fg"
               >
                 <X size={14} weight="thin" />
                 Clear
               </button>
             </div>
 
-            <div className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 p-4 flex items-center justify-center min-h-[200px]">
+            <div className="border border-border bg-surface-code p-4 flex items-center justify-center min-h-[200px]">
               <img
                 ref={imageRef}
                 src={src}
@@ -191,9 +188,9 @@ export default function ImageEditor({ onToast }) {
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              <Label>
                 Effects
-              </label>
+              </Label>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
@@ -212,7 +209,7 @@ export default function ImageEditor({ onToast }) {
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="px-3 py-1.5 font-mono text-xs text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 border border-transparent"
+                  className="px-3 py-1.5 font-mono text-xs text-fg-muted hover:text-fg border border-transparent"
                 >
                   Reset
                 </button>
@@ -222,10 +219,10 @@ export default function ImageEditor({ onToast }) {
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between items-baseline gap-4 mb-2">
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                  <Label>
                     Hue
-                  </label>
-                  <span className="text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums">
+                  </Label>
+                  <span className="text-xs font-mono text-fg-muted tabular-nums">
                     {hue}°
                   </span>
                 </div>
@@ -241,10 +238,10 @@ export default function ImageEditor({ onToast }) {
               </div>
               <div>
                 <div className="flex justify-between items-baseline gap-4 mb-2">
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                  <Label>
                     Saturation
-                  </label>
-                  <span className="text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums">
+                  </Label>
+                  <span className="text-xs font-mono text-fg-muted tabular-nums">
                     {saturation}%
                   </span>
                 </div>
@@ -265,7 +262,7 @@ export default function ImageEditor({ onToast }) {
               <button
                 type="button"
                 onClick={() => download("image/png")}
-                className="flex items-center gap-2 px-4 py-2 font-mono text-xs bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-900 dark:border-stone-100 hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 font-mono text-xs bg-primary text-primary-fg rounded-button border border-inverse-border hover:bg-primary-hover transition-colors"
               >
                 <DownloadSimple size={16} weight="thin" />
                 Download PNG
@@ -273,7 +270,7 @@ export default function ImageEditor({ onToast }) {
               <button
                 type="button"
                 onClick={() => download("image/jpeg")}
-                className="flex items-center gap-2 px-4 py-2 font-mono text-xs border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 font-mono text-xs border border-border-strong text-fg-soft hover:bg-hover-muted transition-colors"
               >
                 <DownloadSimple size={16} weight="thin" />
                 Download JPG
@@ -281,7 +278,7 @@ export default function ImageEditor({ onToast }) {
             </div>
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

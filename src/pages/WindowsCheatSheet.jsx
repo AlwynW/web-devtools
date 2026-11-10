@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 import { MagnifyingGlass } from "phosphor-react";
 import CopyButton from "../components/CopyButton";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const SECTIONS = [
   {
@@ -253,12 +255,12 @@ function filterSection(section, q) {
 
 function CheatRow({ item, onCopySuccess }) {
   return (
-    <div className="flex items-center justify-between p-3 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors group">
+    <div className="flex items-center justify-between p-3 border border-border hover:bg-hover transition-colors group">
       <div className="min-w-0 flex-1">
-        <code className="font-mono font-bold text-stone-800 dark:text-stone-200 break-all">
+        <code className="font-mono font-bold text-fg-soft break-all">
           {item.token}
         </code>
-        <div className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
+        <div className="text-sm text-fg-muted mt-0.5">
           {item.description}
         </div>
       </div>
@@ -285,28 +287,21 @@ export default function WindowsCheatSheet({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Windows Cheat Sheet
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Paths, shell: folders, and Run commands — grouped by usefulness.
-        </p>
-      </header>
+      <PageHeader title="Windows Cheat Sheet" description="Paths, shell: folders, and Run commands — grouped by usefulness." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div className="relative">
           <MagnifyingGlass
             size={16}
             weight="thin"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-subtle"
           />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="> search paths and commands (e.g. appdata, services)"
-            className="w-full pl-11 pr-4 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full pl-11 pr-4 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
@@ -320,11 +315,11 @@ export default function WindowsCheatSheet({ onToast }) {
                   : ""
               }
             >
-              <h3 className="text-[11px] font-mono tracking-[0.18em] text-stone-500 dark:text-stone-500 uppercase mb-2">
+              <h3 className="field-label mb-2">
                 {section.title}
               </h3>
               {section.intro && (
-                <p className="text-sm text-stone-600 dark:text-stone-400 mb-3 leading-relaxed">
+                <p className="text-sm text-fg-muted mb-3 leading-relaxed">
                   {section.intro}
                 </p>
               )}
@@ -333,7 +328,7 @@ export default function WindowsCheatSheet({ onToast }) {
                   {section.parts.map((part, idx) => (
                     <div key={part.intro ?? `part-${idx}`}>
                       {part.intro && (
-                        <p className="text-xs font-mono text-stone-500 dark:text-stone-500 mb-2">
+                        <p className="text-xs font-mono text-fg-muted mb-2">
                           {part.intro}
                         </p>
                       )}
@@ -367,11 +362,11 @@ export default function WindowsCheatSheet({ onToast }) {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-stone-500 font-mono text-sm">
+          <div className="text-center py-12 text-fg-muted font-mono text-sm">
             No matching entries.
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

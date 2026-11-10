@@ -2,6 +2,9 @@ import { useMemo, useState } from "react";
 import { MagnifyingGlass } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import { copyToClipboard } from "../utils/clipboard";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 const LETTER_WORD = {
   A: "Alpha",
@@ -117,30 +120,23 @@ export default function NatoPhonetic({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          NATO Phonetic
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          ICAO spelling alphabet for letters A–Z and digits 0–9.
-        </p>
-      </header>
+      <PageHeader title="NATO Phonetic" description="ICAO spelling alphabet for letters A–Z and digits 0–9." />
 
       <div className="space-y-8">
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-          <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <Panel className="space-y-4">
+          <h3 className="field-label">
             Spell-out
           </h3>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <Label>
                 Input
-              </label>
+              </Label>
               {input && (
                 <button
                   type="button"
                   onClick={() => setInput("")}
-                  className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+                  className="text-xs font-mono text-fg-muted hover:text-fg"
                 >
                   Clear
                 </button>
@@ -150,39 +146,39 @@ export default function NatoPhonetic({ onToast }) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="HELLO 911"
-              className="w-full h-24 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full h-24 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
-            <p className="mt-2 text-xs font-mono text-stone-500 dark:text-stone-400">
+            <p className="mt-2 text-xs font-mono text-fg-muted">
               Whitespace separates word groups. Other characters appear as{" "}
-              <span className="text-stone-700 dark:text-stone-300">[char]</span>.
+              <span className="text-fg-soft">[char]</span>.
             </p>
           </div>
           {output && (
             <>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+              <Label className="mb-1">
                 Output
-              </label>
+              </Label>
               <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
             </>
           )}
-        </div>
+        </Panel>
 
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-          <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <Panel className="space-y-4">
+          <h3 className="field-label">
             Reference
           </h3>
           <div className="relative">
             <MagnifyingGlass
               size={16}
               weight="thin"
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-subtle"
             />
             <input
               type="text"
               value={refSearch}
               onChange={(e) => setRefSearch(e.target.value)}
               placeholder="> search letter or word"
-              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full pl-11 pr-4 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
@@ -191,18 +187,18 @@ export default function NatoPhonetic({ onToast }) {
                 key={key}
                 type="button"
                 onClick={() => copyWord(word)}
-                className="p-2 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 text-left font-mono text-sm"
+                className="p-2 border border-border hover:bg-hover text-left font-mono text-sm"
               >
-                <span className="font-bold text-stone-800 dark:text-stone-200">
+                <span className="font-bold text-fg-soft">
                   {label}
                 </span>
-                <div className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                <div className="text-xs text-fg-muted truncate">
                   {word}
                 </div>
               </button>
             ))}
           </div>
-        </div>
+        </Panel>
       </div>
     </div>
   );

@@ -2,6 +2,8 @@ import { useState, useMemo } from "react";
 import { MagnifyingGlass } from "phosphor-react";
 import CopyButton from "../components/CopyButton";
 import { ASCII_CHARS } from "../data/asciiChars";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 export default function AsciiUnicodeTable({ onToast }) {
   const [search, setSearch] = useState("");
@@ -20,39 +22,32 @@ export default function AsciiUnicodeTable({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          ASCII / Unicode Table
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Look up character codes and copy symbols.
-        </p>
-      </header>
+      <PageHeader title="ASCII / Unicode Table" description="Look up character codes and copy symbols." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div className="relative">
           <MagnifyingGlass
             size={16}
             weight="thin"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-subtle"
           />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="> search by code (65), hex (0x41), or character (A)"
-            className="w-full pl-11 pr-4 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full pl-11 pr-4 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
         <div className="max-h-[32rem] overflow-y-auto">
           <table className="w-full font-mono text-sm">
-            <thead className="sticky top-0 bg-stone-50 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-700">
+            <thead className="sticky top-0 bg-surface-muted border-b border-border">
               <tr>
-                <th className="text-left p-2 text-[11px] text-stone-500 uppercase tracking-wider">Char</th>
-                <th className="text-left p-2 text-[11px] text-stone-500 uppercase tracking-wider">Dec</th>
-                <th className="text-left p-2 text-[11px] text-stone-500 uppercase tracking-wider">Hex</th>
-                <th className="text-left p-2 text-[11px] text-stone-500 uppercase tracking-wider">Name</th>
+                <th className="text-left p-2 text-[11px] text-fg-muted uppercase tracking-wider">Char</th>
+                <th className="text-left p-2 text-[11px] text-fg-muted uppercase tracking-wider">Dec</th>
+                <th className="text-left p-2 text-[11px] text-fg-muted uppercase tracking-wider">Hex</th>
+                <th className="text-left p-2 text-[11px] text-fg-muted uppercase tracking-wider">Name</th>
                 <th className="w-16"></th>
               </tr>
             </thead>
@@ -60,14 +55,14 @@ export default function AsciiUnicodeTable({ onToast }) {
               {filtered.map((c) => (
                 <tr
                   key={c.code}
-                  className="border-b border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-900 group"
+                  className="border-b border-border hover:bg-hover group"
                 >
-                  <td className="p-2 font-bold text-stone-800 dark:text-stone-200 w-12">
+                  <td className="p-2 font-bold text-fg-soft w-12">
                     {c.char || "—"}
                   </td>
-                  <td className="p-2 text-stone-600 dark:text-stone-400">{c.code}</td>
-                  <td className="p-2 text-stone-600 dark:text-stone-400">0x{c.hex}</td>
-                  <td className="p-2 text-stone-500 dark:text-stone-400 text-xs">{c.name}</td>
+                  <td className="p-2 text-fg-muted">{c.code}</td>
+                  <td className="p-2 text-fg-muted">0x{c.hex}</td>
+                  <td className="p-2 text-fg-muted text-xs">{c.name}</td>
                   <td className="p-2">
                     {c.char && c.char !== "—" && (
                       <CopyButton
@@ -85,11 +80,11 @@ export default function AsciiUnicodeTable({ onToast }) {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-stone-500 font-mono text-sm">
+          <div className="text-center py-12 text-fg-muted font-mono text-sm">
             No matching characters.
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

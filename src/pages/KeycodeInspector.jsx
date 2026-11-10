@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 export default function KeycodeInspector({ onToast }) {
   const [last, setLast] = useState(null);
@@ -27,40 +29,33 @@ export default function KeycodeInspector({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Key inspector
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Focus the box and press keys. Uses <code className="text-stone-600 dark:text-stone-300">keydown</code>{" "}
-          (modifiers and legacy <code className="text-stone-600 dark:text-stone-300">which</code>).
-        </p>
-      </header>
+      <PageHeader title="Key inspector" description={<>Focus the box and press keys. Uses <code className="text-fg-muted">keydown</code>{" "}
+          (modifiers and legacy <code className="text-fg-muted">which</code>).</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div
           ref={boxRef}
           tabIndex={0}
           onKeyDown={onKeyDown}
-          className="min-h-[8rem] p-6 border-2 border-dashed border-stone-400 dark:border-stone-600 rounded font-mono text-sm text-stone-600 dark:text-stone-400 outline-none focus:border-stone-900 dark:focus:border-stone-300 focus:ring-1 focus:ring-stone-500"
+          className="min-h-[8rem] p-6 border-2 border-dashed border-border-muted rounded font-mono text-sm text-fg-muted outline-none focus:border-stone-900 dark:focus:border-stone-300 focus:ring-1 focus:ring-focus"
         >
           Click here, then type…
         </div>
 
         {last && (
           <>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs text-stone-800 dark:text-stone-200">
-              <dt className="text-stone-500">key</dt>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs text-fg-soft">
+              <dt className="text-fg-muted">key</dt>
               <dd>{JSON.stringify(last.key)}</dd>
-              <dt className="text-stone-500">code</dt>
+              <dt className="text-fg-muted">code</dt>
               <dd>{last.code}</dd>
-              <dt className="text-stone-500">which</dt>
+              <dt className="text-fg-muted">which</dt>
               <dd>{last.which}</dd>
-              <dt className="text-stone-500">location</dt>
+              <dt className="text-fg-muted">location</dt>
               <dd>{last.location}</dd>
-              <dt className="text-stone-500">repeat</dt>
+              <dt className="text-fg-muted">repeat</dt>
               <dd>{String(last.repeat)}</dd>
-              <dt className="text-stone-500">modifiers</dt>
+              <dt className="text-fg-muted">modifiers</dt>
               <dd>
                 ctrl={String(last.ctrlKey)} shift={String(last.shiftKey)} alt=
                 {String(last.altKey)} meta={String(last.metaKey)}
@@ -70,12 +65,12 @@ export default function KeycodeInspector({ onToast }) {
               text={json}
               onCopySuccess={() => onToast("JSON copied!")}
               title="Copy as JSON"
-              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
-              preClassName="p-3 font-mono text-xs text-stone-700 dark:text-stone-300"
+              className="border border-border bg-surface-code"
+              preClassName="p-3 font-mono text-xs text-fg-soft"
             />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

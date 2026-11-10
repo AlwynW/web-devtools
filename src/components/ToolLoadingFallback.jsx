@@ -11,18 +11,12 @@ export default function ToolLoadingFallback({ label }) {
       <CircleNotch
         size={32}
         weight="thin"
-        className="animate-spin text-stone-400 dark:text-stone-500"
+        className="animate-spin text-fg-subtle"
         aria-hidden
       />
       <div className="text-center space-y-1.5">
-        <p className="text-sm font-mono text-stone-600 dark:text-stone-400">
-          Loading module…
-        </p>
-        {label && (
-          <p className="text-xs font-mono text-stone-400 dark:text-stone-500">
-            {label}
-          </p>
-        )}
+        <p className="text-sm font-mono text-fg-muted">Loading module…</p>
+        {label && <p className="text-xs font-mono text-fg-subtle">{label}</p>}
       </div>
     </div>
   );

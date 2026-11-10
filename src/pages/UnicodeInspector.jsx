@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const ZW = new Set([
   "\u200B",
@@ -99,30 +101,23 @@ export default function UnicodeInspector() {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Unicode inspector
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Graphemes, code points, UTF-8 bytes, normalization (NFC/NFD/NFKC/NFKD).
-        </p>
-      </header>
+      <PageHeader title="Unicode inspector" description="Graphemes, code points, UTF-8 bytes, normalization (NFC/NFD/NFKC/NFKD)." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={4}
-          className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+          className="w-full p-4 border border-border-strong font-mono text-sm bg-surface text-fg"
         />
 
         <div className="space-y-3 max-h-[32rem] overflow-y-auto">
           {rows.map((r, idx) => (
             <div
               key={`${idx}-${r.offset}`}
-              className="p-3 border border-stone-200 dark:border-stone-700 text-xs font-mono space-y-1 bg-stone-50 dark:bg-stone-950"
+              className="p-3 border border-border text-xs font-mono space-y-1 bg-surface-code"
             >
-              <div className="flex flex-wrap gap-2 text-stone-600 dark:text-stone-400">
+              <div className="flex flex-wrap gap-2 text-fg-muted">
                 <span>offset {r.offset}</span>
                 {!r.same && (
                   <span className="text-amber-700 dark:text-amber-400">
@@ -138,7 +133,7 @@ export default function UnicodeInspector() {
                   </span>
                 ))}
               </div>
-              <div className="text-stone-800 dark:text-stone-200">
+              <div className="text-fg-soft">
                 {r.codePoints.map(({ c, hex }) => {
                   const bytes = utf8Bytes(c)
                     .map((b) => b.toString(16).toUpperCase().padStart(2, "0"))
@@ -151,7 +146,7 @@ export default function UnicodeInspector() {
                 })}
               </div>
               {!r.same && (
-                <div className="text-[11px] text-stone-500 space-y-0.5 pt-1 border-t border-stone-200 dark:border-stone-700">
+                <div className="text-[11px] text-fg-muted space-y-0.5 pt-1 border-t border-border">
                   {(["nfc", "nfd", "nfkc", "nfkd"] ).map((k) => {
                     const s = r[k];
                     const pts = [...scalarStrings(s)]
@@ -171,7 +166,7 @@ export default function UnicodeInspector() {
             </div>
           ))}
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const emptyGroup = () => ({
   userAgent: "*",
@@ -79,23 +81,16 @@ export default function RobotsBuilder({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          robots.txt
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Build User-agent groups and Sitemap lines; copy the file body.
-        </p>
-      </header>
+      <PageHeader title="robots.txt" description="Build User-agent groups and Sitemap lines; copy the file body." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-8">
+      <Panel className="space-y-8">
         {groups.map((g, gi) => (
           <div
             key={gi}
-            className="p-4 border border-stone-200 dark:border-stone-700 space-y-3"
+            className="p-4 border border-border space-y-3"
           >
             <div className="flex justify-between items-center">
-              <span className="text-xs font-mono text-stone-500">
+              <span className="text-xs font-mono text-fg-muted">
                 Group {gi + 1}
               </span>
               {groups.length > 1 && (
@@ -111,25 +106,25 @@ export default function RobotsBuilder({ onToast }) {
               )}
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 mb-1">
+              <label className="block text-[11px] font-mono text-fg-muted mb-1">
                 User-agent
               </label>
               <input
                 value={g.userAgent}
                 onChange={(e) => updateGroup(gi, "userAgent", e.target.value)}
-                className="w-full p-2 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="w-full p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
               />
             </div>
             {(["allow", "disallow"]).map((field) => (
               <div key={field}>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-[11px] font-mono text-stone-500 capitalize">
+                  <label className="text-[11px] font-mono text-fg-muted capitalize">
                     {field}
                   </label>
                   <button
                     type="button"
                     onClick={() => addRule(gi, field)}
-                    className="text-[11px] font-mono underline text-stone-600 dark:text-stone-400"
+                    className="text-[11px] font-mono underline text-fg-muted"
                   >
                     + line
                   </button>
@@ -143,12 +138,12 @@ export default function RobotsBuilder({ onToast }) {
                           updateRuleLine(gi, field, li, e.target.value)
                         }
                         placeholder={field === "allow" ? "/" : "/admin/"}
-                        className="flex-1 p-2 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                        className="flex-1 p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
                       />
                       <button
                         type="button"
                         onClick={() => removeRule(gi, field, li)}
-                        className="px-2 text-stone-500 hover:text-stone-900 dark:hover:text-stone-200"
+                        className="px-2 text-fg-muted hover:text-fg"
                       >
                         ×
                       </button>
@@ -158,14 +153,14 @@ export default function RobotsBuilder({ onToast }) {
               </div>
             ))}
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 mb-1">
+              <label className="block text-[11px] font-mono text-fg-muted mb-1">
                 Crawl-delay (optional)
               </label>
               <input
                 value={g.crawlDelay}
                 onChange={(e) => updateGroup(gi, "crawlDelay", e.target.value)}
                 placeholder="10"
-                className="w-full max-w-[8rem] p-2 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="w-full max-w-[8rem] p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
               />
             </div>
           </div>
@@ -174,35 +169,35 @@ export default function RobotsBuilder({ onToast }) {
         <button
           type="button"
           onClick={() => setGroups((g) => [...g, emptyGroup()])}
-          className="px-4 py-2 font-mono text-xs border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800"
+          className="px-4 py-2 font-mono text-xs border border-border-strong hover:bg-hover-muted"
         >
           + User-agent group
         </button>
 
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
             Sitemap URLs (one per line)
           </label>
           <textarea
             value={sitemaps}
             onChange={(e) => setSitemaps(e.target.value)}
             rows={3}
-            className="w-full p-3 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
           />
         </div>
 
         <div>
-          <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
             robots.txt
           </span>
           <CopyPre
             text={output}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-64 overflow-y-auto"
-            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+            className="border border-border bg-surface-code max-h-64 overflow-y-auto"
+            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
           />
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

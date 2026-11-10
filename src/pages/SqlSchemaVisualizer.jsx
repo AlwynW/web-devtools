@@ -10,12 +10,13 @@ import {
 import Button from "../components/Button";
 import SchemaCanvas from "../components/SchemaCanvas";
 import { parseSqlSchema, SAMPLE_SQL } from "../utils/sqlSchemaParser";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const tabClass = (active) =>
-  `px-4 py-2 font-mono text-xs uppercase tracking-[0.12em] border transition-colors ${
+  `px-4 py-2 font-mono text-xs uppercase tracking-[0.12em] border rounded-button transition-colors ${
     active
-      ? "bg-stone-900 text-stone-50 border-stone-900 dark:bg-stone-100 dark:text-stone-900 dark:border-stone-100"
-      : "bg-white text-stone-600 border-stone-300 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:border-stone-700 dark:hover:bg-stone-800"
+      ? "bg-inverse text-inverse-fg border-inverse-border"
+      : "bg-surface text-fg-muted border-border-strong hover:bg-surface-muted"
   }`;
 
 function DataModal({ table, tableData, onClose }) {
@@ -35,26 +36,26 @@ function DataModal({ table, tableData, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-stone-900/50 dark:bg-black/60"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-overlay"
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-full max-w-4xl max-h-[85vh] flex flex-col shadow-xl"
+        className="bg-surface border border-border-strong w-full max-w-4xl max-h-[85vh] flex flex-col shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-stone-200 dark:border-stone-800">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <div>
-            <h3 className="font-mono text-sm font-bold text-stone-900 dark:text-stone-100">
+            <h3 className="font-mono text-sm font-bold text-fg">
               {table.name}
             </h3>
-            <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mt-0.5">
+            <p className="text-[11px] font-mono text-fg-muted mt-0.5">
               {rows.length} row{rows.length !== 1 ? "s" : ""}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 border border-stone-300 dark:border-stone-700 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+            className="p-1.5 border border-border-strong text-fg-muted hover:text-fg hover:bg-hover transition-colors"
             aria-label="Close"
           >
             <X size={18} weight="thin" />
@@ -62,17 +63,17 @@ function DataModal({ table, tableData, onClose }) {
         </div>
         <div className="flex-1 overflow-auto min-h-0">
           {rows.length === 0 ? (
-            <p className="p-8 text-center font-mono text-sm text-stone-500 dark:text-stone-400">
+            <p className="p-8 text-center font-mono text-sm text-fg-muted">
               No INSERT data found for this table.
             </p>
           ) : (
             <table className="w-full text-left font-mono text-xs">
-              <thead className="sticky top-0 bg-stone-50 dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700">
+              <thead className="sticky top-0 bg-surface-inset border-b border-border">
                 <tr>
                   {columns.map((col) => (
                     <th
                       key={col}
-                      className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-stone-500 dark:text-stone-400 whitespace-nowrap"
+                      className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-fg-muted whitespace-nowrap"
                     >
                       {col}
                     </th>
@@ -83,16 +84,16 @@ function DataModal({ table, tableData, onClose }) {
                 {rows.map((row, ri) => (
                   <tr
                     key={ri}
-                    className="border-b border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-800/50"
+                    className="border-b border-border hover:bg-hover/50"
                   >
                     {columns.map((_, ci) => (
                       <td
                         key={ci}
-                        className="px-4 py-2 text-stone-800 dark:text-stone-200 whitespace-nowrap max-w-[240px] truncate"
+                        className="px-4 py-2 text-fg-soft whitespace-nowrap max-w-[240px] truncate"
                         title={row[ci] ?? "NULL"}
                       >
                         {row[ci] ?? (
-                          <span className="text-stone-400 dark:text-stone-500 italic">NULL</span>
+                          <span className="text-fg-subtle italic">NULL</span>
                         )}
                       </td>
                     ))}
@@ -188,10 +189,10 @@ export default function SqlSchemaVisualizer({ onToast }) {
   return (
     <div className="max-w-none w-full mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-8 text-center">
-        <h2 className="text-4xl font-black tracking-tight text-stone-900 dark:text-stone-50">
+        <h2 className="text-4xl font-black tracking-tight text-fg-strong">
           SQL Schema
         </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400 mt-2 max-w-xl mx-auto">
+        <p className="text-[13px] font-mono text-fg-muted mt-2 max-w-xl mx-auto">
           Drop or paste DDL to explore tables, columns, relationships, and INSERT data.
         </p>
       </header>
@@ -199,16 +200,16 @@ export default function SqlSchemaVisualizer({ onToast }) {
       <div
         className={`mb-6 border-2 border-dashed transition-colors p-4 sm:p-6 ${
           dragOver
-            ? "border-stone-600 bg-stone-100 dark:bg-stone-800 dark:border-stone-400"
-            : "border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900"
+            ? "border-border-muted bg-hover-muted"
+            : "border-border-strong bg-surface"
         }`}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
       >
         <div className="flex flex-wrap items-center gap-3 mb-3">
-          <UploadSimple size={20} weight="thin" className="text-stone-400" />
-          <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-stone-500">
+          <UploadSimple size={20} weight="thin" className="text-fg-subtle" />
+          <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-fg-muted">
             Drop .sql file or paste DDL
           </span>
           <input
@@ -231,15 +232,15 @@ export default function SqlSchemaVisualizer({ onToast }) {
           onChange={(e) => setSqlText(e.target.value)}
           rows={5}
           spellCheck={false}
-          className="w-full px-3 py-2 bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 font-mono text-xs text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-stone-500 resize-y min-h-[100px]"
+          className="w-full px-3 py-2 bg-surface-code border border-border-strong font-mono text-xs text-fg focus:outline-none focus:ring-1 focus:ring-focus resize-y min-h-[100px] rounded-control"
           placeholder="CREATE TABLE ..."
         />
       </div>
 
       {parseError && !schema && (
-        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 font-mono text-sm text-red-700 dark:text-red-300">
+        <ErrorBanner className="mb-6 p-4 font-mono text-sm">
           {parseError}
-        </div>
+        </ErrorBanner>
       )}
 
       {schema && (
@@ -257,15 +258,15 @@ export default function SqlSchemaVisualizer({ onToast }) {
                 Visual
               </span>
             </button>
-            <span className="ml-auto text-[11px] font-mono text-stone-500 dark:text-stone-400">
+            <span className="ml-auto text-[11px] font-mono text-fg-muted">
               {schema.tables.length} table{schema.tables.length !== 1 ? "s" : ""}
             </span>
           </div>
 
           {view === "tables" ? (
-            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-0 border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 min-h-[480px]">
-              <aside className="border-b lg:border-b-0 lg:border-r border-stone-200 dark:border-stone-800 overflow-auto max-h-[240px] lg:max-h-none">
-                <p className="px-4 py-3 text-[11px] font-mono uppercase tracking-[0.18em] text-stone-500 border-b border-stone-200 dark:border-stone-800 sticky top-0 bg-white dark:bg-stone-900 z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-0 border border-border bg-surface min-h-[480px]">
+              <aside className="border-b lg:border-b-0 lg:border-r border-border overflow-auto max-h-[240px] lg:max-h-none">
+                <p className="px-4 py-3 text-[11px] font-mono uppercase tracking-[0.18em] text-fg-muted border-b border-border sticky top-0 bg-surface z-10">
                   Tables
                 </p>
                 <ul>
@@ -279,8 +280,8 @@ export default function SqlSchemaVisualizer({ onToast }) {
                           onClick={() => setSelectedTable(table.name)}
                           className={`w-full text-left px-4 py-2.5 font-mono text-xs flex items-center justify-between gap-2 transition-colors ${
                             isActive
-                              ? "bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100"
-                              : "text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50"
+                              ? "bg-hover-muted text-fg"
+                              : "text-fg-muted hover:bg-hover/50"
                           }`}
                         >
                           <span className="flex items-center gap-2 truncate">
@@ -288,7 +289,7 @@ export default function SqlSchemaVisualizer({ onToast }) {
                             {table.name}
                           </span>
                           {dataRows > 0 && (
-                            <span className="text-[10px] text-stone-400 dark:text-stone-500 shrink-0">
+                            <span className="text-[10px] text-fg-subtle shrink-0">
                               {dataRows}
                             </span>
                           )}
@@ -302,12 +303,12 @@ export default function SqlSchemaVisualizer({ onToast }) {
               <section className="flex flex-col min-h-[360px]">
                 {activeTable ? (
                   <>
-                    <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-stone-200 dark:border-stone-800">
+                    <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-border">
                       <div>
-                        <h3 className="font-mono text-sm font-bold text-stone-900 dark:text-stone-100">
+                        <h3 className="font-mono text-sm font-bold text-fg">
                           {activeTable.name}
                         </h3>
-                        <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mt-0.5">
+                        <p className="text-[11px] font-mono text-fg-muted mt-0.5">
                           {activeTable.columns.length} column
                           {activeTable.columns.length !== 1 ? "s" : ""}
                           {activeTable.foreignKeys.length > 0 &&
@@ -324,15 +325,15 @@ export default function SqlSchemaVisualizer({ onToast }) {
                     </div>
                     <div className="flex-1 overflow-auto">
                       <table className="w-full text-left font-mono text-xs">
-                        <thead className="sticky top-0 bg-stone-50 dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700">
+                        <thead className="sticky top-0 bg-surface-inset border-b border-border">
                           <tr>
-                            <th className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-stone-500 w-[180px]">
+                            <th className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-fg-muted w-[180px]">
                               Column
                             </th>
-                            <th className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-stone-500 w-[160px]">
+                            <th className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-fg-muted w-[160px]">
                               Type
                             </th>
-                            <th className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-stone-500">
+                            <th className="px-4 py-2 font-normal uppercase tracking-[0.1em] text-fg-muted">
                               Attributes
                             </th>
                           </tr>
@@ -345,18 +346,18 @@ export default function SqlSchemaVisualizer({ onToast }) {
                             return (
                               <tr
                                 key={col.name}
-                                className="border-b border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-800/40"
+                                className="border-b border-border hover:bg-hover/40"
                               >
-                                <td className="px-4 py-2.5 text-stone-900 dark:text-stone-100">
+                                <td className="px-4 py-2.5 text-fg">
                                   {col.name}
                                 </td>
-                                <td className="px-4 py-2.5 text-stone-600 dark:text-stone-400">
+                                <td className="px-4 py-2.5 text-fg-muted">
                                   {col.type}
                                 </td>
                                 <td className="px-4 py-2.5">
                                   <div className="flex flex-wrap gap-1.5">
                                     {col.primaryKey && (
-                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-warning-border">
                                         PK
                                       </span>
                                     )}
@@ -366,17 +367,17 @@ export default function SqlSchemaVisualizer({ onToast }) {
                                       </span>
                                     )}
                                     {col.unique && !col.primaryKey && (
-                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700">
+                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-hover-muted text-fg-muted border border-border">
                                         Unique
                                       </span>
                                     )}
                                     {!col.nullable && (
-                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700">
+                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-hover-muted text-fg-muted border border-border">
                                         NOT NULL
                                       </span>
                                     )}
                                     {col.defaultValue && (
-                                      <span className="px-1.5 py-0.5 text-[10px] text-stone-500 dark:text-stone-400">
+                                      <span className="px-1.5 py-0.5 text-[10px] text-fg-muted">
                                         default {col.defaultValue}
                                       </span>
                                     )}
@@ -390,14 +391,14 @@ export default function SqlSchemaVisualizer({ onToast }) {
                     </div>
                   </>
                 ) : (
-                  <div className="flex-1 flex items-center justify-center text-stone-400 dark:text-stone-500 font-mono text-sm">
+                  <div className="flex-1 flex items-center justify-center text-fg-subtle font-mono text-sm">
                     Select a table
                   </div>
                 )}
               </section>
             </div>
           ) : (
-            <div className="border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 h-[calc(100vh-320px)] min-h-[480px]">
+            <div className="border border-border bg-surface h-[calc(100vh-320px)] min-h-[480px]">
               <SchemaCanvas
                 tables={schema.tables}
                 selectedTable={selectedTable}

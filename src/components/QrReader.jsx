@@ -15,6 +15,7 @@ import {
   loadImageElement,
   readQrFromDrawable,
 } from "../utils/qrDecode";
+import ErrorBanner from "./ui/ErrorBanner";
 
 const SOURCES = [
   { id: "upload", label: "Upload", icon: UploadSimple },
@@ -56,10 +57,10 @@ function Field({ label, value }) {
   if (!value) return null;
   return (
     <div>
-      <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+      <div className="field-label mb-1">
         {label}
       </div>
-      <div className="font-mono text-sm text-stone-800 dark:text-stone-100 break-all">
+      <div className="font-mono text-sm text-fg break-all">
         {value}
       </div>
     </div>
@@ -345,7 +346,7 @@ export default function QrReader({ onToast }) {
       onDragLeave={() => setDragOver(false)}
       onDrop={onDrop}
     >
-      <div className="flex flex-wrap gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+      <div className="flex flex-wrap gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
         {SOURCES.map((item) => {
           const Icon = item.icon;
           const selected = source === item.id;
@@ -357,8 +358,8 @@ export default function QrReader({ onToast }) {
               aria-pressed={selected}
               className={`px-3 py-1.5 transition-colors flex items-center gap-1.5 ${
                 selected
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               <Icon size={14} weight="thin" />
@@ -372,8 +373,8 @@ export default function QrReader({ onToast }) {
         <div
           className={`border-2 border-dashed p-12 text-center transition-colors ${
             dragOver
-              ? "border-stone-500 bg-stone-100/50 dark:bg-stone-900/50"
-              : "border-stone-300 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-500"
+              ? "border-focus bg-shell/50"
+              : "border-border-strong hover:border-border-muted"
           }`}
         >
           <input
@@ -388,11 +389,11 @@ export default function QrReader({ onToast }) {
             }}
           />
           <label htmlFor={fileInputId} className="cursor-pointer flex flex-col items-center gap-3">
-            <UploadSimple size={48} weight="thin" className="text-stone-400" />
-            <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
+            <UploadSimple size={48} weight="thin" className="text-fg-subtle" />
+            <span className="font-mono text-sm text-fg-muted">
               Drop a QR image here, or click to browse
             </span>
-            <span className="font-mono text-[11px] text-stone-400">
+            <span className="font-mono text-[11px] text-fg-subtle">
               PNG, JPG, WebP, SVG. You can also paste with Ctrl+V or Cmd+V.
             </span>
           </label>
@@ -403,12 +404,12 @@ export default function QrReader({ onToast }) {
         <div
           className={`border-2 border-dashed p-12 text-center space-y-4 transition-colors ${
             dragOver
-              ? "border-stone-500 bg-stone-100/50 dark:bg-stone-900/50"
-              : "border-stone-300 dark:border-stone-600"
+              ? "border-focus bg-shell/50"
+              : "border-border-strong"
           }`}
         >
-          <ClipboardText size={48} weight="thin" className="mx-auto text-stone-400" />
-          <p className="font-mono text-sm text-stone-600 dark:text-stone-300">
+          <ClipboardText size={48} weight="thin" className="mx-auto text-fg-subtle" />
+          <p className="font-mono text-sm text-fg-muted">
             Copy a QR image, then paste it here with Ctrl+V or Cmd+V.
           </p>
           <div className="flex justify-center">
@@ -422,8 +423,8 @@ export default function QrReader({ onToast }) {
       {source === "webcam" && (
         <div className="space-y-3">
           <div
-            className={`relative border border-stone-200 dark:border-stone-700 min-h-[220px] flex items-center justify-center overflow-hidden ${
-              showVideo ? "bg-stone-950" : "bg-stone-100 dark:bg-stone-950"
+            className={`relative border border-border min-h-[220px] flex items-center justify-center overflow-hidden ${
+              showVideo ? "bg-stone-950" : "bg-stage"
             }`}
           >
             <video
@@ -455,7 +456,7 @@ export default function QrReader({ onToast }) {
               />
             )}
             {!showVideo && !preview && (
-              <span className="font-mono text-sm text-stone-400 px-6 text-center">
+              <span className="font-mono text-sm text-fg-subtle px-6 text-center">
                 Camera is off.
               </span>
             )}
@@ -488,7 +489,7 @@ export default function QrReader({ onToast }) {
       )}
 
       {busy && (
-        <div className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm font-mono text-stone-500">
+        <div className="p-4 bg-surface-muted border border-border text-sm font-mono text-fg-muted">
           Reading QR code…
         </div>
       )}
@@ -496,26 +497,26 @@ export default function QrReader({ onToast }) {
       {error && (
         <div className="space-y-3">
           {preview && !contents && (
-            <div className="w-28 h-28 border border-stone-200 dark:border-stone-700 bg-white overflow-hidden">
+            <div className="w-28 h-28 border border-border bg-white overflow-hidden">
               <img src={preview} alt="Image that was scanned" className="w-full h-full object-contain" />
             </div>
           )}
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         </div>
       )}
 
       {contents && info && (
-        <div className="space-y-4 border border-stone-200 dark:border-stone-700 p-4">
+        <div className="space-y-4 border border-border p-4">
           <div className="flex items-start gap-4">
             {preview && (
-              <div className="w-28 h-28 border border-stone-200 dark:border-stone-700 bg-white shrink-0 overflow-hidden">
+              <div className="w-28 h-28 border border-border bg-white shrink-0 overflow-hidden">
                 <img src={preview} alt="QR code that was read" className="w-full h-full object-contain" />
               </div>
             )}
             <div className="min-w-0 flex-1 space-y-3">
-              <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <div className="field-label">
                 {KIND_LABEL[info.kind] || "Text"}
               </div>
               {info.kind === "wifi" && (
@@ -540,7 +541,7 @@ export default function QrReader({ onToast }) {
                   href={info.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-xs transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
                 >
                   <ArrowSquareOut size={16} weight="thin" />
                   Open
@@ -550,11 +551,11 @@ export default function QrReader({ onToast }) {
           </div>
 
           <div>
-            <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <div className="field-label mb-2">
               Contents
             </div>
             <div className="relative">
-              <pre className="w-full max-h-64 overflow-auto bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 p-4 pr-14 text-sm font-mono text-stone-800 dark:text-stone-100 whitespace-pre-wrap break-all">
+              <pre className="w-full max-h-64 overflow-auto bg-surface-code border border-border-strong p-4 pr-14 text-sm font-mono text-fg whitespace-pre-wrap break-all">
                 {contents}
               </pre>
               <CopyButton

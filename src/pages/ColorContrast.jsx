@@ -1,5 +1,7 @@
 import { useMemo, useState, useCallback } from "react";
 import { parse, formatRgb, formatHex, converter } from "culori";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const toRgb = converter("rgb");
 
@@ -75,19 +77,12 @@ export default function ColorContrast() {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Color contrast
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          WCAG 2.x contrast ratio for text and background (sRGB).
-        </p>
-      </header>
+      <PageHeader title="Color contrast" description="WCAG 2.x contrast ratio for text and background (sRGB)." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
               Foreground (text)
             </label>
             <div className="flex gap-2 items-stretch">
@@ -96,18 +91,18 @@ export default function ColorContrast() {
                 value={pickerFg}
                 onChange={(e) => setFg(e.target.value)}
                 title="Pick foreground color"
-                className="h-11 w-14 shrink-0 cursor-pointer rounded border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-stone-800 p-0.5"
+                className="h-11 w-14 shrink-0 cursor-pointer rounded border border-border-strong bg-hover-muted p-0.5"
               />
               <input
                 type="text"
                 value={fg}
                 onChange={(e) => setFg(e.target.value)}
-                className="min-w-0 flex-1 p-3 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="min-w-0 flex-1 p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
               />
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
               Background
             </label>
             <div className="flex gap-2 items-stretch">
@@ -116,13 +111,13 @@ export default function ColorContrast() {
                 value={pickerBg}
                 onChange={(e) => setBg(e.target.value)}
                 title="Pick background color"
-                className="h-11 w-14 shrink-0 cursor-pointer rounded border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-stone-800 p-0.5"
+                className="h-11 w-14 shrink-0 cursor-pointer rounded border border-border-strong bg-hover-muted p-0.5"
               />
               <input
                 type="text"
                 value={bg}
                 onChange={(e) => setBg(e.target.value)}
-                className="min-w-0 flex-1 p-3 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="min-w-0 flex-1 p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
               />
             </div>
           </div>
@@ -135,7 +130,7 @@ export default function ColorContrast() {
         {ratio != null && (
           <>
             <div
-              className="p-6 rounded border border-stone-200 dark:border-stone-700 text-center"
+              className="p-6 rounded border border-border text-center"
               style={sampleStyle()}
             >
               <p className="text-lg font-medium">Sample heading text</p>
@@ -144,19 +139,19 @@ export default function ColorContrast() {
               </p>
             </div>
 
-            <div className="font-mono text-sm space-y-2 p-4 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700">
-              <p className="text-2xl font-bold text-stone-900 dark:text-stone-100">
+            <div className="font-mono text-sm space-y-2 p-4 bg-surface-code border border-border">
+              <p className="text-2xl font-bold text-fg">
                 {ratio}:1
               </p>
               <table className="w-full text-left text-xs mt-2">
                 <thead>
-                  <tr className="text-stone-500">
+                  <tr className="text-fg-muted">
                     <th className="py-1">Level</th>
                     <th className="py-1">Normal text</th>
                     <th className="py-1">Large text (18pt+ / 14pt+ bold)</th>
                   </tr>
                 </thead>
-                <tbody className="text-stone-800 dark:text-stone-200">
+                <tbody className="text-fg-soft">
                   <tr>
                     <td className="py-1">AA</td>
                     <td>{passesAA(ratio, false) ? "Pass" : "Fail"}</td>
@@ -172,7 +167,7 @@ export default function ColorContrast() {
             </div>
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

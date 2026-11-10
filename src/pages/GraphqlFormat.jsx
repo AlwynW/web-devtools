@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 import { parse, print, stripIgnoredCharacters } from "graphql";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const SAMPLE = `query GetUser($id: ID!) {
   user(id: $id) {
@@ -30,24 +34,17 @@ export default function GraphqlFormat({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          GraphQL format
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Parse and print GraphQL documents. Validates syntax; no server.
-        </p>
-      </header>
+      <PageHeader title="GraphQL format" description="Parse and print GraphQL documents. Validates syntax; no server." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-[11px] w-fit">
+      <Panel className="space-y-4">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px] w-fit">
           <button
             type="button"
             onClick={() => setMode("pretty")}
             className={`px-3 py-1.5 transition-colors ${
               mode === "pretty"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
           >
             Pretty
@@ -57,8 +54,8 @@ export default function GraphqlFormat({ onToast }) {
             onClick={() => setMode("minify")}
             className={`px-3 py-1.5 transition-colors ${
               mode === "minify"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
           >
             Minify
@@ -66,32 +63,32 @@ export default function GraphqlFormat({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Input
-          </label>
+          </Label>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="query { field }"
-            className="w-full h-48 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full h-48 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 font-mono text-sm">
+          <ErrorBanner className="p-4 font-mono text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {output && !error && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Output
-            </label>
+            </Label>
             <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

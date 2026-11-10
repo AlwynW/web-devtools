@@ -1,5 +1,8 @@
 import { useState, useCallback } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 export default function Base64Encoder({ onToast }) {
   const [mode, setMode] = useState("encode");
@@ -27,22 +30,15 @@ export default function Base64Encoder({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Base64 Encoder
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Encode and decode Base64 strings.
-        </p>
-      </header>
+      <PageHeader title="Base64 Encoder" description="Encode and decode Base64 strings." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+      <Panel className="space-y-4">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
           <button
             className={`px-3 py-1.5 transition-colors ${
               mode === "encode"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
             onClick={() => setMode("encode")}
           >
@@ -51,8 +47,8 @@ export default function Base64Encoder({ onToast }) {
           <button
             className={`px-3 py-1.5 transition-colors ${
               mode === "decode"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
             onClick={() => setMode("decode")}
           >
@@ -60,7 +56,7 @@ export default function Base64Encoder({ onToast }) {
           </button>
         </div>
 
-        <label className="block text-[11px] font-mono text-stone-600 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
           Input
         </label>
         <textarea
@@ -76,33 +72,33 @@ export default function Base64Encoder({ onToast }) {
               ? "> enter text to encode"
               : "> enter base64 to decode"
           }
-          className="w-full h-32 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+          className="w-full h-32 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
         />
 
         <div className="flex justify-end">
           <button
             onClick={process}
-            className="px-4 py-2 border border-stone-400 text-xs font-mono tracking-tight text-stone-800 dark:text-stone-100 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+            className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors"
           >
             {mode === "encode" ? "> encode" : "> decode"}
           </button>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {output && (
           <>
-            <label className="block text-[11px] font-mono text-stone-600 dark:text-stone-400 uppercase tracking-[0.18em]">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
               Output
             </label>
             <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

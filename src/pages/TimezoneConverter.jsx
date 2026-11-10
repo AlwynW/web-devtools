@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MagnifyingGlass } from "phosphor-react";
 import CopyButton from "../components/CopyButton";
+import PageHeader from "../components/ui/PageHeader";
+import Label from "../components/ui/Label";
 
 /** Hints for IANA ids (abbreviations are location-dependent; shown as typical labels). */
 const IANA_EXTRA_LABELS = {
@@ -209,7 +211,7 @@ function TimezoneSelect({ value, onChange, zones, id }) {
   };
 
   const triggerClass =
-    "w-full p-2.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100 text-left flex items-center justify-between gap-2";
+    "w-full p-2.5 bg-surface border border-border-strong rounded-control font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg text-left flex items-center justify-between gap-2";
 
   return (
     <div ref={rootRef} className="relative">
@@ -222,18 +224,18 @@ function TimezoneSelect({ value, onChange, zones, id }) {
         className={triggerClass}
       >
         <span className="truncate">{optionLabel(value)}</span>
-        <span className="text-stone-400 dark:text-stone-500 shrink-0" aria-hidden>
+        <span className="text-fg-subtle shrink-0" aria-hidden>
           ▾
         </span>
       </button>
 
       {open && (
-        <div className="absolute z-20 left-0 right-0 mt-1 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 shadow-lg">
-          <div className="relative border-b border-stone-200 dark:border-stone-800">
+        <div className="absolute z-20 left-0 right-0 mt-1 bg-surface border border-border-strong shadow-lg">
+          <div className="relative border-b border-border">
             <MagnifyingGlass
               size={14}
               weight="thin"
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-fg-subtle pointer-events-none"
             />
             <input
               ref={inputRef}
@@ -245,7 +247,7 @@ function TimezoneSelect({ value, onChange, zones, id }) {
               }}
               onKeyDown={onSearchKeyDown}
               placeholder="Search (e.g. CET, New York, Berlin)"
-              className="w-full pl-8 pr-2.5 py-2 bg-white dark:bg-stone-900 font-mono text-xs sm:text-sm focus:outline-none text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
+              className="w-full pl-8 pr-2.5 py-2 bg-surface font-mono text-xs sm:text-sm focus:outline-none text-fg placeholder:text-fg-subtle"
               aria-controls={`${id}-listbox`}
               aria-autocomplete="list"
             />
@@ -258,7 +260,7 @@ function TimezoneSelect({ value, onChange, zones, id }) {
             className="max-h-56 overflow-y-auto custom-scrollbar"
           >
             {filtered.length === 0 ? (
-              <li className="px-2.5 py-3 font-mono text-xs text-stone-500 dark:text-stone-400">
+              <li className="px-2.5 py-3 font-mono text-xs text-fg-muted">
                 No timezones match &ldquo;{query.trim()}&rdquo;
               </li>
             ) : (
@@ -272,10 +274,10 @@ function TimezoneSelect({ value, onChange, zones, id }) {
                   onClick={() => pick(o.value)}
                   className={`px-2.5 py-2 font-mono text-xs sm:text-sm cursor-pointer truncate ${
                     i === activeIndex
-                      ? "bg-stone-200 dark:bg-stone-800 text-stone-900 dark:text-stone-100"
+                      ? "bg-secondary-hover text-fg"
                       : o.value === value
-                        ? "bg-stone-100 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200"
-                        : "text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                        ? "bg-hover-muted/60 text-fg-soft"
+                        : "text-fg-soft hover:bg-hover-muted"
                   }`}
                 >
                   {o.label}
@@ -355,7 +357,7 @@ function ZoneTimeDisplay({ instant, timeZone, onCopySuccess }) {
 
   return (
     <div className="flex items-start gap-2">
-      <div className="font-mono text-lg sm:text-xl text-stone-800 dark:text-stone-200 leading-snug break-words flex-1 min-w-0">
+      <div className="font-mono text-lg sm:text-xl text-fg-soft leading-snug break-words flex-1 min-w-0">
         {displayed}
       </div>
       <CopyButton
@@ -372,10 +374,10 @@ function ZoneAbbrevRow({ instant, timeZone }) {
   const uniq = [...new Set([shortGeneric, short].filter(Boolean))];
   if (!uniq.length && !long) return null;
   return (
-    <p className="text-[12px] font-mono text-stone-500 dark:text-stone-400 pt-1 border-t border-stone-100 dark:border-stone-800">
+    <p className="text-[12px] font-mono text-fg-muted pt-1 border-t border-border">
       <span>{uniq.join(" · ")}</span>
       {long ? (
-        <span className="text-stone-400 dark:text-stone-500 block sm:inline sm:ml-2">
+        <span className="text-fg-subtle block sm:inline sm:ml-2">
           {long}
         </span>
       ) : null}
@@ -424,24 +426,17 @@ export default function TimezoneConverter({ onToast }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Timezone converter
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          One moment, two zones. Pick a moment and say whether it is wall-clock
+      <PageHeader title="Timezone converter" description={<>One moment, two zones. Pick a moment and say whether it is wall-clock
           time in zone A or B. Searchable zone pickers with typical abbreviations
-          (ET, CET, PST/PDT, etc.).
-        </p>
-      </header>
+          (ET, CET, PST/PDT, etc.).</>} />
 
-      <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max mb-8 mx-auto font-mono text-[11px]">
+      <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max mb-8 mx-auto font-mono text-[11px]">
         <button
           type="button"
           className={`px-3 py-1.5 transition-colors ${
             mode === "live"
-              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-              : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+              : "text-fg-muted hover:bg-hover-muted"
           }`}
           onClick={() => setMode("live")}
         >
@@ -451,8 +446,8 @@ export default function TimezoneConverter({ onToast }) {
           type="button"
           className={`px-3 py-1.5 transition-colors ${
             mode === "custom"
-              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-              : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+              : "text-fg-muted hover:bg-hover-muted"
           }`}
           onClick={() => setMode("custom")}
         >
@@ -465,7 +460,7 @@ export default function TimezoneConverter({ onToast }) {
           <div className="flex flex-wrap items-center justify-center gap-2 font-mono text-[11px]">
             <label
               htmlFor="custom-time-source"
-              className="text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]"
+              className="text-fg-muted uppercase tracking-[0.18em]"
             >
               Date &amp; time in
             </label>
@@ -473,7 +468,7 @@ export default function TimezoneConverter({ onToast }) {
               id="custom-time-source"
               value={customTimeSource}
               onChange={(e) => setCustomTimeSource(e.target.value)}
-              className="bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 px-2 py-1.5 text-xs text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400"
+              className="bg-surface border border-border-strong px-2 py-1.5 text-xs text-fg-soft focus:outline-none focus:ring-1 focus:ring-focus rounded-control"
             >
               <option value="A">Zone A — {zoneA}</option>
               <option value="B">Zone B — {zoneB}</option>
@@ -483,11 +478,11 @@ export default function TimezoneConverter({ onToast }) {
             type="datetime-local"
             value={customLocal}
             onChange={(e) => setCustomLocal(e.target.value)}
-            className="p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
-          <p className="text-[11px] font-mono text-stone-500 dark:text-stone-500 text-center max-w-md">
+          <p className="text-[11px] font-mono text-fg-muted text-center max-w-md">
             Wall-clock time in{" "}
-            <span className="text-stone-700 dark:text-stone-300">
+            <span className="text-fg-soft">
               {customSourceZone}
             </span>
             , converted to the other zone.
@@ -496,10 +491,10 @@ export default function TimezoneConverter({ onToast }) {
       )}
 
       <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-        <div className="bg-white dark:bg-stone-900 p-5 sm:p-6 border border-stone-200 dark:border-stone-800 flex flex-col gap-4">
-          <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <div className="bg-surface p-5 sm:p-6 border border-border flex flex-col gap-4 rounded-panel">
+          <Label>
             Zone A
-          </label>
+          </Label>
           <TimezoneSelect
             id="zone-a-select"
             value={zoneA}
@@ -514,10 +509,10 @@ export default function TimezoneConverter({ onToast }) {
           <ZoneAbbrevRow instant={instant} timeZone={zoneA} />
         </div>
 
-        <div className="bg-white dark:bg-stone-900 p-5 sm:p-6 border border-stone-200 dark:border-stone-800 flex flex-col gap-4">
-          <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <div className="bg-surface p-5 sm:p-6 border border-border flex flex-col gap-4 rounded-panel">
+          <Label>
             Zone B
-          </label>
+          </Label>
           <TimezoneSelect
             id="zone-b-select"
             value={zoneB}
@@ -533,7 +528,7 @@ export default function TimezoneConverter({ onToast }) {
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-2 text-[11px] font-mono text-stone-500 dark:text-stone-500">
+      <div className="mt-6 flex items-center justify-center gap-2 text-[11px] font-mono text-fg-muted">
         <span>Unix ms: {unixMs}</span>
         <CopyButton
           text={unixMs}

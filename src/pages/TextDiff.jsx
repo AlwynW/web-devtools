@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { diffLines } from "diff";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
 
 function prepare(text, ignoreTrim, ignoreCase) {
   let lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -75,24 +76,17 @@ export default function TextDiff({ onToast }) {
 
   const cell = (kind) => {
     if (kind === "removed")
-      return "bg-red-100/80 dark:bg-red-950/40 text-stone-900 dark:text-stone-100";
+      return "bg-red-100/80 dark:bg-red-950/40 text-fg";
     if (kind === "added")
-      return "bg-green-100/80 dark:bg-green-950/40 text-stone-900 dark:text-stone-100";
+      return "bg-green-100/80 dark:bg-green-950/40 text-fg";
     if (kind === "same")
-      return "bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-200";
-    return "bg-stone-50 dark:bg-stone-950 text-stone-400";
+      return "bg-surface text-fg-soft";
+    return "bg-surface-code text-fg-subtle";
   };
 
   return (
     <div className="max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Text diff
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Line-based diff. Optional ignore trim and case for comparison only.
-        </p>
-      </header>
+      <PageHeader title="Text diff" description="Line-based diff. Optional ignore trim and case for comparison only." />
 
       <div className="space-y-4">
         <div className="flex flex-wrap gap-4 items-center font-mono text-xs">
@@ -112,7 +106,7 @@ export default function TextDiff({ onToast }) {
             />
             Ignore case
           </label>
-          <div className="flex gap-2 p-1 border border-stone-300 dark:border-stone-600">
+          <div className="flex gap-2 p-1 border border-border-strong">
             {[
               { id: "unified", label: "Unified" },
               { id: "split", label: "Side by side" },
@@ -121,7 +115,7 @@ export default function TextDiff({ onToast }) {
                 key={m.id}
                 type="button"
                 onClick={() => setMode(m.id)}
-                className={`px-2 py-1 ${mode === m.id ? "bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900" : "text-stone-600"}`}
+                className={`px-2 py-1 ${mode === m.id ? "bg-inverse text-primary-fg" : "text-fg-muted"}`}
               >
                 {m.label}
               </button>
@@ -131,31 +125,31 @@ export default function TextDiff({ onToast }) {
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
               A
             </label>
             <textarea
               value={left}
               onChange={(e) => setLeft(e.target.value)}
               rows={12}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong font-mono text-xs bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
               B
             </label>
             <textarea
               value={right}
               onChange={(e) => setRight(e.target.value)}
               rows={12}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong font-mono text-xs bg-surface text-fg"
             />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-stone-900 p-4 border border-stone-200 dark:border-stone-800">
-          <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+        <div className="bg-surface p-4 border border-border">
+          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
             {mode === "unified" ? "Unified" : "Side by side"}
           </span>
           {mode === "unified" ? (
@@ -163,18 +157,18 @@ export default function TextDiff({ onToast }) {
               text={unified || ""}
               onCopySuccess={() => onToast("Copied!")}
               title="Copy unified"
-              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-[28rem] overflow-y-auto overflow-x-auto"
-              preClassName="p-3 font-mono text-xs whitespace-pre text-stone-800 dark:text-stone-200"
+              className="border border-border bg-surface-code max-h-[28rem] overflow-y-auto overflow-x-auto"
+              preClassName="p-3 font-mono text-xs whitespace-pre text-fg-soft"
             >
               {unified || "—"}
             </CopyPre>
           ) : (
-            <div className="grid grid-cols-2 gap-0 border border-stone-200 dark:border-stone-700 max-h-[28rem] overflow-y-auto font-mono text-xs">
-              <div className="border-r border-stone-200 dark:border-stone-700">
+            <div className="grid grid-cols-2 gap-0 border border-border max-h-[28rem] overflow-y-auto font-mono text-xs">
+              <div className="border-r border-border">
                 {sideBySide.outL.map((row, i) => (
                   <div
                     key={i}
-                    className={`px-2 py-0.5 border-b border-stone-100 dark:border-stone-800 min-h-[1.25rem] ${cell(row.kind)}`}
+                    className={`px-2 py-0.5 border-b border-border min-h-[1.25rem] ${cell(row.kind)}`}
                   >
                     {row.text || " "}
                   </div>
@@ -184,7 +178,7 @@ export default function TextDiff({ onToast }) {
                 {sideBySide.outR.map((row, i) => (
                   <div
                     key={i}
-                    className={`px-2 py-0.5 border-b border-stone-100 dark:border-stone-800 min-h-[1.25rem] ${cell(row.kind)}`}
+                    className={`px-2 py-0.5 border-b border-border min-h-[1.25rem] ${cell(row.kind)}`}
                   >
                     {row.text || " "}
                   </div>

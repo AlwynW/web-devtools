@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Plus, Trash } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 const PRESET_VALUES = ["1fr", "2fr", "auto", "minmax(0, 1fr)", "100px", "repeat(3, 1fr)"];
 
@@ -63,17 +66,10 @@ grid-template-areas:
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Grid Template Builder
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Build CSS grid layouts with parameters or named areas.
-        </p>
-      </header>
+      <PageHeader title="Grid Template Builder" description="Build CSS grid layouts with parameters or named areas." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+      <Panel className="space-y-6">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
           {[
             { id: "params", label: "Parameters" },
             { id: "areas", label: "Named Areas" },
@@ -83,8 +79,8 @@ grid-template-areas:
               onClick={() => setMode(m.id)}
               className={`px-3 py-1.5 transition-colors ${
                 mode === m.id
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               {m.label}
@@ -96,9 +92,9 @@ grid-template-areas:
           <>
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                <Label>
                   Columns
-                </label>
+                </Label>
                 <Button onClick={addColumn} icon={Plus} variant="outline" className="text-xs">
                   Add
                 </Button>
@@ -111,12 +107,12 @@ grid-template-areas:
                       value={col}
                       onChange={(e) => updateColumn(i, e.target.value)}
                       placeholder="1fr"
-                      className="flex-1 px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                      className="flex-1 px-3 py-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                     />
                     <button
                       onClick={() => removeColumn(i)}
                       disabled={columns.length <= 1}
-                      className="p-2 border border-stone-300 dark:border-stone-700 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
+                      className="p-2 border border-border-strong text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
                     >
                       <Trash size={16} weight="thin" />
                     </button>
@@ -128,7 +124,7 @@ grid-template-areas:
                   <button
                     key={v}
                     onClick={() => setColumns([...columns, v])}
-                    className="px-2 py-1 text-xs font-mono border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-900"
+                    className="px-2 py-1 text-xs font-mono border border-border-strong bg-surface hover:bg-hover-muted"
                   >
                     + {v}
                   </button>
@@ -138,9 +134,9 @@ grid-template-areas:
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                <Label>
                   Rows
-                </label>
+                </Label>
                 <Button onClick={addRow} icon={Plus} variant="outline" className="text-xs">
                   Add
                 </Button>
@@ -153,12 +149,12 @@ grid-template-areas:
                       value={row}
                       onChange={(e) => updateRow(i, e.target.value)}
                       placeholder="1fr"
-                      className="flex-1 px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                      className="flex-1 px-3 py-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                     />
                     <button
                       onClick={() => removeRow(i)}
                       disabled={rows.length <= 1}
-                      className="p-2 border border-stone-300 dark:border-stone-700 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
+                      className="p-2 border border-border-strong text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
                     >
                       <Trash size={16} weight="thin" />
                     </button>
@@ -168,44 +164,44 @@ grid-template-areas:
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              <Label>
                 Gap
-              </label>
+              </Label>
               <div className="flex gap-3 flex-wrap">
                 <div>
-                  <span className="text-xs font-mono text-stone-500 block mb-1">All</span>
+                  <span className="text-xs font-mono text-fg-muted block mb-1">All</span>
                   <input
                     type="text"
                     value={gap}
                     onChange={(e) => setGap(e.target.value)}
                     placeholder="1rem"
-                    className="w-24 px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                    className="w-24 px-3 py-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                   />
                 </div>
                 <div>
-                  <span className="text-xs font-mono text-stone-500 block mb-1">Row</span>
+                  <span className="text-xs font-mono text-fg-muted block mb-1">Row</span>
                   <input
                     type="text"
                     value={rowGap}
                     onChange={(e) => setRowGap(e.target.value)}
                     placeholder="override"
-                    className="w-24 px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                    className="w-24 px-3 py-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                   />
                 </div>
                 <div>
-                  <span className="text-xs font-mono text-stone-500 block mb-1">Column</span>
+                  <span className="text-xs font-mono text-fg-muted block mb-1">Column</span>
                   <input
                     type="text"
                     value={columnGap}
                     onChange={(e) => setColumnGap(e.target.value)}
                     placeholder="override"
-                    className="w-24 px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                    className="w-24 px-3 py-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700">
+            <div className="p-4 bg-surface-muted border border-border">
               <div
                 className="grid gap-2 min-h-[8rem]"
                 style={{
@@ -218,7 +214,7 @@ grid-template-areas:
                   rows.map((_, r) => (
                     <div
                       key={`${c}-${r}`}
-                      className="bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-xs font-mono text-stone-700 dark:text-stone-300"
+                      className="bg-secondary-hover flex items-center justify-center text-xs font-mono text-fg-soft"
                     >
                       {c + 1},{r + 1}
                     </div>
@@ -237,29 +233,29 @@ grid-template-areas:
         {mode === "areas" && (
           <>
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              <Label>
                 grid-template-areas (one row per line, space-separated names)
-              </label>
+              </Label>
               <textarea
                 value={areas}
                 onChange={(e) => setAreas(e.target.value)}
                 placeholder={`"header header header"
 "sidebar main aside"
 "footer footer footer"`}
-                className="w-full h-32 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full h-32 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
-              <p className="text-xs font-mono text-stone-500 mt-1">
+              <p className="text-xs font-mono text-fg-muted mt-1">
                 Use the same name to span cells. Each line = one row.
               </p>
             </div>
 
             {areasPreview.length > 0 && (
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Preview
-                </label>
+                </Label>
                 <div
-                  className="grid gap-2 p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 min-h-[10rem]"
+                  className="grid gap-2 p-4 bg-surface-muted border border-border min-h-[10rem]"
                   style={{
                     gridTemplateColumns: `repeat(${Math.max(...areasPreview.map((r) => r.length), 1)}, 1fr)`,
                     gridTemplateRows: `repeat(${areasPreview.length}, 1fr)`,
@@ -273,7 +269,7 @@ grid-template-areas:
                       <div
                         key={name}
                         style={{ gridArea: name }}
-                        className="bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-sm font-mono text-stone-700 dark:text-stone-300"
+                        className="bg-secondary-hover flex items-center justify-center text-sm font-mono text-fg-soft"
                       >
                         {name}
                       </div>
@@ -289,7 +285,7 @@ grid-template-areas:
             />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

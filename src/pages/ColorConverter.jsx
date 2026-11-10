@@ -8,6 +8,10 @@ import {
   oklch,
 } from "culori";
 import CopyButton from "../components/CopyButton";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const detectFormat = (str) => {
   const s = str.trim();
@@ -70,38 +74,31 @@ export default function ColorConverter({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Color Converter
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Convert between hex, RGB, HSL, and OKLCH.
-        </p>
-      </header>
+      <PageHeader title="Color Converter" description="Convert between hex, RGB, HSL, and OKLCH." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-        <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+      <Panel className="space-y-4">
+        <Label>
           Input color (hex, rgb, hsl, oklch)
-        </label>
+        </Label>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="#3b82f6 or rgb(59, 130, 246) or oklch(0.6 0.2 250)"
-          className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+          className="w-full p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
         />
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {formats.hex && (
           <>
             <div className="flex items-center gap-4">
               <label
-                className="w-24 h-24 border-2 border-stone-200 dark:border-stone-700 shrink-0 cursor-pointer overflow-hidden block"
+                className="w-24 h-24 border-2 border-border shrink-0 cursor-pointer overflow-hidden block"
                 style={{ backgroundColor: previewColor }}
                 title="Click to pick a color"
               >
@@ -112,7 +109,7 @@ export default function ColorConverter({ onToast }) {
                   className="w-full h-full opacity-0 cursor-pointer"
                 />
               </label>
-              <div className="text-sm font-mono text-stone-500 dark:text-stone-400">
+              <div className="text-sm font-mono text-fg-muted">
                 Click swatch to open color picker
               </div>
             </div>
@@ -126,13 +123,13 @@ export default function ColorConverter({ onToast }) {
               ].map(({ key, label }) => (
                 <div
                   key={key}
-                  className="flex items-center justify-between p-3 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700"
+                  className="flex items-center justify-between p-3 bg-surface-muted border border-border"
                 >
-                  <span className="text-sm font-mono text-stone-600 dark:text-stone-300">
+                  <span className="text-sm font-mono text-fg-muted">
                     {label}
                   </span>
                   <div className="flex items-center gap-2">
-                    <code className="font-mono text-sm text-stone-800 dark:text-stone-200">
+                    <code className="font-mono text-sm text-fg-soft">
                       {formats[key]}
                     </code>
                     <CopyButton
@@ -147,7 +144,7 @@ export default function ColorConverter({ onToast }) {
             </div>
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

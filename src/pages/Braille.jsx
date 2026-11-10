@@ -2,6 +2,9 @@ import { useMemo, useState } from "react";
 import { MagnifyingGlass } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import { copyToClipboard } from "../utils/clipboard";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 const BRAILLE_START = 0x2800;
 const NUMBER_SIGN = "\u283c";
@@ -183,28 +186,21 @@ export default function Braille({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Braille
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Grade 1 English Braille (Unicode); digits use number sign + letter cells.
-        </p>
-      </header>
+      <PageHeader title="Braille" description="Grade 1 English Braille (Unicode); digits use number sign + letter cells." />
 
       <div className="space-y-8">
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-          <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <Panel className="space-y-4">
+          <h3 className="field-label">
             Converter
           </h3>
-          <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
             <button
               type="button"
               onClick={() => setMode("encode")}
               className={`px-3 py-1.5 transition-colors ${
                 mode === "encode"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               Text → Braille
@@ -214,8 +210,8 @@ export default function Braille({ onToast }) {
               onClick={() => setMode("decode")}
               className={`px-3 py-1.5 transition-colors ${
                 mode === "decode"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               Braille → Text
@@ -223,14 +219,14 @@ export default function Braille({ onToast }) {
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <Label>
                 Input
-              </label>
+              </Label>
               {input && (
                 <button
                   type="button"
                   onClick={() => setInput("")}
-                  className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+                  className="text-xs font-mono text-fg-muted hover:text-fg"
                 >
                   Clear
                 </button>
@@ -244,40 +240,40 @@ export default function Braille({ onToast }) {
                   ? "hello 42"
                   : "\u2813\u2811\u2807\u2807\u2815"
               }
-              className="w-full min-h-[7rem] p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-lg leading-relaxed focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full min-h-[7rem] p-4 bg-surface border border-border-strong font-mono text-lg leading-relaxed focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               spellCheck={mode === "encode"}
             />
-            <p className="mt-2 text-xs font-mono text-stone-500 dark:text-stone-400">
+            <p className="mt-2 text-xs font-mono text-fg-muted">
               Decode expects Unicode Braille patterns; unsupported cells pass through.
               Contractions beyond Grade 1 are not implemented.
             </p>
           </div>
           {output && (
             <>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+              <Label className="mb-1">
                 Output
-              </label>
+              </Label>
               <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
             </>
           )}
-        </div>
+        </Panel>
 
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-          <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <Panel className="space-y-4">
+          <h3 className="field-label">
             Reference
           </h3>
           <div className="relative">
             <MagnifyingGlass
               size={16}
               weight="thin"
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-subtle"
             />
             <input
               type="text"
               value={refSearch}
               onChange={(e) => setRefSearch(e.target.value)}
               placeholder="> search letter / digit"
-              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full pl-11 pr-4 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-64 overflow-y-auto">
@@ -286,16 +282,16 @@ export default function Braille({ onToast }) {
                 key={key}
                 type="button"
                 onClick={() => copySym(symbol)}
-                className="p-2 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 text-center font-mono text-lg leading-snug"
+                className="p-2 border border-border hover:bg-hover text-center font-mono text-lg leading-snug"
               >
-                <span className="block text-xs font-bold text-stone-800 dark:text-stone-200 mb-1">
+                <span className="block text-xs font-bold text-fg-soft mb-1">
                   {label}
                 </span>
-                <span className="text-stone-900 dark:text-stone-100">{symbol}</span>
+                <span className="text-fg">{symbol}</span>
               </button>
             ))}
           </div>
-        </div>
+        </Panel>
       </div>
     </div>
   );

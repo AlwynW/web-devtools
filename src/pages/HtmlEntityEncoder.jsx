@@ -1,5 +1,8 @@
 import { useState, useCallback } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 const ENTITIES = {
   "&": "&amp;",
@@ -47,22 +50,15 @@ export default function HtmlEntityEncoder({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          HTML Entity Encoder
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Encode and decode HTML entities.
-        </p>
-      </header>
+      <PageHeader title="HTML Entity Encoder" description="Encode and decode HTML entities." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+      <Panel className="space-y-4">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
           <button
             className={`px-3 py-1.5 transition-colors ${
               mode === "encode"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
             onClick={() => setMode("encode")}
           >
@@ -71,8 +67,8 @@ export default function HtmlEntityEncoder({ onToast }) {
           <button
             className={`px-3 py-1.5 transition-colors ${
               mode === "decode"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
             onClick={() => setMode("decode")}
           >
@@ -80,9 +76,9 @@ export default function HtmlEntityEncoder({ onToast }) {
           </button>
         </div>
 
-        <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+        <Label>
           Input
-        </label>
+        </Label>
         <textarea
           value={input}
           onChange={(e) => {
@@ -95,13 +91,13 @@ export default function HtmlEntityEncoder({ onToast }) {
               ? '> enter text with < & " \' > to encode'
               : "> enter HTML entities to decode"
           }
-          className="w-full h-32 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+          className="w-full h-32 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
         />
 
         <div className="flex justify-end">
           <button
             onClick={process}
-            className="px-4 py-2 border border-stone-400 dark:border-stone-600 text-xs font-mono tracking-tight text-stone-800 dark:text-stone-100 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+            className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors"
           >
             {mode === "encode" ? "> Encode" : "> Decode"}
           </button>
@@ -109,13 +105,13 @@ export default function HtmlEntityEncoder({ onToast }) {
 
         {output && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Output
-            </label>
+            </Label>
             <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

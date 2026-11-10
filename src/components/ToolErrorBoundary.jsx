@@ -1,4 +1,5 @@
 import { Component } from "react";
+import Button from "./Button";
 
 export default class ToolErrorBoundary extends Component {
   state = { error: null };
@@ -18,20 +19,14 @@ export default class ToolErrorBoundary extends Component {
 
     return (
       <div className="py-20 flex flex-col items-center justify-center gap-4 text-center">
-        <p className="text-sm font-mono text-stone-700 dark:text-stone-300">
+        <p className="text-sm font-mono text-fg-soft">
           This tool&apos;s script failed to load.
         </p>
-        <p className="max-w-md text-xs font-mono text-stone-500 dark:text-stone-400">
+        <p className="max-w-md text-xs font-mono text-fg-muted">
           Reload to fetch the current version. If it still fails, publish the
           site again so the tool file is replaced.
         </p>
-        <button
-          type="button"
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 border font-mono text-xs tracking-tight bg-stone-900 hover:bg-stone-800 text-stone-50 border-stone-900 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-950 dark:border-stone-200"
-        >
-          Reload
-        </button>
+        <Button onClick={() => window.location.reload()}>Reload</Button>
       </div>
     );
   }

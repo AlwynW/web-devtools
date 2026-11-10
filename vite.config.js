@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { brand, themeColor } from "./src/theme/brand.js";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -22,14 +23,14 @@ export default defineConfig({
       ],
       manifest: {
         id: "/",
-        name: "DevKit",
-        short_name: "DevKit",
-        description: "Developer utilities for everyday tasks.",
+        name: brand.name,
+        short_name: brand.shortName,
+        description: brand.description,
         start_url: "/",
         scope: "/",
         display: "standalone",
-        background_color: "#f5f5f4",
-        theme_color: "#f5f5f4",
+        background_color: themeColor.light,
+        theme_color: themeColor.light,
         icons: [
           {
             src: "/icon-192.png",

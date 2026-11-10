@@ -1,6 +1,9 @@
 import { useState, useCallback } from "react";
 import CopyPre from "../components/CopyPre";
 import { formatXml, minifyXml, parseXmlError } from "../utils/xmlFormat";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 export default function XmlTools({ onToast }) {
   const [input, setInput] = useState(
@@ -42,35 +45,28 @@ export default function XmlTools({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          XML
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Format, minify, and check well-formed XML in the browser.
-        </p>
-      </header>
+      <PageHeader title="XML" description="Format, minify, and check well-formed XML in the browser." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={runFormat}
-            className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900"
+            className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
           >
             Format
           </button>
           <button
             type="button"
             onClick={runMinify}
-            className="px-4 py-2 font-mono text-xs border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800"
+            className="px-4 py-2 font-mono text-xs border border-border-strong hover:bg-hover-muted"
           >
             Minify
           </button>
           <button
             type="button"
             onClick={validateOnly}
-            className="px-4 py-2 font-mono text-xs border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800"
+            className="px-4 py-2 font-mono text-xs border border-border-strong hover:bg-hover-muted"
           >
             Validate only
           </button>
@@ -80,13 +76,13 @@ export default function XmlTools({ onToast }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={10}
-          className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+          className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
         />
 
         {(err || liveErr) && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 text-xs font-mono">
+          <ErrorBanner className="p-3 text-xs font-mono">
             {err || liveErr}
-          </div>
+          </ErrorBanner>
         )}
         {!err && !liveErr && input.trim() && (
           <p className="text-xs font-mono text-green-700 dark:text-green-400">
@@ -96,18 +92,18 @@ export default function XmlTools({ onToast }) {
 
         {output && (
           <div>
-            <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
               Output
             </span>
             <CopyPre
               text={output}
               onCopySuccess={() => onToast("Copied!")}
-              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-80 overflow-y-auto overflow-x-auto"
-              preClassName="p-4 font-mono text-xs whitespace-pre-wrap break-all text-stone-800 dark:text-stone-200"
+              className="border border-border bg-surface-code max-h-80 overflow-y-auto overflow-x-auto"
+              preClassName="p-4 font-mono text-xs whitespace-pre-wrap break-all text-fg-soft"
             />
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

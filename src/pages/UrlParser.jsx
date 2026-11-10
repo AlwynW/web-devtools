@@ -1,5 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 export default function UrlParser({ onToast }) {
   const [input, setInput] = useState("");
@@ -67,33 +71,26 @@ export default function UrlParser({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          URL Parser / Query Builder
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Parse URLs and edit query parameters.
-        </p>
-      </header>
+      <PageHeader title="URL Parser / Query Builder" description="Parse URLs and edit query parameters." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             URL
-          </label>
+          </Label>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="https://example.com/path?foo=bar&baz=qux"
-            className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 font-mono text-sm">
+          <ErrorBanner className="p-4 font-mono text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {parsed && (
@@ -106,10 +103,10 @@ export default function UrlParser({ onToast }) {
                 { label: "Hash", value: parsed.hash || "—" },
               ].map(({ label, value }) => (
                 <div key={label}>
-                  <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                  <div className="field-label">
                     {label}
                   </div>
-                  <div className="font-mono text-sm text-stone-800 dark:text-stone-200 truncate">
+                  <div className="font-mono text-sm text-fg-soft truncate">
                     {value}
                   </div>
                 </div>
@@ -118,12 +115,12 @@ export default function UrlParser({ onToast }) {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                <Label>
                   Query parameters
-                </label>
+                </Label>
                 <button
                   onClick={addParam}
-                  className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+                  className="text-xs font-mono text-fg-muted hover:text-fg"
                 >
                   + Add
                 </button>
@@ -136,18 +133,18 @@ export default function UrlParser({ onToast }) {
                       value={p.key}
                       onChange={(e) => updateParam(i, "key", e.target.value)}
                       placeholder="key"
-                      className="flex-1 p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm"
+                      className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
                     />
                     <input
                       type="text"
                       value={p.value}
                       onChange={(e) => updateParam(i, "value", e.target.value)}
                       placeholder="value"
-                      className="flex-1 p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm"
+                      className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
                     />
                     <button
                       onClick={() => removeParam(i)}
-                      className="p-2 text-stone-500 hover:text-red-600"
+                      className="p-2 text-fg-muted hover:text-red-600"
                     >
                       ×
                     </button>
@@ -158,15 +155,15 @@ export default function UrlParser({ onToast }) {
 
             {rebuiltUrl && (
               <>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Rebuilt URL
-                </label>
+                </Label>
                 <CopyArea text={rebuiltUrl} onCopySuccess={() => onToast("Copied!")} />
               </>
             )}
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

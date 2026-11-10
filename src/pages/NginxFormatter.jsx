@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { formatNginxConfig, lintNginxConfig } from "../utils/nginxFormat";
 import CopyButton from "../components/CopyButton";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const SAMPLE = `server {
 listen 80;
@@ -26,32 +28,25 @@ export default function NginxFormatter({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Nginx formatter
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Brace-aware indent; light lint for braces and duplicate{" "}
-          <code className="text-stone-600 dark:text-stone-300">server_name</code>.
-        </p>
-      </header>
+      <PageHeader title="Nginx formatter" description={<>Brace-aware indent; light lint for braces and duplicate{" "}
+          <code className="text-fg-muted">server_name</code>.</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
               Input
             </label>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               rows={16}
-              className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
             />
           </div>
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
+              <label className="text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
                 Formatted
               </label>
               <CopyButton
@@ -64,7 +59,7 @@ export default function NginxFormatter({ onToast }) {
               readOnly
               value={formatted}
               rows={16}
-              className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-stone-50 dark:bg-stone-950 text-stone-800 dark:text-stone-200"
+              className="w-full p-4 border border-border-strong font-mono text-xs bg-surface-code text-fg-soft"
             />
           </div>
         </div>
@@ -72,17 +67,17 @@ export default function NginxFormatter({ onToast }) {
         <button
           type="button"
           onClick={() => setInput(formatted)}
-          className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900"
+          className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
         >
           Replace input with formatted
         </button>
 
         {issues.length > 0 && (
-          <div className="p-4 border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 space-y-1">
-            <p className="text-xs font-mono font-semibold text-amber-900 dark:text-amber-200">
+          <div className="p-4 border border-warning-border bg-warning-bg space-y-1 rounded-control">
+            <p className="text-xs font-mono font-semibold text-warning-fg">
               Lint
             </p>
-            <ul className="text-xs font-mono text-amber-900 dark:text-amber-200 space-y-1">
+            <ul className="text-xs font-mono text-warning-fg space-y-1">
               {issues.map((it, i) => (
                 <li key={i}>
                   Line {it.line}: {it.msg}
@@ -91,7 +86,7 @@ export default function NginxFormatter({ onToast }) {
             </ul>
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

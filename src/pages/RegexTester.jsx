@@ -1,5 +1,9 @@
 import { useState, useMemo } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const TOKEN_GUIDE = [
   { pattern: ".", desc: "Any character except newline" },
@@ -56,22 +60,15 @@ export default function RegexTester({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Regex Tester & Explainer
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Test patterns, view matches and groups, and learn regex syntax.
-        </p>
-      </header>
+      <PageHeader title={<>Regex Tester & Explainer</>} description="Test patterns, view matches and groups, and learn regex syntax." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Regular expression
-          </label>
+          </Label>
           <div className="flex gap-2">
-            <span className="flex items-center px-3 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-stone-500">
+            <span className="flex items-center px-3 bg-shell border border-border-strong font-mono text-fg-muted">
               /
             </span>
             <input
@@ -79,9 +76,9 @@ export default function RegexTester({ onToast }) {
               value={pattern}
               onChange={(e) => setPattern(e.target.value)}
               placeholder="\\d+"
-              className="flex-1 px-4 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="flex-1 px-4 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
-            <span className="flex items-center px-3 bg-stone-100 dark:bg-stone-900 border-y border-stone-300 dark:border-stone-700 font-mono text-stone-500">
+            <span className="flex items-center px-3 bg-shell border-y border-border-strong font-mono text-fg-muted">
               /
             </span>
             <input
@@ -89,47 +86,47 @@ export default function RegexTester({ onToast }) {
               value={flags}
               onChange={(e) => setFlags(e.target.value)}
               placeholder="gim"
-              className="w-16 px-2 py-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-16 px-2 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Test string
-          </label>
+          </Label>
           <textarea
             value={testString}
             onChange={(e) => setTestString(e.target.value)}
             placeholder="> enter text to test against"
-            className="w-full h-28 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full h-28 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
         {result.error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm font-mono">
+          <ErrorBanner className="p-4 text-sm font-mono">
             {result.error}
-          </div>
+          </ErrorBanner>
         )}
 
         {!result.error && (
           <>
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              <Label>
                 Matches ({result.matches.length})
-              </label>
+              </Label>
               {result.matches.length > 0 ? (
                 <div className="space-y-2 max-h-48 overflow-y-auto">
                   {result.matches.map((m, i) => (
                     <div
                       key={i}
-                      className="p-3 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700"
+                      className="p-3 bg-surface-muted border border-border"
                     >
-                      <div className="font-mono text-stone-800 dark:text-stone-200">
+                      <div className="font-mono text-fg-soft">
                         {m[0]}
                       </div>
                       {m.length > 1 && (
-                        <div className="mt-2 text-xs text-stone-500 space-y-1">
+                        <div className="mt-2 text-xs text-fg-muted space-y-1">
                           {m.slice(1).map((g, j) => (
                             <div key={j}>
                               Group {j + 1}: {g ?? "(undefined)"}
@@ -137,14 +134,14 @@ export default function RegexTester({ onToast }) {
                           ))}
                         </div>
                       )}
-                      <div className="text-xs text-stone-400 mt-1">
+                      <div className="text-xs text-fg-subtle mt-1">
                         index: {m.index}
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-500 text-center font-mono text-sm">
+                <div className="p-4 bg-surface-muted border border-border text-fg-muted text-center font-mono text-sm">
                   No matches
                 </div>
               )}
@@ -152,17 +149,17 @@ export default function RegexTester({ onToast }) {
 
             {replaceWith !== "" && result.replace !== null && (
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Replace with
-                </label>
+                </Label>
                 <input
                   type="text"
                   value={replaceWith}
                   onChange={(e) => setReplaceWith(e.target.value)}
                   placeholder="> replacement string"
-                  className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100 mb-2"
+                  className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg mb-2 rounded-control"
                 />
-                <div className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 font-mono text-sm whitespace-pre-wrap text-stone-800 dark:text-stone-200">
+                <div className="p-4 bg-surface-muted border border-border font-mono text-sm whitespace-pre-wrap text-fg-soft">
                   {result.replace}
                 </div>
               </div>
@@ -170,15 +167,15 @@ export default function RegexTester({ onToast }) {
 
             {replaceWith === "" && (
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Replace (optional)
-                </label>
+                </Label>
                 <input
                   type="text"
                   value={replaceWith}
                   onChange={(e) => setReplaceWith(e.target.value)}
                   placeholder="> leave empty to skip"
-                  className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                  className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 />
               </div>
             )}
@@ -193,26 +190,26 @@ export default function RegexTester({ onToast }) {
         <div>
           <button
             onClick={() => setShowExplainer(!showExplainer)}
-            className="text-sm font-mono text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100"
+            className="text-sm font-mono text-fg-muted hover:text-fg"
           >
             {showExplainer ? "Hide" : "Show"} regex syntax reference
           </button>
           {showExplainer && (
-            <div className="mt-3 p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 overflow-x-auto">
+            <div className="mt-3 p-4 bg-surface-muted border border-border overflow-x-auto">
               <table className="w-full text-sm font-mono">
                 <thead>
-                  <tr className="text-left text-stone-500 dark:text-stone-400">
+                  <tr className="text-left text-fg-muted">
                     <th className="pb-2">Pattern</th>
                     <th className="pb-2 pl-4">Description</th>
                   </tr>
                 </thead>
                 <tbody>
                   {TOKEN_GUIDE.map((t, i) => (
-                    <tr key={i} className="border-t border-stone-200 dark:border-stone-700">
-                      <td className="py-2 text-stone-800 dark:text-stone-200">
+                    <tr key={i} className="border-t border-border">
+                      <td className="py-2 text-fg-soft">
                         {t.pattern}
                       </td>
-                      <td className="py-2 pl-4 text-stone-600 dark:text-stone-300">
+                      <td className="py-2 pl-4 text-fg-muted">
                         {t.desc}
                       </td>
                     </tr>
@@ -222,7 +219,7 @@ export default function RegexTester({ onToast }) {
             </div>
           )}
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

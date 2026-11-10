@@ -1,5 +1,8 @@
 import { useState } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 function parseInput(value, base) {
   const trimmed = value.trim().replace(/^0x/i, "");
@@ -44,16 +47,9 @@ export default function HexConverter({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Hex / Binary / Decimal Converter
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Convert between hexadecimal, binary, decimal, and octal.
-        </p>
-      </header>
+      <PageHeader title="Hex / Binary / Decimal Converter" description="Convert between hexadecimal, binary, decimal, and octal." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         {[
           { key: "hex", label: "Hexadecimal", value: hex, set: setHex, placeholder: "FF" },
           { key: "binary", label: "Binary", value: binary, set: setBinary, placeholder: "11111111" },
@@ -61,28 +57,28 @@ export default function HexConverter({ onToast }) {
           { key: "octal", label: "Octal", value: octal, set: setOctal, placeholder: "377" },
         ].map(({ key, label, value, set, placeholder }) => (
           <div key={key}>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+            <Label className="mb-1">
               {label}
-            </label>
+            </Label>
             <input
               type="text"
               value={value}
                 onChange={(e) => handleChange(key, e.target.value)}
               placeholder={placeholder}
-              className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
         ))}
 
         {output && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2 mt-4">
+            <Label className="mt-4">
               Summary
-            </label>
+            </Label>
             <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

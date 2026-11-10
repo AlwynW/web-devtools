@@ -6,6 +6,8 @@ import {
   gradientToCss,
   hexToRgba,
 } from "../utils/gradientCss";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 /**
  * Gradient border via a masked ::before ring so the element's own
@@ -152,18 +154,11 @@ ${beforeRules.join("\n")}
         `}</style>
       )}
 
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Gradient Border
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Masked ring on ::before — fill stays independently translucent.
-        </p>
-      </header>
+      <PageHeader title="Gradient Border" description="Masked ring on ::before — fill stays independently translucent." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div
-          className="min-h-48 flex items-center justify-center p-10 border border-stone-200 dark:border-stone-700"
+          className="min-h-48 flex items-center justify-center p-10 border border-border"
           style={{
             backgroundImage:
               "linear-gradient(45deg, #d6d3d1 25%, transparent 25%), linear-gradient(-45deg, #d6d3d1 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #d6d3d1 75%), linear-gradient(-45deg, transparent 75%, #d6d3d1 75%)",
@@ -173,7 +168,7 @@ ${beforeRules.join("\n")}
           }}
         >
           <div
-            className="relative min-w-[220px] max-w-sm text-center font-mono text-sm text-stone-800 dark:text-stone-100"
+            className="relative min-w-[220px] max-w-sm text-center font-mono text-sm text-fg"
             style={{
               borderRadius: `${borderRadius}px`,
               background: fillCss,
@@ -208,7 +203,7 @@ ${beforeRules.join("\n")}
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+            <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
               <span>Border width</span>
               <span>{borderWidth}px</span>
             </label>
@@ -218,11 +213,11 @@ ${beforeRules.join("\n")}
               max={24}
               value={borderWidth}
               onChange={(e) => setBorderWidth(Number(e.target.value))}
-              className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+              className="w-full h-2 bg-secondary-hover accent-fg"
             />
           </div>
           <div>
-            <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+            <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
               <span>Border radius</span>
               <span>{borderRadius}px</span>
             </label>
@@ -232,11 +227,11 @@ ${beforeRules.join("\n")}
               max={64}
               value={borderRadius}
               onChange={(e) => setBorderRadius(Number(e.target.value))}
-              className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+              className="w-full h-2 bg-secondary-hover accent-fg"
             />
           </div>
           <div>
-            <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+            <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
               <span>Content padding</span>
               <span>{previewPad}px</span>
             </label>
@@ -246,11 +241,11 @@ ${beforeRules.join("\n")}
               max={64}
               value={previewPad}
               onChange={(e) => setPreviewPad(Number(e.target.value))}
-              className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+              className="w-full h-2 bg-secondary-hover accent-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Fill color
             </label>
             <div className="flex flex-wrap items-center gap-2">
@@ -258,35 +253,35 @@ ${beforeRules.join("\n")}
                 type="color"
                 value={fillColor}
                 onChange={(e) => setFillColor(e.target.value)}
-                className="w-10 h-8 border border-stone-200 dark:border-stone-600 cursor-pointer"
+                className="w-10 h-8 border border-border cursor-pointer"
               />
               <input
                 type="text"
                 value={fillColor}
                 onChange={(e) => setFillColor(e.target.value)}
-                className="w-24 px-2 py-1 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs font-mono dark:text-white"
+                className="w-24 px-2 py-1 bg-shell border border-border text-xs font-mono dark:text-white"
               />
-              <label className="text-xs font-mono text-stone-500">Opacity</label>
+              <label className="text-xs font-mono text-fg-muted">Opacity</label>
               <input
                 type="range"
                 min={0}
                 max={100}
                 value={fillAlpha}
                 onChange={(e) => setFillAlpha(Number(e.target.value))}
-                className="w-28 h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                className="w-28 h-2 bg-secondary-hover accent-fg"
               />
-              <span className="text-xs text-stone-500 w-8">{fillAlpha}%</span>
+              <span className="text-xs text-fg-muted w-8">{fillAlpha}%</span>
             </div>
           </div>
         </div>
 
-        <div className="space-y-3 p-4 border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-900/40">
-          <label className="flex items-center gap-2 text-sm font-mono text-stone-700 dark:text-stone-300">
+        <div className="space-y-3 p-4 border border-border bg-surface-muted/60 dark:bg-overlay">
+          <label className="flex items-center gap-2 text-sm font-mono text-fg-soft">
             <input
               type="checkbox"
               checked={animate}
               onChange={(e) => setAnimate(e.target.checked)}
-              className="rounded border-stone-400 text-stone-900 focus:ring-stone-500"
+              className="rounded border-border-muted text-fg focus:ring-focus"
             />
             Animate rotation
           </label>
@@ -297,7 +292,7 @@ ${beforeRules.join("\n")}
           )}
           {animating && (
             <div>
-              <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+              <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
                 <span>Duration</span>
                 <span>{duration}s</span>
               </label>
@@ -308,18 +303,18 @@ ${beforeRules.join("\n")}
                 step={0.5}
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
-                className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                className="w-full h-2 bg-secondary-hover accent-fg"
               />
             </div>
           )}
         </div>
 
-        <div className="space-y-4 p-4 border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-900/40">
-          <p className="text-xs font-bold text-stone-500 dark:text-stone-400">
+        <div className="space-y-4 p-4 border border-border bg-surface-muted/60 dark:bg-overlay">
+          <p className="text-xs font-bold text-fg-muted">
             Border gradient
           </p>
 
-          <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-800 w-max text-xs font-mono">
+          <div className="flex gap-2 p-1 bg-hover-muted w-max text-xs font-mono">
             {["linear", "radial", "conic"].map((t) => (
               <button
                 key={t}
@@ -327,8 +322,8 @@ ${beforeRules.join("\n")}
                 onClick={() => setType(t)}
                 className={`px-3 py-1.5 ${
                   type === t
-                    ? "bg-white dark:bg-stone-700 text-stone-700 dark:text-stone-200"
-                    : "text-stone-500"
+                    ? "bg-surface-inset text-fg-soft"
+                    : "text-fg-muted"
                 }`}
               >
                 {t}
@@ -338,7 +333,7 @@ ${beforeRules.join("\n")}
 
           {(type === "linear" || type === "conic") && (
             <div>
-              <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+              <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
                 <span>
                   {animating
                     ? "Start angle"
@@ -354,7 +349,7 @@ ${beforeRules.join("\n")}
                 max={360}
                 value={angle}
                 onChange={(e) => setAngle(Number(e.target.value))}
-                className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                className="w-full h-2 bg-secondary-hover accent-fg"
               />
             </div>
           )}
@@ -364,7 +359,7 @@ ${beforeRules.join("\n")}
               <select
                 value={radialShape}
                 onChange={(e) => setRadialShape(e.target.value)}
-                className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
               >
                 <option value="circle">circle</option>
                 <option value="ellipse">ellipse</option>
@@ -372,7 +367,7 @@ ${beforeRules.join("\n")}
               <select
                 value={radialSize}
                 onChange={(e) => setRadialSize(e.target.value)}
-                className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
               >
                 <option value="closest-side">closest-side</option>
                 <option value="closest-corner">closest-corner</option>
@@ -382,7 +377,7 @@ ${beforeRules.join("\n")}
               <select
                 value={radialPos}
                 onChange={(e) => setRadialPos(e.target.value)}
-                className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
               >
                 <option value="center">center</option>
                 <option value="top">top</option>
@@ -395,13 +390,13 @@ ${beforeRules.join("\n")}
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-stone-500 dark:text-stone-400">
+              <p className="text-xs font-bold text-fg-muted">
                 Color stops
               </p>
               <button
                 type="button"
                 onClick={addStop}
-                className="text-xs font-mono text-stone-600 dark:text-stone-400 hover:underline"
+                className="text-xs font-mono text-fg-muted hover:underline"
               >
                 + Add stop
               </button>
@@ -409,10 +404,10 @@ ${beforeRules.join("\n")}
             {stops.map((stop, stopIndex) => (
               <div
                 key={`stop-${stopIndex}`}
-                className="p-3 border border-stone-200 dark:border-stone-700 bg-white/70 dark:bg-stone-950/50 space-y-2"
+                className="p-3 border border-border bg-surface-code/70 space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-stone-500">
+                  <span className="text-xs font-mono text-fg-muted">
                     Stop {stopIndex + 1}
                   </span>
                   <button
@@ -429,15 +424,15 @@ ${beforeRules.join("\n")}
                     type="color"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-10 h-8 border border-stone-200 dark:border-stone-600 cursor-pointer"
+                    className="w-10 h-8 border border-border cursor-pointer"
                   />
                   <input
                     type="text"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-24 px-2 py-1 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs font-mono dark:text-white"
+                    className="w-24 px-2 py-1 bg-shell border border-border text-xs font-mono dark:text-white"
                   />
-                  <label className="text-xs font-mono text-stone-500">Opacity</label>
+                  <label className="text-xs font-mono text-fg-muted">Opacity</label>
                   <input
                     type="range"
                     min={0}
@@ -446,12 +441,12 @@ ${beforeRules.join("\n")}
                     onChange={(e) =>
                       updateStop(stopIndex, "alpha", Number.parseInt(e.target.value, 10))
                     }
-                    className="w-28 h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                    className="w-28 h-2 bg-secondary-hover accent-fg"
                   />
-                  <span className="text-xs text-stone-500 w-8">{stop.alpha}%</span>
+                  <span className="text-xs text-fg-muted w-8">{stop.alpha}%</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <label className="text-xs font-mono text-stone-500">Position</label>
+                  <label className="text-xs font-mono text-fg-muted">Position</label>
                   <input
                     type="range"
                     min={0}
@@ -460,16 +455,16 @@ ${beforeRules.join("\n")}
                     onChange={(e) =>
                       updateStop(stopIndex, "pos", Number.parseInt(e.target.value, 10))
                     }
-                    className="flex-1 h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                    className="flex-1 h-2 bg-secondary-hover accent-fg"
                   />
-                  <span className="text-xs text-stone-500 w-8">{stop.pos}%</span>
+                  <span className="text-xs text-fg-muted w-8">{stop.pos}%</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 leading-relaxed">
+        <p className="text-[11px] font-mono text-fg-muted leading-relaxed">
           Dual background-clip cannot punch a true hole — the gradient would show
           through a translucent fill. A masked ::before ring keeps the fill and
           border independent.
@@ -479,7 +474,7 @@ ${beforeRules.join("\n")}
         </p>
 
         <CopyArea text={cssOutput} onCopySuccess={() => onToast("CSS copied!")} />
-      </div>
+      </Panel>
     </div>
   );
 }

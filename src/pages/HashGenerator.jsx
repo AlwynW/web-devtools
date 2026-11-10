@@ -2,6 +2,9 @@ import { useState, useCallback, useEffect } from "react";
 import { UploadSimple } from "phosphor-react";
 import CryptoJS from "crypto-js";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 const hashFunctions = {
   MD5: (str) => CryptoJS.MD5(str).toString(CryptoJS.enc.Hex),
@@ -63,23 +66,16 @@ export default function HashGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Hash Generator
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Create MD5, SHA-1, SHA-256, or SHA-512 hashes for verification.
-        </p>
-      </header>
+      <PageHeader title="Hash Generator" description="Create MD5, SHA-1, SHA-256, or SHA-512 hashes for verification." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+      <Panel className="space-y-4">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
           <button
             onClick={switchToText}
             className={`px-3 py-1.5 transition-colors ${
               mode === "text"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
           >
             Text
@@ -87,8 +83,8 @@ export default function HashGenerator({ onToast }) {
           <label
             className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-2 ${
               mode === "file"
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
           >
             <input
@@ -102,21 +98,21 @@ export default function HashGenerator({ onToast }) {
 
         {mode === "text" ? (
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Input text
-            </label>
+            </Label>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onBlur={compute}
               placeholder="> enter text to hash"
-              className="w-full h-32 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full h-32 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
         ) : (
-          <div className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700">
-            <div className="font-mono text-sm text-stone-800 dark:text-stone-200">{fileName}</div>
-            <div className="text-xs font-mono text-stone-500">
+          <div className="p-4 bg-surface-muted border border-border">
+            <div className="font-mono text-sm text-fg-soft">{fileName}</div>
+            <div className="text-xs font-mono text-fg-muted">
               {(input.length / 1024).toFixed(1)} KB loaded
             </div>
           </div>
@@ -126,7 +122,7 @@ export default function HashGenerator({ onToast }) {
           <div className="flex justify-end">
             <button
               onClick={compute}
-              className="px-4 py-2 border border-stone-400 dark:border-stone-600 text-xs font-mono tracking-tight text-stone-800 dark:text-stone-100 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+              className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors"
             >
               {" > Generate hashes"}
             </button>
@@ -135,12 +131,12 @@ export default function HashGenerator({ onToast }) {
 
         {Object.keys(hashes).length > 0 && (
           <div className="space-y-4">
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+            <Label>
               Hashes
-            </label>
+            </Label>
             {Object.entries(hashes).map(([name, hash]) => (
               <div key={name}>
-                <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+                <div className="field-label mb-1">
                   {name}
                 </div>
                 <CopyArea
@@ -151,7 +147,7 @@ export default function HashGenerator({ onToast }) {
             ))}
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

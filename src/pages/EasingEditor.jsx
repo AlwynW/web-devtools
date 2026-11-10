@@ -1,5 +1,7 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const PRESETS = [
   { name: "ease", v: [0.25, 0.1, 0.25, 1] },
@@ -101,22 +103,15 @@ export default function EasingEditor({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Cubic bezier
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Drag handles. Copy{" "}
-          <code className="text-stone-600 dark:text-stone-300">cubic-bezier</code>{" "}
+      <PageHeader title="Cubic bezier" description={<>Drag handles. Copy{" "}
+          <code className="text-fg-muted">cubic-bezier</code>{" "}
           or{" "}
-          <code className="text-stone-600 dark:text-stone-300">
+          <code className="text-fg-muted">
             transition-timing-function
           </code>
-          .
-        </p>
-      </header>
+          .</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div className="flex flex-wrap gap-2">
           {PRESETS.map((p) => (
             <button
@@ -129,7 +124,7 @@ export default function EasingEditor({ onToast }) {
                 setP2x(c);
                 setP2y(d);
               }}
-              className="px-3 py-1 text-xs font-mono border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800"
+              className="px-3 py-1 text-xs font-mono border border-border-strong hover:bg-hover-muted"
             >
               {p.name}
             </button>
@@ -142,7 +137,7 @@ export default function EasingEditor({ onToast }) {
             width={VIEW}
             height={VIEW}
             viewBox={`0 0 ${VIEW} ${VIEW}`}
-            className="border border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-950 touch-none shrink-0 overflow-visible"
+            className="border border-border-strong bg-surface-code touch-none shrink-0 overflow-visible"
             onPointerMove={onPointerMove}
           >
             {/* Bounding box for the unit square */}
@@ -153,7 +148,7 @@ export default function EasingEditor({ onToast }) {
               height={INNER}
               fill="none"
               stroke="currentColor"
-              className="text-stone-300 dark:text-stone-600"
+              className="text-fg-subtle"
               strokeWidth={1}
             />
             {/* Curve under handles; arms on top so they stay visible */}
@@ -161,7 +156,7 @@ export default function EasingEditor({ onToast }) {
               d={pathD}
               fill="none"
               stroke="currentColor"
-              className="text-stone-900 dark:text-stone-100"
+              className="text-fg"
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -172,7 +167,7 @@ export default function EasingEditor({ onToast }) {
               x2={mapX(p1x)}
               y2={mapY(p1y)}
               stroke="currentColor"
-              className="text-stone-400 dark:text-stone-500"
+              className="text-fg-subtle"
               strokeWidth={1.5}
               strokeLinecap="round"
             />
@@ -182,7 +177,7 @@ export default function EasingEditor({ onToast }) {
               x2={mapX(p2x)}
               y2={mapY(p2y)}
               stroke="currentColor"
-              className="text-stone-400 dark:text-stone-500"
+              className="text-fg-subtle"
               strokeWidth={1.5}
               strokeLinecap="round"
             />
@@ -191,13 +186,13 @@ export default function EasingEditor({ onToast }) {
               cx={mapX(0)}
               cy={mapY(0)}
               r={4}
-              className="fill-stone-600 dark:fill-stone-400"
+              className="fill-fg-muted"
             />
             <circle
               cx={mapX(1)}
               cy={mapY(1)}
               r={4}
-              className="fill-stone-600 dark:fill-stone-400"
+              className="fill-fg-muted"
             />
             <circle
               cx={mapX(p1x)}
@@ -206,7 +201,7 @@ export default function EasingEditor({ onToast }) {
               fill="currentColor"
               stroke="white"
               strokeWidth={2}
-              className="text-amber-500 cursor-grab active:cursor-grabbing dark:stroke-stone-950"
+              className="text-amber-500 cursor-grab active:cursor-grabbing"
               onPointerDown={(e) => {
                 e.currentTarget.setPointerCapture(e.pointerId);
                 setDrag("p1");
@@ -219,7 +214,7 @@ export default function EasingEditor({ onToast }) {
               fill="currentColor"
               stroke="white"
               strokeWidth={2}
-              className="text-sky-500 cursor-grab active:cursor-grabbing dark:stroke-stone-950"
+              className="text-sky-500 cursor-grab active:cursor-grabbing"
               onPointerDown={(e) => {
                 e.currentTarget.setPointerCapture(e.pointerId);
                 setDrag("p2");
@@ -235,7 +230,7 @@ export default function EasingEditor({ onToast }) {
               ["P2 y", p2y, setP2y],
             ].map(([label, val, set]) => (
               <label key={label} className="flex items-center gap-2">
-                <span className="w-10 text-stone-500">{label}</span>
+                <span className="w-10 text-fg-muted">{label}</span>
                 <input
                   type="number"
                   step={0.01}
@@ -243,7 +238,7 @@ export default function EasingEditor({ onToast }) {
                   max={1}
                   value={val}
                   onChange={(e) => set(parseFloat(e.target.value) || 0)}
-                  className="flex-1 p-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                  className="flex-1 p-2 border border-border-strong bg-surface text-fg"
                 />
               </label>
             ))}
@@ -251,21 +246,21 @@ export default function EasingEditor({ onToast }) {
         </div>
 
         <div className="space-y-2">
-          <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
+          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
             CSS
           </span>
           <CopyPre
             text={`transition-timing-function: ${css};`}
             onCopySuccess={() => onToast("Copied!")}
             title="Copy cubic-bezier"
-            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
-            preClassName="p-4 font-mono text-sm text-stone-800 dark:text-stone-200"
+            className="border border-border bg-surface-code"
+            preClassName="p-4 font-mono text-sm text-fg-soft"
           />
         </div>
 
-        <div className="relative h-14 border border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-950 rounded overflow-hidden">
+        <div className="relative h-14 border border-border-strong bg-surface-code rounded overflow-hidden">
           <div
-            className="absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded bg-stone-900 dark:bg-stone-100"
+            className="absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded bg-inverse"
             style={{
               animation: "easingPreviewMove 2.2s infinite alternate",
               animationTimingFunction: css,
@@ -278,7 +273,7 @@ export default function EasingEditor({ onToast }) {
             to { left: calc(100% - 2.25rem); }
           }
         `}</style>
-      </div>
+      </Panel>
     </div>
   );
 }

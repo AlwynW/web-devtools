@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 /**
  * Adaptive harmony: linear R − P for small padding, then blend toward a
@@ -149,11 +151,11 @@ export default function PerfectBorderGenerator({ onToast }) {
   const harmonyTextColor = useMemo(() => {
     const map = {
       emerald: "text-emerald-600 dark:text-emerald-400",
-      amber: "text-amber-600 dark:text-amber-400",
+      amber: "text-favorite",
       red: "text-red-600 dark:text-red-400",
-      stone: "text-stone-500 dark:text-stone-400",
+      stone: "text-fg-muted",
     };
-    return map[harmony.color] ?? "text-stone-500";
+    return map[harmony.color] ?? "text-fg-muted";
   }, [harmony.color]);
 
   const harmonyBarColor = useMemo(() => {
@@ -168,24 +170,17 @@ export default function PerfectBorderGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Perfect Border Radius
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Generate matching outer/inner radii so borders stay perfectly
-          smooth.
-        </p>
-      </header>
+      <PageHeader title="Perfect Border Radius" description={<>Generate matching outer/inner radii so borders stay perfectly
+          smooth.</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-8">
+      <Panel className="space-y-8">
         <section className="grid gap-6 md:grid-cols-2 items-start">
           {/* Controls */}
           <div className="space-y-4">
             <div>
-              <label className="flex justify-between text-[11px] font-mono mb-1 text-stone-500 dark:text-stone-400">
+              <label className="flex justify-between text-[11px] font-mono mb-1 text-fg-muted">
                 <span>Outer radius</span>
-                <span className="text-stone-900 dark:text-stone-100">
+                <span className="text-fg">
                   {outerRadius}px
                 </span>
               </label>
@@ -198,7 +193,7 @@ export default function PerfectBorderGenerator({ onToast }) {
                   onChange={(e) =>
                     setOuterRadius(parseInt(e.target.value) || 0)
                   }
-                  className="w-full h-2 bg-stone-200 dark:bg-stone-700 appearance-none cursor-pointer accent-stone-800 dark:accent-stone-200"
+                  className="w-full h-2 bg-secondary-hover appearance-none cursor-pointer accent-fg"
                 />
                 <input
                   type="number"
@@ -210,15 +205,15 @@ export default function PerfectBorderGenerator({ onToast }) {
                       Math.max(0, parseInt(e.target.value) || 0),
                     )
                   }
-                  className="w-20 px-2 py-1.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                  className="w-20 px-2 py-1.5 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 />
               </div>
             </div>
 
             <div>
-              <label className="flex justify-between text-[11px] font-mono mb-1 text-stone-500 dark:text-stone-400">
+              <label className="flex justify-between text-[11px] font-mono mb-1 text-fg-muted">
                 <span>Padding</span>
-                <span className="text-stone-900 dark:text-stone-100">
+                <span className="text-fg">
                   {padding}px
                 </span>
               </label>
@@ -231,7 +226,7 @@ export default function PerfectBorderGenerator({ onToast }) {
                   onChange={(e) =>
                     setPadding(parseInt(e.target.value) || 0)
                   }
-                  className="w-full h-2 bg-stone-200 dark:bg-stone-700 appearance-none cursor-pointer accent-stone-800 dark:accent-stone-200"
+                  className="w-full h-2 bg-secondary-hover appearance-none cursor-pointer accent-fg"
                 />
                 <input
                   type="number"
@@ -243,7 +238,7 @@ export default function PerfectBorderGenerator({ onToast }) {
                       Math.max(0, parseInt(e.target.value) || 0),
                     )
                   }
-                  className="w-20 px-2 py-1.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                  className="w-20 px-2 py-1.5 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 />
               </div>
             </div>
@@ -251,10 +246,10 @@ export default function PerfectBorderGenerator({ onToast }) {
             {/* Adaptive harmony switch */}
             <div className="flex items-center justify-between gap-4 py-1">
               <div className="min-w-0 space-y-0.5">
-                <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400 block">
+                <span className="text-[11px] font-mono text-fg-muted block">
                   Adaptive harmony
                 </span>
-                <p className="text-[10px] font-mono text-stone-400 dark:text-stone-500 leading-snug">
+                <p className="text-[10px] font-mono text-fg-subtle leading-snug">
                   Off: classic{" "}
                   <span className="whitespace-nowrap">max(R − P, 0)</span>. On:
                   smooth blend when padding is large.
@@ -268,12 +263,12 @@ export default function PerfectBorderGenerator({ onToast }) {
                 onClick={() => setAdaptiveHarmony((v) => !v)}
                 className={`relative shrink-0 w-11 h-6 rounded-full border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 dark:focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-stone-900 ${
                   adaptiveHarmony
-                    ? "bg-stone-800 dark:bg-stone-200 border-stone-700 dark:border-stone-300"
-                    : "bg-stone-200 dark:bg-stone-700 border-stone-300 dark:border-stone-600"
+                    ? "bg-stone-800 dark:bg-stone-200 border-border-strong"
+                    : "bg-secondary-hover border-border-strong"
                 }`}
               >
                 <span
-                  className={`absolute top-0.5 left-0.5 h-[calc(100%-4px)] aspect-square rounded-full bg-white dark:bg-stone-900 shadow-sm transition-transform ${
+                  className={`absolute top-0.5 left-0.5 h-[calc(100%-4px)] aspect-square rounded-full bg-surface shadow-sm transition-transform ${
                     adaptiveHarmony ? "translate-x-5" : "translate-x-0"
                   }`}
                 />
@@ -281,25 +276,25 @@ export default function PerfectBorderGenerator({ onToast }) {
             </div>
 
             {/* Computed inner radius */}
-            <div className="text-sm font-mono text-stone-500 dark:text-stone-400 space-y-1">
+            <div className="text-sm font-mono text-fg-muted space-y-1">
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0">
-                <span className="font-semibold text-stone-700 dark:text-stone-200">
+                <span className="font-semibold text-fg-soft">
                   Inner radius:
                 </span>
                 {!adaptiveHarmony ? (
                   <span>
                     max({outerRadius} − {padding}, 0) ={" "}
-                    <span className="text-stone-900 dark:text-stone-100">
+                    <span className="text-fg">
                       {innerRadius}px
                     </span>
                   </span>
                 ) : methodLabel === "Adaptive" ? (
                   <span>
                     blended (harmonic curve) →{" "}
-                    <span className="text-stone-900 dark:text-stone-100">
+                    <span className="text-fg">
                       {innerRadius}px
                     </span>
-                    <span className="text-stone-400 dark:text-stone-500">
+                    <span className="text-fg-subtle">
                       {" "}
                       (pure subtract would be {geometricInner}px)
                     </span>
@@ -307,10 +302,10 @@ export default function PerfectBorderGenerator({ onToast }) {
                 ) : (
                   <span>
                     max({outerRadius} − {padding}, 0) ={" "}
-                    <span className="text-stone-900 dark:text-stone-100">
+                    <span className="text-fg">
                       {innerRadius}px
                     </span>
-                    <span className="text-stone-400 dark:text-stone-500">
+                    <span className="text-fg-subtle">
                       {" "}
                       — geometric for this scale
                     </span>
@@ -320,9 +315,9 @@ export default function PerfectBorderGenerator({ onToast }) {
             </div>
 
             {/* Harmony indicator */}
-            <div className="p-3 bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 space-y-2">
+            <div className="p-3 bg-surface-inset/50 border border-border space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+                <span className="text-[11px] font-mono text-fg-muted">
                   Harmony
                 </span>
                 <span
@@ -331,27 +326,27 @@ export default function PerfectBorderGenerator({ onToast }) {
                   {harmony.label}
                 </span>
               </div>
-              <div className="flex items-center justify-between gap-2 text-[10px] font-mono text-stone-500 dark:text-stone-400">
+              <div className="flex items-center justify-between gap-2 text-[10px] font-mono text-fg-muted">
                 <span>Method</span>
-                <span className="text-stone-800 dark:text-stone-200 font-semibold">
+                <span className="text-fg-soft font-semibold">
                   {methodLabel}
                 </span>
               </div>
-              <div className="h-1.5 bg-stone-200 dark:bg-stone-700 overflow-hidden">
+              <div className="h-1.5 bg-secondary-hover overflow-hidden">
                 <div
                   className={`h-full transition-all duration-300 ${harmonyBarColor}`}
                   style={{ width: `${harmony.pct}%` }}
                 />
               </div>
               {adaptiveHarmony && methodLabel === "Adaptive" && (
-                <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 leading-relaxed">
+                <p className="text-[11px] font-mono text-fg-muted leading-relaxed">
                   Inner radius is smoothed so the corner does not look too sharp
                   relative to the gap; copy CSS uses the computed{" "}
                   {innerRadius}px value.
                 </p>
               )}
               {!adaptiveHarmony && harmony.pct <= 50 && (
-                <p className="text-[11px] font-mono text-amber-600 dark:text-amber-400">
+                <p className="text-[11px] font-mono text-favorite">
                   Tip: keep padding ≤{" "}
                   {maxRecommendedPadding}px (≈60% of outer
                   radius) for smooth-looking inner corners, or enable adaptive
@@ -369,15 +364,15 @@ export default function PerfectBorderGenerator({ onToast }) {
 
           {/* Preview */}
           <div className="flex flex-col gap-4">
-            <div className="text-sm font-mono text-stone-600 dark:text-stone-300">
+            <div className="text-sm font-mono text-fg-muted">
               Live preview
               {scaleFactor < 1 && (
-                <span className="ml-2 text-[10px] text-stone-400">
+                <span className="ml-2 text-[10px] text-fg-subtle">
                   (scaled to fit)
                 </span>
               )}
             </div>
-            <div className="p-6 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
+            <div className="p-6 bg-shell border border-border flex items-center justify-center">
               <div
                 className="bg-gradient-to-br from-stone-500 to-stone-600 flex items-center justify-center transition-all duration-150"
                 style={{
@@ -388,12 +383,12 @@ export default function PerfectBorderGenerator({ onToast }) {
                 }}
               >
                 <div
-                  className="w-full h-full bg-stone-50 dark:bg-stone-900 flex items-center justify-center transition-all duration-150"
+                  className="w-full h-full bg-surface-muted flex items-center justify-center transition-all duration-150"
                   style={{
                     borderRadius: `${vInnerRadius}px`,
                   }}
                 >
-                  <span className="text-xs font-mono text-stone-500 dark:text-stone-400 text-center px-2">
+                  <span className="text-xs font-mono text-fg-muted text-center px-2">
                     inner = {innerRadius}px
                   </span>
                 </div>
@@ -406,11 +401,11 @@ export default function PerfectBorderGenerator({ onToast }) {
         <section className="space-y-4">
           <div className="flex flex-wrap items-center gap-3 justify-between">
             <div className="space-y-1">
-              <h3 className="text-sm font-mono font-semibold text-stone-700 dark:text-stone-200">
+              <h3 className="text-sm font-mono font-semibold text-fg-soft">
                 Copy mode
               </h3>
             </div>
-            <div className="flex gap-1 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-[11px]">
+            <div className="flex gap-1 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
               {copyModes.map((m) => (
                 <button
                   key={m.key}
@@ -418,8 +413,8 @@ export default function PerfectBorderGenerator({ onToast }) {
                   onClick={() => setCopyMode(m.key)}
                   className={`px-3 py-1.5 transition-colors ${
                     copyMode === m.key
-                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                      : "text-stone-500 hover:bg-stone-200 dark:hover:bg-stone-800"
+                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                      : "text-fg-muted hover:bg-secondary-hover"
                   }`}
                 >
                   {m.label}
@@ -432,10 +427,10 @@ export default function PerfectBorderGenerator({ onToast }) {
             <div className="space-y-6">
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-sm font-mono font-semibold text-stone-700 dark:text-stone-200">
+                  <h4 className="text-sm font-mono font-semibold text-fg-soft">
                     CSS
                   </h4>
-                 
+
                 </div>
                 <CopyArea
                   text={cssSnippet}
@@ -444,10 +439,10 @@ export default function PerfectBorderGenerator({ onToast }) {
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-sm font-mono font-semibold text-stone-700 dark:text-stone-200">
+                  <h4 className="text-sm font-mono font-semibold text-fg-soft">
                     HTML
                   </h4>
-                 
+
                 </div>
                 <CopyArea
                   text={htmlSnippet}
@@ -462,7 +457,7 @@ export default function PerfectBorderGenerator({ onToast }) {
           {copyMode === "inline" && (
             <div>
               <div className="flex items-center justify-between mb-1">
-                <h4 className="text-sm font-mono font-semibold text-stone-700 dark:text-stone-200">
+                <h4 className="text-sm font-mono font-semibold text-fg-soft">
                   HTML with inline CSS variables
                 </h4>
               </div>
@@ -478,7 +473,7 @@ export default function PerfectBorderGenerator({ onToast }) {
           {copyMode === "tailwind" && (
             <div>
               <div className="flex items-center justify-between mb-1">
-                <h4 className="text-sm font-mono font-semibold text-stone-700 dark:text-stone-200">
+                <h4 className="text-sm font-mono font-semibold text-fg-soft">
                   Tailwind v4
                 </h4>
               </div>
@@ -491,7 +486,7 @@ export default function PerfectBorderGenerator({ onToast }) {
             </div>
           )}
         </section>
-      </div>
+      </Panel>
     </div>
   );
 }

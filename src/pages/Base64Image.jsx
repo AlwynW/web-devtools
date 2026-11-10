@@ -1,6 +1,9 @@
 import { useState, useCallback } from "react";
 import { UploadSimple, X } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 export default function Base64Image({ onToast }) {
   const [file, setFile] = useState(null);
@@ -64,24 +67,17 @@ export default function Base64Image({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Base64 Image Converter
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Drag and drop an image to get the Base64 string for CSS or HTML.
-        </p>
-      </header>
+      <PageHeader title="Base64 Image Converter" description="Drag and drop an image to get the Base64 string for CSS or HTML." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           className={`border-2 border-dashed p-12 text-center transition-colors ${
             dragOver
-              ? "border-stone-500 bg-stone-100/50 dark:bg-stone-900/50"
-              : "border-stone-300 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-500"
+              ? "border-focus bg-shell/50"
+              : "border-border-strong hover:border-border-muted"
           }`}
         >
           <input
@@ -95,23 +91,23 @@ export default function Base64Image({ onToast }) {
             htmlFor="base64-file-input"
             className="cursor-pointer flex flex-col items-center gap-3"
           >
-            <UploadSimple size={48} weight="thin" className="text-stone-400" />
-            <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
+            <UploadSimple size={48} weight="thin" className="text-fg-subtle" />
+            <span className="font-mono text-sm text-fg-muted">
               Drop an image here or click to browse
             </span>
           </label>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {file && base64 && (
           <>
             <div className="flex items-center gap-4">
-              <div className="w-32 h-32 border border-stone-200 dark:border-stone-700 overflow-hidden bg-stone-100 dark:bg-stone-900 shrink-0">
+              <div className="w-32 h-32 border border-border overflow-hidden bg-shell shrink-0">
                 <img
                   src={base64}
                   alt="Preview"
@@ -119,22 +115,22 @@ export default function Base64Image({ onToast }) {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-mono text-sm truncate text-stone-800 dark:text-stone-200">
+                <div className="font-mono text-sm truncate text-fg-soft">
                   {file.name}
                 </div>
-                <div className="text-xs font-mono text-stone-500">
+                <div className="text-xs font-mono text-fg-muted">
                   {(file.size / 1024).toFixed(1)} KB
                 </div>
                 <button
                   onClick={clear}
-                  className="mt-2 flex items-center gap-1 text-xs font-mono text-stone-500 hover:text-red-600"
+                  className="mt-2 flex items-center gap-1 text-xs font-mono text-fg-muted hover:text-red-600"
                 >
                   <X size={14} weight="thin" /> Clear
                 </button>
               </div>
             </div>
 
-            <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
               {[
                 { id: "raw", label: "Raw" },
                 { id: "css", label: "CSS url()" },
@@ -145,8 +141,8 @@ export default function Base64Image({ onToast }) {
                   onClick={() => setFormat(m.id)}
                   className={`px-3 py-1.5 transition-colors ${
                     format === m.id
-                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                      : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                      : "text-fg-muted hover:bg-hover-muted"
                   }`}
                 >
                   {m.label}
@@ -160,7 +156,7 @@ export default function Base64Image({ onToast }) {
             />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

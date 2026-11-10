@@ -3,6 +3,11 @@ import { ArrowsClockwise } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
 import useOnlineStatus from "../hooks/useOnlineStatus";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
+import { WarningBanner } from "../components/ui/ErrorBanner";
 
 const fetchIp = async (version = "4") => {
   const url =
@@ -64,32 +69,25 @@ export default function WhatsMyIp({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          What&apos;s my IP?
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Your public IP address as seen from the internet.
-        </p>
-      </header>
+      <PageHeader title={<>What&apos;s my IP?</>} description="Your public IP address as seen from the internet." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         {!online && (
-          <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-sm font-mono">
+          <WarningBanner className="p-4 text-sm font-mono">
             Needs network. Connect to look up your public IP.
-          </div>
+          </WarningBanner>
         )}
 
         {online && loading && (
-          <div className="text-center py-8 text-stone-500">
+          <div className="text-center py-8 text-fg-muted">
             Fetching your IP...
           </div>
         )}
 
         {online && error && !loading && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {online && !loading && !error && (
@@ -97,9 +95,9 @@ export default function WhatsMyIp({ onToast }) {
             <div className="space-y-4">
               {ipv4 && (
                 <div>
-                  <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                  <Label>
                     IPv4
-                  </label>
+                  </Label>
                   <CopyArea
                     text={ipv4}
                     onCopySuccess={() => onToast("IPv4 copied!")}
@@ -108,9 +106,9 @@ export default function WhatsMyIp({ onToast }) {
               )}
               {ipv6 && (
                 <div>
-                  <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                  <Label>
                     IPv6
-                  </label>
+                  </Label>
                   <CopyArea
                     text={ipv6}
                     onCopySuccess={() => onToast("IPv6 copied!")}
@@ -134,7 +132,7 @@ export default function WhatsMyIp({ onToast }) {
             </Button>
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

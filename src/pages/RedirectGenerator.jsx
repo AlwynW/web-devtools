@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 export default function RedirectGenerator({ onToast }) {
   const [path, setPath] = useState("/old");
@@ -27,41 +29,34 @@ export default function RedirectGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Redirect rules
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Snippets for Netlify, Vercel, nginx, Apache httpd.
-        </p>
-      </header>
+      <PageHeader title="Redirect rules" description="Snippets for Netlify, Vercel, nginx, Apache httpd." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4 font-mono text-sm">
+      <Panel className="space-y-4 font-mono text-sm">
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="sm:col-span-1">
-            <label className="block text-[11px] text-stone-500 mb-1">Path</label>
+            <label className="block text-[11px] text-fg-muted mb-1">Path</label>
             <input
               value={path}
               onChange={(e) => setPath(e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong bg-surface text-fg"
             />
           </div>
           <div className="sm:col-span-1">
-            <label className="block text-[11px] text-stone-500 mb-1">
+            <label className="block text-[11px] text-fg-muted mb-1">
               Target URL or path
             </label>
             <input
               value={target}
               onChange={(e) => setTarget(e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] text-stone-500 mb-1">Code</label>
+            <label className="block text-[11px] text-fg-muted mb-1">Code</label>
             <select
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong bg-surface text-fg"
             >
               <option value="301">301</option>
               <option value="302">302</option>
@@ -78,18 +73,18 @@ export default function RedirectGenerator({ onToast }) {
           { title: "Apache mod_alias", body: blocks.apache },
         ].map((sec) => (
           <div key={sec.title}>
-            <span className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-2">
+            <span className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-2">
               {sec.title}
             </span>
             <CopyPre
               text={sec.body}
               onCopySuccess={() => onToast("Copied!")}
-              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
-              preClassName="p-3 text-xs whitespace-pre-wrap break-all text-stone-800 dark:text-stone-200"
+              className="border border-border bg-surface-code"
+              preClassName="p-3 text-xs whitespace-pre-wrap break-all text-fg-soft"
             />
           </div>
         ))}
-      </div>
+      </Panel>
     </div>
   );
 }

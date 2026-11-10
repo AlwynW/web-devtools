@@ -1,5 +1,8 @@
 import { useState, useMemo } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 function generateMetaTags(fields) {
   const { title, description, url, imageUrl, siteName, twitterHandle } = fields;
@@ -63,16 +66,9 @@ export default function MetaTagGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Meta Tag Generator
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Generate Open Graph and Twitter Card meta tags for SEO and social sharing.
-        </p>
-      </header>
+      <PageHeader title="Meta Tag Generator" description="Generate Open Graph and Twitter Card meta tags for SEO and social sharing." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         {[
           { key: "title", label: "Title", value: title, set: setTitle },
           { key: "description", label: "Description", value: description, set: setDescription },
@@ -82,28 +78,28 @@ export default function MetaTagGenerator({ onToast }) {
           { key: "twitterHandle", label: "Twitter handle (e.g. @username)", value: twitterHandle, set: setTwitterHandle },
         ].map(({ key, label, value, set }) => (
           <div key={key}>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+            <Label className="mb-1">
               {label}
-            </label>
+            </Label>
             <input
               type="text"
               value={value}
               onChange={(e) => set(e.target.value)}
               placeholder={label}
-              className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
         ))}
 
         {output && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2 mt-6">
+            <Label className="mt-6">
               Generated HTML
-            </label>
+            </Label>
             <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

@@ -18,12 +18,14 @@ import {
   loadImageFile,
   renderAssetGrid,
 } from "../utils/assetGridComposer";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const INPUT_CLASS =
-  "w-full px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100";
+  "w-full px-3 py-2 bg-surface border border-border-strong rounded-control font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg";
 
 const LABEL_CLASS =
-  "block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2";
+  "field-label mb-2";
 
 const ZERO_TRIM = { top: 0, bottom: 0, left: 0, right: 0 };
 
@@ -261,26 +263,19 @@ export default function AssetGridComposer({ onToast }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Composition
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Compose multiple images on one canvas and export PNG or JPG.
-        </p>
-      </header>
+      <PageHeader title="Composition" description="Compose multiple images on one canvas and export PNG or JPG." />
 
       <div className="space-y-6">
-        <section className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <Panel as="section" className="space-y-4">
           <div className="flex items-center justify-between gap-3">
-            <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+            <h3 className="field-label">
               Images
             </h3>
             {images.length > 0 && (
               <button
                 type="button"
                 onClick={clearAll}
-                className="flex items-center gap-1 text-xs font-mono text-stone-500 hover:text-red-600 dark:hover:text-red-400"
+                className="flex items-center gap-1 text-xs font-mono text-fg-muted hover:text-red-600 dark:hover:text-red-400"
               >
                 <X size={14} weight="thin" /> Clear all
               </button>
@@ -303,8 +298,8 @@ export default function AssetGridComposer({ onToast }) {
               images.length ? "p-6" : "p-12"
             } ${
               dragOver
-                ? "border-stone-500 bg-stone-100/50 dark:bg-stone-800/50"
-                : "border-stone-300 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-500"
+                ? "border-focus bg-shell/50"
+                : "border-border-strong hover:border-border-muted"
             }`}
           >
             <input
@@ -319,8 +314,8 @@ export default function AssetGridComposer({ onToast }) {
               }}
             />
             <div className="flex flex-col items-center gap-3 pointer-events-none">
-              <UploadSimple size={images.length ? 32 : 48} weight="thin" className="text-stone-400" />
-              <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
+              <UploadSimple size={images.length ? 32 : 48} weight="thin" className="text-fg-subtle" />
+              <span className="font-mono text-sm text-fg-muted">
                 Drop images here or click to browse
               </span>
             </div>
@@ -331,7 +326,7 @@ export default function AssetGridComposer({ onToast }) {
               {images.map((item, index) => (
                 <li
                   key={item.id}
-                  className="group relative aspect-square bg-stone-100 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 overflow-hidden"
+                  className="group relative aspect-square bg-stage border border-border overflow-hidden"
                 >
                   <img
                     src={item.objectUrl}
@@ -345,7 +340,7 @@ export default function AssetGridComposer({ onToast }) {
                         aria-label="Move left"
                         onClick={() => moveAt(index, -1)}
                         disabled={index === 0}
-                        className="p-1.5 bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 disabled:opacity-40"
+                        className="p-1.5 bg-primary text-primary-fg rounded-button disabled:opacity-40"
                       >
                         <CaretLeft size={16} weight="thin" />
                       </button>
@@ -354,7 +349,7 @@ export default function AssetGridComposer({ onToast }) {
                         aria-label="Move right"
                         onClick={() => moveAt(index, 1)}
                         disabled={index === images.length - 1}
-                        className="p-1.5 bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 disabled:opacity-40"
+                        className="p-1.5 bg-primary text-primary-fg rounded-button disabled:opacity-40"
                       >
                         <CaretRight size={16} weight="thin" />
                       </button>
@@ -372,10 +367,10 @@ export default function AssetGridComposer({ onToast }) {
               ))}
             </ul>
           )}
-        </section>
+        </Panel>
 
-        <section className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-5">
-          <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <Panel as="section" className="space-y-5">
+          <h3 className="field-label">
             Settings
           </h3>
 
@@ -432,7 +427,7 @@ export default function AssetGridComposer({ onToast }) {
               <button
                 type="button"
                 onClick={fitHeight}
-                className="mt-2 text-[10px] font-mono uppercase tracking-wider text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"
+                className="mt-2 text-[10px] font-mono uppercase tracking-wider text-fg-muted hover:text-fg"
               >
                 Fit height to grid
               </button>
@@ -455,7 +450,7 @@ export default function AssetGridComposer({ onToast }) {
 
           <div>
             <p className={LABEL_CLASS}>Image fit</p>
-            <div className="flex flex-wrap gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+            <div className="flex flex-wrap gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
               {FIT_MODES.map((m) => (
                 <button
                   key={m.id}
@@ -463,28 +458,28 @@ export default function AssetGridComposer({ onToast }) {
                   onClick={() => setFitMode(m.id)}
                   className={`px-3 py-1.5 transition-colors ${
                     fitMode === m.id
-                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                      : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                      : "text-fg-muted hover:bg-hover-muted"
                   }`}
                 >
                   {m.label}
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-[10px] font-mono text-stone-500 dark:text-stone-400">
+            <p className="mt-2 text-[10px] font-mono text-fg-muted">
               Cover crops to fill, contain keeps the full image, fill stretches.
             </p>
           </div>
 
           <div>
             <div className="flex items-center justify-between gap-3 mb-2">
-              <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <p className="field-label">
                 Trim (px)
               </p>
               <button
                 type="button"
                 onClick={() => setTrim(ZERO_TRIM)}
-                className="text-[10px] font-mono uppercase tracking-wider text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"
+                className="text-[10px] font-mono uppercase tracking-wider text-fg-muted hover:text-fg"
               >
                 Reset trims
               </button>
@@ -497,7 +492,7 @@ export default function AssetGridComposer({ onToast }) {
                 { key: "right", label: "Right" },
               ].map((side) => (
                 <div key={side.key}>
-                  <label className="block text-[10px] font-mono text-stone-400 uppercase mb-1 text-center">
+                  <label className="block text-[10px] font-mono text-fg-subtle uppercase mb-1 text-center">
                     {side.label}
                   </label>
                   <input
@@ -518,34 +513,34 @@ export default function AssetGridComposer({ onToast }) {
                 </div>
               ))}
             </div>
-            <p className="mt-2 text-[10px] font-mono text-stone-500 dark:text-stone-400">
+            <p className="mt-2 text-[10px] font-mono text-fg-muted">
               Drag handles on the composition to trim.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-stone-200 dark:border-stone-800">
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border">
             <Button onClick={() => save("png")} icon={DownloadSimple}>
               Save PNG
             </Button>
             <Button onClick={() => save("jpeg")} icon={DownloadSimple} >
               Save JPG
             </Button>
-            <span className="text-[10px] font-mono text-stone-400 uppercase tracking-tighter">
+            <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
               {exportDims.width}×{exportDims.height}
             </span>
           </div>
-        </section>
+        </Panel>
 
-        <section className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <Panel as="section" className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+            <h3 className="field-label">
               Composition
             </h3>
             <div className="flex gap-4 items-center">
-              <span className="text-[10px] font-mono text-stone-400 uppercase tracking-tighter">
+              <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
                 Base: {canvasWidth}×{canvasHeight}
               </span>
-              <span className="text-[10px] font-mono text-stone-600 dark:text-stone-300 uppercase tracking-tighter">
+              <span className="text-[10px] font-mono text-fg-muted uppercase tracking-tighter">
                 Export: {exportDims.width}×{exportDims.height}
               </span>
             </div>
@@ -553,7 +548,7 @@ export default function AssetGridComposer({ onToast }) {
 
           <div
             ref={wrapperRef}
-            className="relative border border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-950 flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]"
+            className="relative border border-border bg-stage flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]"
           >
             <div className="relative inline-block max-w-full">
               <canvas
@@ -603,7 +598,7 @@ export default function AssetGridComposer({ onToast }) {
               </div>
             </div>
           </div>
-        </section>
+        </Panel>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import { useMemo, useState, useCallback } from "react";
 import CopyButton from "../components/CopyButton";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const labels = [
   { key: "r", name: "Read" },
@@ -35,21 +37,21 @@ function tripleFromOctal(octal) {
 
 function ChmodRow({ title, state, section, onToggle }) {
   return (
-    <div className="flex flex-wrap items-center gap-4 py-3 border-b border-stone-200 dark:border-stone-700 last:border-0">
-      <div className="w-20 text-xs font-mono text-stone-500 uppercase tracking-wider">
+    <div className="flex flex-wrap items-center gap-4 py-3 border-b border-border last:border-0">
+      <div className="w-20 text-xs font-mono text-fg-muted uppercase tracking-wider">
         {title}
       </div>
       <div className="flex gap-2">
         {labels.map(({ key, name }) => (
           <label
             key={key}
-            className="flex items-center gap-2 cursor-pointer font-mono text-sm text-stone-800 dark:text-stone-200"
+            className="flex items-center gap-2 cursor-pointer font-mono text-sm text-fg-soft"
           >
             <input
               type="checkbox"
               checked={state[key]}
               onChange={() => onToggle(section, key)}
-              className="rounded border-stone-400"
+              className="rounded border-border-muted"
             />
             <span title={name}>{key}</span>
           </label>
@@ -97,16 +99,9 @@ export default function ChmodCalculator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          chmod Calculator
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Toggle rwx for owner, group, and other. Octal updates live.
-        </p>
-      </header>
+      <PageHeader title="chmod Calculator" description="Toggle rwx for owner, group, and other. Octal updates live." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <ChmodRow
           title="Owner"
           state={owner}
@@ -128,53 +123,53 @@ export default function ChmodCalculator({ onToast }) {
 
         <div className="grid sm:grid-cols-2 gap-4 pt-2">
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
               Octal (3 digits)
             </label>
-            <p className="text-[11px] font-mono text-stone-500 mb-2">
+            <p className="text-[11px] font-mono text-fg-muted mb-2">
               Live from toggles:{" "}
-              <strong className="text-stone-800 dark:text-stone-200">{octStr}</strong>
+              <strong className="text-fg-soft">{octStr}</strong>
             </p>
             <div className="flex gap-2">
               <input
                 value={octInput}
                 onChange={(e) => setOctInput(e.target.value)}
-                className="flex-1 p-3 font-mono text-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="flex-1 p-3 font-mono text-lg border border-border-strong bg-surface text-fg"
                 maxLength={3}
                 placeholder="e.g. 644"
               />
               <button
                 type="button"
                 onClick={applyOctal}
-                className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900"
+                className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
               >
                 Apply
               </button>
             </div>
           </div>
           <div className="space-y-2 font-mono text-sm">
-            <div className="flex justify-between items-center border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950">
-              <span className="text-stone-500">Octal</span>
+            <div className="flex justify-between items-center border border-border p-3 bg-surface-code">
+              <span className="text-fg-muted">Octal</span>
               <div className="flex items-center gap-2">
-                <span className="text-stone-900 dark:text-stone-100 font-semibold font-mono">
+                <span className="text-fg font-semibold font-mono">
                   {octStr}
                 </span>
                 <CopyButton text={octStr} onCopySuccess={copyToast} size={16} />
               </div>
             </div>
-            <div className="flex justify-between items-center border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950">
-              <span className="text-stone-500">Symbolic</span>
+            <div className="flex justify-between items-center border border-border p-3 bg-surface-code">
+              <span className="text-fg-muted">Symbolic</span>
               <div className="flex items-center gap-2">
-                <span className="text-stone-900 dark:text-stone-100 font-mono">
+                <span className="text-fg font-mono">
                   {symbolic}
                 </span>
                 <CopyButton text={symbolic} onCopySuccess={copyToast} size={16} />
               </div>
             </div>
-            <div className="flex justify-between items-center border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950 gap-2">
-              <span className="text-stone-500 shrink-0">chmod</span>
+            <div className="flex justify-between items-center border border-border p-3 bg-surface-code gap-2">
+              <span className="text-fg-muted shrink-0">chmod</span>
               <div className="flex items-center gap-2 min-w-0">
-                <span className="text-xs text-left text-stone-800 dark:text-stone-200 font-mono break-all">
+                <span className="text-xs text-left text-fg-soft font-mono break-all">
                   chmod {octStr} file
                 </span>
                 <CopyButton
@@ -187,7 +182,7 @@ export default function ChmodCalculator({ onToast }) {
             </div>
           </div>
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

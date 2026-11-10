@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { MIME_BY_EXT } from "../data/mimeTypes";
 import CopyButton from "../components/CopyButton";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const entries = Object.entries(MIME_BY_EXT).sort(([a], [b]) =>
   a.localeCompare(b),
@@ -28,32 +30,25 @@ export default function MimeLookup({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          MIME lookup
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Extension to MIME type. Pick a file to read browser{" "}
-          <code className="text-stone-600 dark:text-stone-300">File.type</code>.
-        </p>
-      </header>
+      <PageHeader title="MIME lookup" description={<>Extension to MIME type. Pick a file to read browser{" "}
+          <code className="text-fg-muted">File.type</code>.</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <input
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search extension or MIME (e.g. svg, json, image/)"
-          className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+          className="w-full p-4 border border-border-strong font-mono text-sm bg-surface text-fg"
         />
-        <label className="inline-flex items-center gap-2 text-xs font-mono text-stone-600 dark:text-stone-400 cursor-pointer border border-dashed border-stone-400 dark:border-stone-600 px-3 py-2">
+        <label className="inline-flex items-center gap-2 text-xs font-mono text-fg-muted cursor-pointer border border-dashed border-border-muted px-3 py-2">
           <input type="file" className="sr-only" onChange={onFile} />
           Choose file (hint only)
         </label>
 
-        <div className="max-h-[28rem] overflow-y-auto border border-stone-200 dark:border-stone-700">
+        <div className="max-h-[28rem] overflow-y-auto border border-border">
           <table className="w-full text-left text-sm font-mono">
-            <thead className="sticky top-0 bg-stone-100 dark:bg-stone-800 text-[11px] uppercase tracking-wider text-stone-500">
+            <thead className="sticky top-0 bg-hover-muted text-[11px] uppercase tracking-wider text-fg-muted">
               <tr>
                 <th className="p-2 pl-3">Ext</th>
                 <th className="p-2">MIME</th>
@@ -64,12 +59,12 @@ export default function MimeLookup({ onToast }) {
               {filtered.map(([ext, mime]) => (
                 <tr
                   key={ext}
-                  className="border-t border-stone-100 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-950 group"
+                  className="border-t border-border hover:bg-hover dark:hover:bg-stone-950 group"
                 >
-                  <td className="p-2 pl-3 text-stone-800 dark:text-stone-200">
+                  <td className="p-2 pl-3 text-fg-soft">
                     .{ext}
                   </td>
-                  <td className="p-2 text-stone-600 dark:text-stone-400 break-all">
+                  <td className="p-2 text-fg-muted break-all">
                     {mime}
                   </td>
                   <td className="p-2">
@@ -85,10 +80,10 @@ export default function MimeLookup({ onToast }) {
             </tbody>
           </table>
           {!filtered.length && (
-            <p className="p-6 text-sm text-stone-500 text-center">No matches.</p>
+            <p className="p-6 text-sm text-fg-muted text-center">No matches.</p>
           )}
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

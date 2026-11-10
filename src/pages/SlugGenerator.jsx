@@ -1,5 +1,10 @@
 import { useState, useMemo } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import Input, { Textarea } from "../components/ui/Input";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const DEFAULT_REPLACEMENTS = [
   { from: "&", to: "and" },
@@ -82,60 +87,46 @@ export default function SlugGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Slug Generator
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Convert text to URL-friendly slugs with full options.
-        </p>
-      </header>
+      <PageHeader title="Slug Generator" description="Convert text to URL-friendly slugs with full options." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Input text
-          </label>
-          <textarea
+          </Label>
+          <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Hello World! This is a title."
-            className="w-full h-24 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="h-24"
           />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Separator
-            </label>
-            <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
-              {["-", "_"].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSeparator(s)}
-                  className={`px-3 py-1.5 transition-colors ${
-                    separator === s
-                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                      : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
-                  }`}
-                >
-                  {s === "-" ? "hyphen" : "underscore"}
-                </button>
-              ))}
-            </div>
+            </Label>
+            <SegmentedControl
+              aria-label="Separator"
+              value={separator}
+              onChange={setSeparator}
+              options={[
+                { value: "-", label: "hyphen" },
+                { value: "_", label: "underscore" },
+              ]}
+            />
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Max length
-            </label>
-            <input
+            </Label>
+            <Input
               type="number"
               value={maxLength}
               onChange={(e) => setMaxLength(e.target.value)}
               placeholder="No limit"
               min="1"
-              className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
             />
           </div>
         </div>
@@ -146,38 +137,38 @@ export default function SlugGenerator({ onToast }) {
               type="checkbox"
               checked={lowercase}
               onChange={(e) => setLowercase(e.target.checked)}
-              className="border-stone-400 focus:ring-stone-500"
+              className="border-border-muted focus:ring-focus"
             />
-            <span className="text-sm font-mono text-stone-600 dark:text-stone-300">Lowercase</span>
+            <span className="text-sm font-mono text-fg-muted">Lowercase</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={stripSpecialChars}
               onChange={(e) => setStripSpecialChars(e.target.checked)}
-              className="border-stone-400 focus:ring-stone-500"
+              className="border-border-muted focus:ring-focus"
             />
-            <span className="text-sm font-mono text-stone-600 dark:text-stone-300">Strip special chars</span>
+            <span className="text-sm font-mono text-fg-muted">Strip special chars</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={preserveUnicode}
               onChange={(e) => setPreserveUnicode(e.target.checked)}
-              className="border-stone-400 focus:ring-stone-500"
+              className="border-border-muted focus:ring-focus"
             />
-            <span className="text-sm font-mono text-stone-600 dark:text-stone-300">Preserve unicode</span>
+            <span className="text-sm font-mono text-fg-muted">Preserve unicode</span>
           </label>
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+            <Label>
               Custom replacements
-            </label>
+            </Label>
             <button
               onClick={addReplacement}
-              className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+              className="text-xs font-mono text-fg-muted hover:text-fg"
             >
               + Add
             </button>
@@ -190,19 +181,19 @@ export default function SlugGenerator({ onToast }) {
                   value={r.from}
                   onChange={(e) => updateReplacement(i, "from", e.target.value)}
                   placeholder="from"
-                  className="flex-1 p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm"
+                  className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
                 />
-                <span className="text-stone-400">→</span>
+                <span className="text-fg-subtle">→</span>
                 <input
                   type="text"
                   value={r.to}
                   onChange={(e) => updateReplacement(i, "to", e.target.value)}
                   placeholder="to"
-                  className="flex-1 p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm"
+                  className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
                 />
                 <button
                   onClick={() => removeReplacement(i)}
-                  className="p-2 text-stone-500 hover:text-red-600"
+                  className="p-2 text-fg-muted hover:text-red-600"
                   title="Remove"
                 >
                   ×
@@ -214,13 +205,13 @@ export default function SlugGenerator({ onToast }) {
 
         {output && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Output slug
-            </label>
+            </Label>
             <CopyArea text={output} onCopySuccess={() => onToast("Copied!")} />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

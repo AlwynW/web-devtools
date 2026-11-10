@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import CopyButton from "../components/CopyButton";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 export default function ClampGenerator({ onToast }) {
   const [minPx, setMinPx] = useState(16);
@@ -55,73 +57,66 @@ export default function ClampGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          CSS clamp()
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Linear fluid sizing between viewport bounds (min/max in px, output rem
-          or px).
-        </p>
-      </header>
+      <PageHeader title="CSS clamp()" description={<>Linear fluid sizing between viewport bounds (min/max in px, output rem
+          or px).</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6 font-mono text-sm">
+      <Panel className="space-y-6 font-mono text-sm">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Min (px)
             </label>
             <input
               type="number"
               value={minPx}
               onChange={(e) => setMinPx(+e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Max (px)
             </label>
             <input
               type="number"
               value={maxPx}
               onChange={(e) => setMaxPx(+e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Viewport min (px)
             </label>
             <input
               type="number"
               value={vpMin}
               onChange={(e) => setVpMin(+e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Viewport max (px)
             </label>
             <input
               type="number"
               value={vpMax}
               onChange={(e) => setVpMax(+e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 border border-border-strong bg-surface text-fg"
             />
           </div>
         </div>
 
         <div className="flex flex-wrap gap-4 items-end">
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Output unit
             </label>
             <select
               value={unit}
               onChange={(e) => setUnit(e.target.value)}
-              className="p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="p-3 border border-border-strong bg-surface text-fg"
             >
               <option value="rem">rem</option>
               <option value="px">px</option>
@@ -129,40 +124,40 @@ export default function ClampGenerator({ onToast }) {
           </div>
           {unit === "rem" && (
             <div>
-              <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+              <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
                 Root font size (px)
               </label>
               <input
                 type="number"
                 value={rootPx}
                 onChange={(e) => setRootPx(+e.target.value)}
-                className="w-24 p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="w-24 p-3 border border-border-strong bg-surface text-fg"
               />
             </div>
           )}
         </div>
 
         <div>
-          <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-2">
+          <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-2">
             Result
           </label>
           <CopyPre
             text={clampCss}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
-            preClassName="p-4 text-stone-800 dark:text-stone-200 text-xs break-all whitespace-pre-wrap"
+            className="border border-border bg-surface-code"
+            preClassName="p-4 text-fg-soft text-xs break-all whitespace-pre-wrap"
           />
-          <p className="text-[11px] text-stone-500 mt-2">
+          <p className="text-[11px] text-fg-muted mt-2">
             vw slope ≈ {preferredVw.toFixed(3)} (linear interpolation in px
             space)
           </p>
         </div>
 
         <div>
-          <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-2">
+          <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-2">
             Computed size at sample widths (px)
           </label>
-          <ul className="text-xs space-y-1 border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950 max-h-40 overflow-y-auto">
+          <ul className="text-xs space-y-1 border border-border p-3 bg-surface-code max-h-40 overflow-y-auto">
             {samples.map(({ w, px }) => (
               <li key={w}>
                 {w}px viewport → <strong>{px}px</strong>
@@ -170,7 +165,7 @@ export default function ClampGenerator({ onToast }) {
             ))}
           </ul>
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

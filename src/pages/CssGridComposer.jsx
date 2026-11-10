@@ -7,11 +7,11 @@ import {
   subCellSize,
   clamp,
 } from "../utils/cssGridComposer";
+import PageHeader from "../components/ui/PageHeader";
 
 const inputClass =
-  "w-full p-2.5 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100";
-const labelClass =
-  "block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1";
+  "w-full p-2.5 border border-border-strong rounded-control bg-surface text-fg";
+const labelClass = "field-label mb-1";
 
 const DIST_MIN = 1;
 const DIST_MAX = 400;
@@ -41,8 +41,8 @@ function Field({ label, children }) {
 
 function LineStyleControls({ title, value, onChange }) {
   return (
-    <div className="space-y-3 border border-stone-200 dark:border-stone-800 p-4">
-      <p className="text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em]">
+    <div className="space-y-3 border border-border p-4">
+      <p className="text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
         {title}
       </p>
       <div className="grid grid-cols-2 gap-3">
@@ -62,7 +62,7 @@ function LineStyleControls({ title, value, onChange }) {
             type="color"
             value={value.color}
             onChange={(e) => onChange({ ...value, color: e.target.value })}
-            className="h-10 w-full cursor-pointer border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900"
+            className="h-10 w-full cursor-pointer border border-border-strong bg-surface"
           />
         </Field>
         <Field label={`Width (${value.width}px)`}>
@@ -209,22 +209,15 @@ export default function CssGridComposer({ onToast }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Grid Composer
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Perspective grids via repeating-linear-gradient and CSS transforms.
-        </p>
-      </header>
+      <PageHeader title="Grid Composer" description="Perspective grids via repeating-linear-gradient and CSS transforms." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6 font-mono text-sm">
+      <div className="bg-surface p-6 border border-border rounded-panel space-y-6 font-mono text-sm">
         {/* Preview: clip shell → perspective scene → transformed plane */}
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
             <label className={labelClass + " mb-0"}>Preview</label>
             <div className="flex flex-wrap items-center gap-4">
-              <label className="flex items-center gap-2 text-[11px] text-stone-500 cursor-pointer">
+              <label className="flex items-center gap-2 text-[11px] text-fg-muted cursor-pointer">
                 <input
                   type="checkbox"
                   checked={enable3d}
@@ -233,7 +226,7 @@ export default function CssGridComposer({ onToast }) {
                 3D transform
               </label>
               {enable3d && (
-                <label className="flex items-center gap-2 text-[11px] text-stone-500 cursor-pointer">
+                <label className="flex items-center gap-2 text-[11px] text-fg-muted cursor-pointer">
                   <input
                     type="checkbox"
                     checked={showVanishing}
@@ -245,7 +238,7 @@ export default function CssGridComposer({ onToast }) {
             </div>
           </div>
           <div
-            className="relative h-72 sm:h-96 border border-stone-300 dark:border-stone-700 overflow-hidden isolate"
+            className="relative h-72 sm:h-96 border border-border-strong overflow-hidden isolate"
             style={{ background: bgColor }}
           >
             <div
@@ -283,10 +276,10 @@ export default function CssGridComposer({ onToast }) {
         {/* Distance */}
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-[11px] text-stone-500 uppercase tracking-[0.18em]">
+            <p className="text-[11px] text-fg-muted uppercase tracking-[0.18em]">
               Distance
             </p>
-            <label className="flex items-center gap-2 text-[11px] text-stone-500 cursor-pointer">
+            <label className="flex items-center gap-2 text-[11px] text-fg-muted cursor-pointer">
               <input
                 type="checkbox"
                 checked={linkAxes}
@@ -343,7 +336,7 @@ export default function CssGridComposer({ onToast }) {
         {/* Subgrid — subdivisions per major cell */}
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <label className="flex items-center gap-2 text-[11px] text-stone-500 uppercase tracking-[0.18em] cursor-pointer">
+            <label className="flex items-center gap-2 text-[11px] text-fg-muted uppercase tracking-[0.18em] cursor-pointer">
               <input
                 type="checkbox"
                 checked={subEnabled}
@@ -352,7 +345,7 @@ export default function CssGridComposer({ onToast }) {
               Subgrid
             </label>
             {subEnabled && (
-              <label className="flex items-center gap-2 text-[11px] text-stone-500 cursor-pointer">
+              <label className="flex items-center gap-2 text-[11px] text-fg-muted cursor-pointer">
                 <input
                   type="checkbox"
                   checked={linkSub}
@@ -435,7 +428,7 @@ export default function CssGridComposer({ onToast }) {
         {enable3d && (
           <>
             <div className="space-y-3">
-              <p className="text-[11px] text-stone-500 uppercase tracking-[0.18em]">
+              <p className="text-[11px] text-fg-muted uppercase tracking-[0.18em]">
                 3D angle
               </p>
               <div className="grid sm:grid-cols-3 gap-4">
@@ -473,7 +466,7 @@ export default function CssGridComposer({ onToast }) {
             </div>
 
             <div className="space-y-3">
-              <p className="text-[11px] text-stone-500 uppercase tracking-[0.18em]">
+              <p className="text-[11px] text-fg-muted uppercase tracking-[0.18em]">
                 Perspective point
               </p>
               <div className="grid sm:grid-cols-3 gap-4">
@@ -518,7 +511,7 @@ export default function CssGridComposer({ onToast }) {
             type="color"
             value={bgColor}
             onChange={(e) => setBgColor(e.target.value)}
-            className="h-10 w-24 cursor-pointer border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900"
+            className="h-10 w-24 cursor-pointer border border-border-strong bg-surface"
           />
         </Field>
 
@@ -527,8 +520,8 @@ export default function CssGridComposer({ onToast }) {
           <CopyPre
             text={cssOutput}
             onCopySuccess={() => onToast?.("Copied!")}
-            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-72 overflow-auto"
-            preClassName="p-4 text-stone-800 dark:text-stone-200 text-xs whitespace-pre-wrap break-all"
+            className="border border-border bg-surface-code max-h-72 overflow-auto"
+            preClassName="p-4 text-fg-soft text-xs whitespace-pre-wrap break-all"
           />
         </div>
       </div>

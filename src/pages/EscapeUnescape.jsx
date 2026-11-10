@@ -1,5 +1,9 @@
 import { useState, useMemo } from "react";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const CONTEXTS = [
   { id: "json", label: "JSON" },
@@ -90,30 +94,23 @@ export default function EscapeUnescape({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Escape / Unescape
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Escape strings for JSON, regex, SQL, HTML, or shell.
-        </p>
-      </header>
+      <PageHeader title="Escape / Unescape" description="Escape strings for JSON, regex, SQL, HTML, or shell." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div className="flex flex-wrap gap-4 items-center">
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+            <Label className="mb-1">
               Context
-            </label>
-            <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-[11px] flex-wrap">
+            </Label>
+            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px] flex-wrap">
               {CONTEXTS.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => setContext(c.id)}
                   className={`px-3 py-1.5 transition-colors ${
                     context === c.id
-                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                      : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                      ? "bg-primary text-primary-fg rounded-button"
+                      : "text-fg-muted hover:bg-hover-muted"
                   }`}
                 >
                   {c.label}
@@ -122,16 +119,16 @@ export default function EscapeUnescape({ onToast }) {
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+            <Label className="mb-1">
               Mode
-            </label>
-            <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-[11px]">
+            </Label>
+            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
               <button
                 onClick={() => setMode("escape")}
                 className={`px-3 py-1.5 transition-colors ${
                   mode === "escape"
-                    ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                    : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                    ? "bg-primary text-primary-fg rounded-button"
+                    : "text-fg-muted hover:bg-hover-muted"
                 }`}
               >
                 Escape
@@ -140,8 +137,8 @@ export default function EscapeUnescape({ onToast }) {
                 onClick={() => setMode("unescape")}
                 className={`px-3 py-1.5 transition-colors ${
                   mode === "unescape"
-                    ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                    : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                    ? "bg-primary text-primary-fg rounded-button"
+                    : "text-fg-muted hover:bg-hover-muted"
                 }`}
               >
                 Unescape
@@ -151,35 +148,35 @@ export default function EscapeUnescape({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Input
-          </label>
+          </Label>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={mode === "escape" ? "Enter text to escape" : "Enter escaped text"}
-            className="w-full h-32 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full h-32 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 font-mono text-sm">
+          <ErrorBanner className="p-4 font-mono text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {output !== "" && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Output
-            </label>
+            </Label>
             <CopyArea
               text={typeof output === "string" ? output : JSON.stringify(output, null, 2)}
               onCopySuccess={() => onToast("Copied!")}
             />
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 /**
  * Very small curl-ish parser: flags and a single URL token.
@@ -135,22 +137,15 @@ export default function CurlConverter({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          cURL → fetch / axios
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Heuristic converter for common flags. Multipart, cookies, and exotic
-          options are skipped with a warning.
-        </p>
-      </header>
+      <PageHeader title="cURL → fetch / axios" description={<>Heuristic converter for common flags. Multipart, cookies, and exotic
+          options are skipped with a warning.</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={4}
-          className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+          className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
         />
 
         {parsed.error && (
@@ -159,7 +154,7 @@ export default function CurlConverter({ onToast }) {
           </p>
         )}
         {parsed.warnings?.length > 0 && (
-          <ul className="text-xs font-mono text-stone-600 dark:text-stone-400 list-disc pl-5">
+          <ul className="text-xs font-mono text-fg-muted list-disc pl-5">
             {parsed.warnings.map((w, i) => (
               <li key={i}>{w}</li>
             ))}
@@ -171,18 +166,18 @@ export default function CurlConverter({ onToast }) {
           { title: "axios", code: `import axios from "axios";\n\n${axiosCode}` },
         ].map((b) => (
           <div key={b.title}>
-            <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+            <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
               {b.title}
             </span>
             <CopyPre
               text={b.code}
               onCopySuccess={() => onToast("Copied!")}
-              className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-56 overflow-y-auto"
-              preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+              className="border border-border bg-surface-code max-h-56 overflow-y-auto"
+              preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
             />
           </div>
         ))}
-      </div>
+      </Panel>
     </div>
   );
 }

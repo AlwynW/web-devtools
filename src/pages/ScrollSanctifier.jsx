@@ -143,7 +143,7 @@ function InlineScrollMessage({ id, topPx, text, onLeftViewport }) {
       style={{ top: topPx }}
     >
       <div
-        className={`w-full max-w-3xl py-3 px-4 rounded-md bg-white/95 dark:bg-stone-900/95 backdrop-blur-sm font-mono text-xs text-stone-800 dark:text-stone-200 transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+        className={`w-full max-w-3xl py-3 px-4 rounded-md bg-white/95 dark:bg-stone-900/95 backdrop-blur-sm font-mono text-xs text-fg-soft transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
           entered ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}
         role="note"
@@ -282,15 +282,15 @@ export default function ScrollSanctifier({ onToast }) {
 
   return (
     <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="fixed top-16 left-0 right-0 z-30 border-b border-stone-200 dark:border-stone-800 bg-stone-100/95 dark:bg-stone-900/95 backdrop-blur-sm">
+      <div className="fixed top-16 left-0 right-0 z-30 border-b border-border bg-shell/95 dark:bg-stone-900/95 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-4 py-2.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
           <div className="font-mono text-sm tabular-nums min-w-0">
-            <span className="text-stone-500 dark:text-stone-400">Lines scrolled: </span>
+            <span className="text-fg-muted">Lines scrolled: </span>
             <span
               className={
                 scrollingUp
                   ? "font-bold text-red-600 dark:text-red-400"
-                  : "font-bold text-stone-900 dark:text-stone-100"
+                  : "font-bold text-fg"
               }
             >
               {lines.toLocaleString()}
@@ -300,14 +300,14 @@ export default function ScrollSanctifier({ onToast }) {
             <button
               type="button"
               onClick={handleGetCertificate}
-              className="px-3 py-1.5 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900 hover:opacity-90"
+              className="px-3 py-1.5 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg hover:opacity-90"
             >
               Get certificate
             </button>
             <button
               type="button"
               onClick={handleFakeReturnToTop}
-              className="px-3 py-1.5 font-mono text-xs border border-stone-300 dark:border-stone-600 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-800"
+              className="px-3 py-1.5 font-mono text-xs border border-border-strong text-fg-soft hover:bg-secondary-hover"
             >
               Return to top
             </button>
@@ -317,13 +317,13 @@ export default function ScrollSanctifier({ onToast }) {
 
       <div className="max-w-3xl mx-auto pt-[5.5rem] px-4 sm:px-0 pb-8">
         <header className="mb-10 text-center space-y-4">
-          <p className="text-[10px] sm:text-[11px] font-mono tracking-[0.35em] text-stone-500 dark:text-stone-500 uppercase">
+          <p className="text-[10px] sm:text-[11px] font-mono tracking-[0.35em] text-fg-muted uppercase">
             Rite of descent
           </p>
-          <h2 className="text-5xl sm:text-6xl font-black tracking-tight text-stone-900 dark:text-stone-50 leading-none">
+          <h2 className="text-5xl sm:text-6xl font-black tracking-tight text-fg-strong leading-none">
             Scroll sanctifier
           </h2>
-          <p className="text-sm sm:text-base font-mono text-stone-600 dark:text-stone-400 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base font-mono text-fg-muted leading-relaxed max-w-2xl mx-auto">
             The abyss below has no floor—only appetite. It lengthens as you
             near its threshold, swallowing distance on your behalf. The tally
             hungers for downward resolve: climb backward and the count
@@ -335,7 +335,7 @@ export default function ScrollSanctifier({ onToast }) {
           </p>
         </header>
 
-        <div className="bg-stone-950 text-stone-100 p-8 sm:p-10 border border-stone-700 dark:border-stone-600 shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset] space-y-5">
+        <div className="bg-stone-950 text-stone-100 p-8 sm:p-10 border border-border-strong shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset] space-y-5">
           <p className="font-serif text-lg sm:text-xl leading-snug text-stone-100 italic">
             You are witnessed. Every line surrendered to the fall is etched
             into nothing—and that nothing is enough. Whispers may rise from the
@@ -343,7 +343,7 @@ export default function ScrollSanctifier({ onToast }) {
             not chained to the earth; look away, scroll past, and they dissolve
             like breath on glass.
           </p>
-          <p className="font-mono text-xs sm:text-sm text-stone-400 leading-relaxed border-t border-stone-700 pt-5">
+          <p className="font-mono text-xs sm:text-sm text-fg-subtle leading-relaxed border-t border-border-strong pt-5">
             When your pilgrimage feels sufficient, seal it in ink: claim your
             certificate. Should you swear an oath to the summit before your
             covenant is complete—know that some doors open only to mock the

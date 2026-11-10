@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import QRCode from "qrcode";
 import { DownloadSimple, QrCode } from "phosphor-react";
 import QrReader from "../components/QrReader";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const MODES = [
   { id: "text", label: "Text" },
@@ -159,17 +163,10 @@ export default function QrCodeGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          QR Code
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Generate a code from text, or read one from an image, clipboard, or camera.
-        </p>
-      </header>
+      <PageHeader title="QR Code" description="Generate a code from text, or read one from an image, clipboard, or camera." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+      <Panel className="space-y-6">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
           {DIRECTIONS.map((item) => (
             <button
               key={item.id}
@@ -178,8 +175,8 @@ export default function QrCodeGenerator({ onToast }) {
               aria-pressed={direction === item.id}
               className={`px-3 py-1.5 transition-colors ${
                 direction === item.id
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               {item.label}
@@ -191,15 +188,15 @@ export default function QrCodeGenerator({ onToast }) {
           <QrReader onToast={onToast} />
         ) : (
         <>
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
           {MODES.map((m) => (
             <button
               key={m.id}
               onClick={() => setMode(m.id)}
               className={`px-3 py-1.5 transition-colors ${
                 mode === m.id
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               {m.label}
@@ -209,14 +206,14 @@ export default function QrCodeGenerator({ onToast }) {
 
         {mode === "text" && (
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Text
-            </label>
+            </Label>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="> enter text to encode"
-              className="w-full h-24 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full h-24 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
         )}
@@ -233,9 +230,9 @@ export default function QrCodeGenerator({ onToast }) {
               { key: "address", label: "Address", span: 2 },
             ].map(({ key, label, span }) => (
               <div key={key} className={span === 2 ? "sm:col-span-2" : ""}>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+                <Label className="mb-1">
                   {label}
-                </label>
+                </Label>
                 <input
                   type="text"
                   value={vcard[key]}
@@ -243,7 +240,7 @@ export default function QrCodeGenerator({ onToast }) {
                     setVcard((v) => ({ ...v, [key]: e.target.value }))
                   }
                   placeholder={label}
-                  className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                  className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 />
               </div>
             ))}
@@ -253,9 +250,9 @@ export default function QrCodeGenerator({ onToast }) {
         {mode === "wifi" && (
           <div className="space-y-4">
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+              <Label className="mb-1">
                 Network name (SSID)
-              </label>
+              </Label>
               <input
                 type="text"
                 value={wifi.ssid}
@@ -263,13 +260,13 @@ export default function QrCodeGenerator({ onToast }) {
                   setWifi((v) => ({ ...v, ssid: e.target.value }))
                 }
                 placeholder="My WiFi"
-                className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+              <Label className="mb-1">
                 Password
-              </label>
+              </Label>
               <input
                 type="password"
                 value={wifi.password}
@@ -277,20 +274,20 @@ export default function QrCodeGenerator({ onToast }) {
                   setWifi((v) => ({ ...v, password: e.target.value }))
                 }
                 placeholder="••••••••"
-                className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
             <div className="flex flex-wrap gap-4">
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-1">
+                <Label className="mb-1">
                   Security
-                </label>
+                </Label>
                 <select
                   value={wifi.auth}
                   onChange={(e) =>
                     setWifi((v) => ({ ...v, auth: e.target.value }))
                   }
-                  className="p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                  className="p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 >
                   <option value="WPA">WPA/WPA2</option>
                   <option value="WEP">WEP</option>
@@ -304,9 +301,9 @@ export default function QrCodeGenerator({ onToast }) {
                   onChange={(e) =>
                     setWifi((v) => ({ ...v, hidden: e.target.checked }))
                   }
-                  className="border-stone-400 focus:ring-stone-500"
+                  className="border-border-muted focus:ring-focus"
                 />
-                <span className="text-sm font-mono text-stone-600 dark:text-stone-300">
+                <span className="text-sm font-mono text-fg-muted">
                   Hidden network
                 </span>
               </label>
@@ -316,42 +313,42 @@ export default function QrCodeGenerator({ onToast }) {
 
         <div className="flex flex-wrap gap-6 items-center">
           <div className="flex items-center gap-3">
-            <label className="text-sm font-mono text-stone-600 dark:text-stone-300">
+            <label className="text-sm font-mono text-fg-muted">
               Foreground
             </label>
             <input
               type="color"
               value={fgColor}
               onChange={(e) => setFgColor(e.target.value)}
-              className="w-10 h-10 border border-stone-300 dark:border-stone-600 cursor-pointer bg-transparent"
+              className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent"
             />
-            <span className="text-xs font-mono text-stone-500">{fgColor}</span>
+            <span className="text-xs font-mono text-fg-muted">{fgColor}</span>
           </div>
           <div className="flex items-center gap-3">
-            <label className="text-sm font-mono text-stone-600 dark:text-stone-300">
+            <label className="text-sm font-mono text-fg-muted">
               Background
             </label>
             <input
               type="color"
               value={bgColor}
               onChange={(e) => setBgColor(e.target.value)}
-              className="w-10 h-10 border border-stone-300 dark:border-stone-600 cursor-pointer bg-transparent"
+              className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent"
             />
-            <span className="text-xs font-mono text-stone-500">{bgColor}</span>
+            <span className="text-xs font-mono text-fg-muted">{bgColor}</span>
           </div>
           <div className="flex items-center gap-3">
-            <label className="text-sm font-mono text-stone-600 dark:text-stone-300">
+            <label className="text-sm font-mono text-fg-muted">
               Size
             </label>
-            <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-[11px]">
+            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
               {SIZES.map((s) => (
                 <button
                   key={s.id}
                   onClick={() => setSize(s.id)}
                   className={`px-3 py-1.5 transition-colors ${
                     size === s.id
-                      ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                      : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                      : "text-fg-muted hover:bg-hover-muted"
                   }`}
                 >
                   {s.label}
@@ -362,9 +359,9 @@ export default function QrCodeGenerator({ onToast }) {
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {qrSvg && (
@@ -372,39 +369,39 @@ export default function QrCodeGenerator({ onToast }) {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={saveSvg}
-                className="flex items-center gap-2 px-4 py-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-xs transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
                 <DownloadSimple size={16} weight="thin" /> SVG
               </button>
               <button
                 onClick={() => savePng(false)}
-                className="flex items-center gap-2 px-4 py-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-xs transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
                 <DownloadSimple size={16} weight="thin" /> PNG (with bg)
               </button>
               <button
                 onClick={() => savePng(true)}
-                className="flex items-center gap-2 px-4 py-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-xs transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
                 <DownloadSimple size={16} weight="thin" /> PNG (transparent)
               </button>
             </div>
             <div
-              className="p-4 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 w-fit"
+              className="p-4 bg-surface border border-border w-fit"
               dangerouslySetInnerHTML={{ __html: qrSvg }}
             />
           </div>
         )}
 
         {!qrSvg && encodedText.trim() && (
-          <div className="flex items-center gap-3 p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-500">
+          <div className="flex items-center gap-3 p-4 bg-surface-muted border border-border text-fg-muted">
             <QrCode size={24} weight="thin" className="shrink-0" />
             <span className="text-sm font-mono">Generating QR code...</span>
           </div>
         )}
         </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

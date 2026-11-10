@@ -30,17 +30,17 @@ function TableNode({ data, selected }) {
 
   return (
     <div
-      className={`border bg-white dark:bg-stone-900 shadow-sm transition-shadow ${
+      className={`border bg-surface shadow-sm transition-shadow rounded-panel ${
         selected
-          ? "border-stone-900 dark:border-stone-300 ring-1 ring-stone-900 dark:ring-stone-300"
-          : "border-stone-300 dark:border-stone-700"
+          ? "border-emphasis ring-1 ring-emphasis"
+          : "border-border-strong"
       }`}
       style={{ width: NODE_WIDTH, minHeight: height }}
       onClick={() => onSelect?.(table.name)}
     >
-      <Handle type="target" position={Position.Left} className="!bg-stone-400 !w-2 !h-2 !border-0" />
-      <div className="px-3 py-2 border-b border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800">
-        <p className="font-mono text-xs font-bold text-stone-900 dark:text-stone-100 truncate">
+      <Handle type="target" position={Position.Left} className="!bg-fg-subtle !w-2 !h-2 !border-0" />
+      <div className="px-3 py-2 border-b border-border bg-surface-inset">
+        <p className="font-mono text-xs font-bold text-fg truncate">
           {table.name}
         </p>
       </div>
@@ -48,28 +48,28 @@ function TableNode({ data, selected }) {
         {table.columns.map((col) => (
           <div
             key={col.name}
-            className="px-3 flex items-center justify-between gap-2 font-mono text-[10px] leading-[22px] text-stone-600 dark:text-stone-400"
+            className="px-3 flex items-center justify-between gap-2 font-mono text-[10px] leading-[22px] text-fg-muted"
           >
             <span className="truncate flex items-center gap-1">
               {col.primaryKey && (
-                <span className="text-amber-600 dark:text-amber-400 shrink-0" title="Primary key">
+                <span className="text-favorite shrink-0" title="Primary key">
                   PK
                 </span>
               )}
               {col.references && (
-                <span className="text-sky-600 dark:text-sky-400 shrink-0" title="Foreign key">
+                <span className="text-info shrink-0" title="Foreign key">
                   FK
                 </span>
               )}
-              <span className="text-stone-800 dark:text-stone-200">{col.name}</span>
+              <span className="text-fg-soft">{col.name}</span>
             </span>
-            <span className="text-stone-400 dark:text-stone-500 shrink-0 truncate max-w-[80px]">
+            <span className="text-fg-subtle shrink-0 truncate max-w-[80px]">
               {col.type}
             </span>
           </div>
         ))}
       </div>
-      <Handle type="source" position={Position.Right} className="!bg-stone-400 !w-2 !h-2 !border-0" />
+      <Handle type="source" position={Position.Right} className="!bg-fg-subtle !w-2 !h-2 !border-0" />
     </div>
   );
 }
@@ -151,7 +151,7 @@ export default function SchemaCanvas({ tables, selectedTable, onSelectTable }) {
 
   if (!tables.length) {
     return (
-      <div className="h-full flex items-center justify-center text-stone-400 dark:text-stone-500 font-mono text-sm">
+      <div className="h-full flex items-center justify-center text-fg-subtle font-mono text-sm">
         No tables to display
       </div>
     );
@@ -176,12 +176,12 @@ export default function SchemaCanvas({ tables, selectedTable, onSelectTable }) {
       >
         <Background gap={20} size={1} color="var(--schema-grid, #d6d3d1)" />
         <Controls
-          className="!bg-white dark:!bg-stone-900 !border-stone-300 dark:!border-stone-700 !shadow-none [&>button]:!bg-white dark:[&>button]:!bg-stone-900 [&>button]:!border-stone-300 dark:[&>button]:!border-stone-700 [&>button]:!text-stone-700 dark:[&>button]:!text-stone-300 [&>button:hover]:!bg-stone-100 dark:[&>button:hover]:!bg-stone-800"
+          className="!bg-surface !border-border-strong !shadow-none [&>button]:!bg-surface [&>button]:!border-border-strong [&>button]:!text-fg-soft [&>button:hover]:!bg-shell"
         />
         <MiniMap
           nodeColor={() => "#78716c"}
           maskColor="rgba(0,0,0,0.08)"
-          className="!bg-white dark:!bg-stone-900 !border-stone-300 dark:!border-stone-700"
+          className="!bg-surface !border-border-strong"
         />
       </ReactFlow>
     </div>

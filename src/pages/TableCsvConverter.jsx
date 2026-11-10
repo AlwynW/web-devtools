@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import Papa from "papaparse";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 function tableToCsv(html) {
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -55,67 +57,60 @@ export default function TableCsvConverter({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          HTML table ↔ CSV
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          First table in HTML, or CSV to a simple HTML table.
-        </p>
-      </header>
+      <PageHeader title="HTML table ↔ CSV" description="First table in HTML, or CSV to a simple HTML table." />
 
       <div className="space-y-8">
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-3">
-          <h3 className="text-sm font-mono text-stone-700 dark:text-stone-300">
+        <Panel className="space-y-3">
+          <h3 className="text-sm font-mono text-fg-soft">
             HTML → CSV
           </h3>
           <textarea
             value={htmlIn}
             onChange={(e) => setHtmlIn(e.target.value)}
             rows={6}
-            className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
           />
           {toCsv.error && (
             <p className="text-sm text-red-600 dark:text-red-400 font-mono">
               {toCsv.error}
             </p>
           )}
-          <span className="block text-[11px] text-stone-500 font-mono mb-2">CSV</span>
+          <span className="block text-[11px] text-fg-muted font-mono mb-2">CSV</span>
           <CopyPre
             text={toCsv.csv || ""}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-40 overflow-y-auto"
-            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+            className="border border-border bg-surface-code max-h-40 overflow-y-auto"
+            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
           >
             {toCsv.csv || "—"}
           </CopyPre>
-        </div>
+        </Panel>
 
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-3">
-          <h3 className="text-sm font-mono text-stone-700 dark:text-stone-300">
+        <Panel className="space-y-3">
+          <h3 className="text-sm font-mono text-fg-soft">
             CSV → HTML
           </h3>
           <textarea
             value={csvIn}
             onChange={(e) => setCsvIn(e.target.value)}
             rows={6}
-            className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
           />
           {toHtml.error && (
             <p className="text-sm text-red-600 dark:text-red-400 font-mono">
               {toHtml.error}
             </p>
           )}
-          <span className="block text-[11px] text-stone-500 font-mono mb-2">HTML</span>
+          <span className="block text-[11px] text-fg-muted font-mono mb-2">HTML</span>
           <CopyPre
             text={toHtml.html || ""}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-48 overflow-y-auto"
-            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+            className="border border-border bg-surface-code max-h-48 overflow-y-auto"
+            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
           >
             {toHtml.html || "—"}
           </CopyPre>
-        </div>
+        </Panel>
       </div>
     </div>
   );

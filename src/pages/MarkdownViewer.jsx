@@ -2,20 +2,10 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { FileArrowDown, CornersOut, CornersIn } from "phosphor-react";
 import CopyButton from "../components/CopyButton";
 import { renderMarkdownWithMermaid } from "../utils/markdownWithMermaid";
-
-function readDarkTheme() {
-  try {
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark") return true;
-    if (saved === "light") return false;
-  } catch {
-    /* ignore */
-  }
-  return (
-    document.documentElement.classList.contains("dark") ||
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-  );
-}
+import { isDarkTheme, subscribeTheme } from "../theme/applyTheme";
+import Label from "../components/ui/Label";
+import PageHeader from "../components/ui/PageHeader";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 export default function MarkdownViewer({ onToast }) {
   const [markdownInput, setMarkdownInput] = useState("");
@@ -24,16 +14,10 @@ export default function MarkdownViewer({ onToast }) {
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [fullWidth, setFullWidth] = useState(false);
-  const [dark, setDark] = useState(readDarkTheme);
+  const [dark, setDark] = useState(isDarkTheme);
   const requestId = useRef(0);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    const sync = () => setDark(root.classList.contains("dark"));
-    const observer = new MutationObserver(sync);
-    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
+  useEffect(() => subscribeTheme(setDark), []);
 
   const parseMarkdown = useCallback(async (text) => {
     const id = ++requestId.current;
@@ -111,38 +95,35 @@ export default function MarkdownViewer({ onToast }) {
 
   return (
     <div className={`mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${fullWidth ? "relative left-1/2 -translate-x-1/2 w-screen max-w-none px-4 sm:px-6" : "max-w-3xl"}`}>
-      <header className="mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="text-center sm:text-left">
-          <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-            Markdown Viewer
-          </h2>
-          <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-            Drop a .md file or type markdown. Fenced mermaid blocks render as diagrams.
-          </p>
-        </div>
+      <PageHeader
+        className="mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        titleClassName="text-center sm:text-left"
+        title="Markdown Viewer"
+        description="Drop a .md file or type markdown. Fenced mermaid blocks render as diagrams."
+      >
         <button
           onClick={() => setFullWidth((v) => !v)}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono tracking-tight border transition-colors shrink-0 self-center sm:self-auto ${
             fullWidth
-              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border-stone-900 dark:border-stone-100 hover:bg-stone-800 dark:hover:bg-stone-200"
-              : "bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-200 border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800"
+              ? "bg-primary text-primary-fg border-primary-border hover:bg-primary-hover rounded-button"
+              : "bg-surface text-fg-soft border-border-strong hover:bg-hover-muted rounded-button"
           }`}
         >
           {fullWidth ? <CornersIn size={18} weight="thin" /> : <CornersOut size={18} weight="thin" />}
           {fullWidth ? "Narrow" : "Fit width"}
         </button>
-      </header>
+      </PageHeader>
 
       <div className="space-y-6">
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Markdown Input
-          </label>
+          </Label>
           <textarea
             value={markdownInput}
             onChange={(e) => setMarkdownInput(e.target.value)}
             placeholder="# Paste or type markdown here"
-            className="w-full h-40 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full h-40 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
@@ -150,10 +131,10 @@ export default function MarkdownViewer({ onToast }) {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`border-2 border-dashed p-8 text-center transition-colors bg-white dark:bg-stone-900 border-stone-300 dark:border-stone-700 ${
+          className={`border-2 border-dashed p-8 text-center transition-colors bg-surface border-border-strong ${
             dragOver
-              ? "border-stone-500 bg-stone-100/50 dark:bg-stone-900/50"
-              : "hover:border-stone-400 dark:hover:border-stone-600"
+              ? "border-focus bg-shell/50"
+              : "hover:border-border-muted dark:hover:border-stone-600"
           }`}
         >
           <input
@@ -167,23 +148,23 @@ export default function MarkdownViewer({ onToast }) {
             htmlFor="md-viewer-file-input"
             className="cursor-pointer flex flex-col items-center gap-3"
           >
-            <FileArrowDown size={40} weight="thin" className="text-stone-400" />
-            <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
+            <FileArrowDown size={40} weight="thin" className="text-fg-subtle" />
+            <span className="font-mono text-sm text-fg-muted">
               Drop a markdown file here or click to browse
             </span>
           </label>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+          <ErrorBanner className="p-4 text-sm">
             {error}
-          </div>
+          </ErrorBanner>
         )}
 
         {content && (
-          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 overflow-hidden">
-            <div className="px-4 py-3 border-b border-stone-200 dark:border-stone-700 flex items-center justify-between gap-2 bg-stone-50 dark:bg-stone-900/50">
-              <span className="font-mono text-sm text-stone-600 dark:text-stone-300 truncate">
+          <div className="bg-surface border border-border overflow-hidden">
+            <div className="px-4 py-3 border-b border-border flex items-center justify-between gap-2 bg-surface-muted/50">
+              <span className="font-mono text-sm text-fg-muted truncate">
                 {fileName || "Direct input"}
               </span>
               <div className="flex items-center gap-2 shrink-0">
@@ -195,14 +176,14 @@ export default function MarkdownViewer({ onToast }) {
                 />
                 <button
                   onClick={clear}
-                  className="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+                  className="text-xs font-mono text-fg-muted hover:text-fg"
                 >
                   Clear
                 </button>
               </div>
             </div>
             <div
-              className="markdown-preview p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-stone-100 [&_code]:dark:bg-stone-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-stone-100 [&_pre]:dark:bg-stone-800 [&_pre]:mb-4 [&_a]:text-stone-700 [&_a]:dark:text-stone-300 [&_a]:underline [&_blockquote]:border-l-stone-500 [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
+              className="markdown-preview p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-surface-inset [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-surface-inset [&_pre]:mb-4 [&_a]:text-fg-soft [&_a]:underline [&_blockquote]:border-l-fg-muted [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>

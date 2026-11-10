@@ -3,6 +3,8 @@ import { ArrowsClockwise } from "phosphor-react";
 import Button from "../components/Button";
 import CopyArea from "../components/CopyArea";
 import { WORDS } from "../utils/words";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 export default function PasswordGenerator({ onToast }) {
   const [mode, setMode] = useState("words");
@@ -58,21 +60,14 @@ export default function PasswordGenerator({ onToast }) {
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Password
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Generate strong, random passwords.
-        </p>
-      </header>
+      <PageHeader title="Password" description="Generate strong, random passwords." />
 
-      <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max mb-6 mx-auto font-mono text-[11px]">
+      <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max mb-6 mx-auto font-mono text-[11px]">
         <button
           className={`px-3 py-1.5 transition-colors ${
             mode === "words"
-              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-              : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+              : "text-fg-muted hover:bg-hover-muted"
           }`}
           onClick={() => setMode("words")}
         >
@@ -81,8 +76,8 @@ export default function PasswordGenerator({ onToast }) {
         <button
           className={`px-3 py-1.5 transition-colors ${
             mode === "chars"
-              ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-              : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+              : "text-fg-muted hover:bg-hover-muted"
           }`}
           onClick={() => setMode("chars")}
         >
@@ -90,13 +85,13 @@ export default function PasswordGenerator({ onToast }) {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800">
+      <Panel>
         {mode === "chars" && (
           <div className="space-y-5 mb-6">
             <div>
-              <div className="flex justify-between text-[11px] font-mono mb-2 text-stone-500 dark:text-stone-400">
+              <div className="flex justify-between text-[11px] font-mono mb-2 text-fg-muted">
                 <span>Password Length</span>
-                <span className="text-stone-900 dark:text-stone-100">{length}</span>
+                <span className="text-fg">{length}</span>
               </div>
               <input
                 type="range"
@@ -104,7 +99,7 @@ export default function PasswordGenerator({ onToast }) {
                 max="64"
                 value={length}
                 onChange={(e) => setLength(parseInt(e.target.value))}
-                className="w-full h-2 bg-stone-200 dark:bg-stone-700 appearance-none cursor-pointer accent-stone-800 dark:accent-stone-200"
+                className="w-full h-2 bg-secondary-hover appearance-none cursor-pointer accent-fg"
               />
             </div>
 
@@ -128,15 +123,15 @@ export default function PasswordGenerator({ onToast }) {
               ].map((item, idx) => (
                 <label
                   key={idx}
-                  className="flex items-center gap-3 p-3 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-900 cursor-pointer transition-colors"
+                  className="flex items-center gap-3 p-3 border border-border hover:bg-hover cursor-pointer transition-colors"
                 >
                   <input
                     type="checkbox"
                     checked={item.state}
                     onChange={(e) => item.setter(e.target.checked)}
-                    className="w-4 h-4 text-stone-800 border-stone-400 focus:ring-stone-500"
+                    className="w-4 h-4 text-fg border-border-muted focus:ring-focus"
                   />
-                  <span className="text-sm font-mono text-stone-700 dark:text-stone-300">
+                  <span className="text-sm font-mono text-fg-soft">
                     {item.label}
                   </span>
                 </label>
@@ -160,7 +155,7 @@ export default function PasswordGenerator({ onToast }) {
             Regenerate
           </Button>
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

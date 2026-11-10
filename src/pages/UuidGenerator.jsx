@@ -4,6 +4,9 @@ import Button from "../components/Button";
 import CopyArea from "../components/CopyArea";
 import CopyButton from "../components/CopyButton";
 import { generateUUIDv1, generateUUIDv4, generateUUIDv7 } from "../utils/uuid";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 const MAX_BULK = 500;
 
@@ -59,14 +62,7 @@ export default function UuidGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          UUID Gen
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Create RFC-compliant UUIDs. Bulk-generate up to {MAX_BULK}.
-        </p>
-      </header>
+      <PageHeader title="UUID Gen" description={<>Create RFC-compliant UUIDs. Bulk-generate up to {MAX_BULK}.</>} />
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
         {types.map((t) => (
@@ -76,32 +72,32 @@ export default function UuidGenerator({ onToast }) {
             onClick={() => setUuidType(t.id)}
             className={`p-3 border text-left transition-colors font-mono text-sm ${
               uuidType === t.id
-                ? "border-stone-900 dark:border-stone-100 bg-stone-100 dark:bg-stone-900"
-                : "border-stone-200 dark:border-stone-700 hover:border-stone-300 dark:hover:border-stone-600"
+                ? "border-inverse-border bg-shell"
+                : "border-border hover:border-border-strong"
             }`}
           >
             <div
-              className={`font-semibold ${uuidType === t.id ? "text-stone-900 dark:text-stone-100" : "text-stone-700 dark:text-stone-200"}`}
+              className={`font-semibold ${uuidType === t.id ? "text-fg" : "text-fg-soft"}`}
             >
               {t.name}
             </div>
-            <div className="text-xs text-stone-500 mt-1">{t.desc}</div>
+            <div className="text-xs text-fg-muted mt-1">{t.desc}</div>
           </button>
         ))}
       </div>
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Count (1–{MAX_BULK})
-          </label>
+          </Label>
           <input
             type="number"
             min={1}
             max={MAX_BULK}
             value={count}
             onChange={(e) => setCount(parseInt(e.target.value, 10) || 1)}
-            className="w-full max-w-[12rem] p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 text-stone-900 dark:text-stone-100"
+            className="w-full max-w-[12rem] p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
@@ -110,9 +106,9 @@ export default function UuidGenerator({ onToast }) {
         ) : (
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <Label>
                 Output ({safeCount} lines)
-              </label>
+              </Label>
               <CopyButton
                 text={bulkText}
                 onCopySuccess={() => onToast("Copied!")}
@@ -124,7 +120,7 @@ export default function UuidGenerator({ onToast }) {
               readOnly
               value={bulkText}
               rows={Math.min(16, Math.max(6, safeCount))}
-              className="w-full p-4 bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 font-mono text-sm text-stone-900 dark:text-stone-100 resize-y min-h-[8rem]"
+              className="w-full p-4 bg-surface-code border border-border-strong font-mono text-sm text-fg resize-y min-h-[8rem]"
             />
           </div>
         )}
@@ -134,7 +130,7 @@ export default function UuidGenerator({ onToast }) {
             Regenerate
           </Button>
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

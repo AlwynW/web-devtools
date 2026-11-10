@@ -7,6 +7,9 @@ import {
   Eye,
 } from "phosphor-react";
 import JSZip from "jszip";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 const INTERNAL = 1024;
 const TAB_FAVICON_SIZE = 32;
@@ -358,7 +361,7 @@ function SizePreview({ sourceRef, spec, maxPreviewPx, drawKey, checkerboard }) {
   const canvas = (
     <canvas
       ref={ref}
-      className={`block border border-stone-200 dark:border-stone-700 ${checkerboard ? "" : "bg-stone-50 dark:bg-stone-950"}`}
+      className={`block border border-border ${checkerboard ? "" : "bg-surface-code"}`}
       style={{
         imageRendering: spec.size <= 64 ? "pixelated" : "auto",
         width: display,
@@ -661,28 +664,21 @@ export default function FaviconGenerator({ onToast }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Icon Generator
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Text, emoji, or image → PNG sizes for web, mobile, and desktop app icons.
-        </p>
-      </header>
+      <PageHeader title="Icon Generator" description="Text, emoji, or image → PNG sizes for web, mobile, and desktop app icons." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div className="flex flex-wrap gap-3 items-center">
-          <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+          <span className="field-label">
             Source
           </span>
-          <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
             <button
               type="button"
               onClick={() => setSourceKind("generate")}
               className={`px-3 py-1.5 transition-colors ${
                 sourceKind === "generate"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               Text / emoji
@@ -692,8 +688,8 @@ export default function FaviconGenerator({ onToast }) {
               onClick={() => setSourceKind("upload")}
               className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors ${
                 sourceKind === "upload"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               <UploadSimple size={14} weight="thin" aria-hidden />
@@ -704,14 +700,14 @@ export default function FaviconGenerator({ onToast }) {
 
         {sourceKind === "generate" && (
           <>
-            <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
               <button
                 type="button"
                 onClick={() => setMode("text")}
                 className={`px-3 py-1.5 transition-colors ${
                   mode === "text"
-                    ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                    : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                    ? "bg-primary text-primary-fg rounded-button"
+                    : "text-fg-muted hover:bg-hover-muted"
                 }`}
               >
                 Text
@@ -721,8 +717,8 @@ export default function FaviconGenerator({ onToast }) {
                 onClick={() => setMode("emoji")}
                 className={`px-3 py-1.5 transition-colors ${
                   mode === "emoji"
-                    ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                    : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                    ? "bg-primary text-primary-fg rounded-button"
+                    : "text-fg-muted hover:bg-hover-muted"
                 }`}
               >
                 Emoji
@@ -731,50 +727,50 @@ export default function FaviconGenerator({ onToast }) {
 
             {mode === "text" && (
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Text (1–2 chars)
-                </label>
+                </Label>
                 <input
                   type="text"
                   value={text}
                   onChange={(e) => setText(e.target.value.slice(0, 2))}
                   placeholder="F"
                   maxLength={2}
-                  className="w-24 p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                  className="w-24 p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 />
               </div>
             )}
 
             {mode === "emoji" && (
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Emoji
-                </label>
+                </Label>
                 <input
                   type="text"
                   value={emoji}
                   onChange={(e) => setEmoji(e.target.value.slice(0, 4))}
                   placeholder="🔥"
-                  className="w-24 p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-2xl focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100 text-center"
+                  className="w-24 p-3 bg-surface border border-border-strong font-mono text-2xl focus:outline-none focus:ring-1 focus:ring-focus text-fg text-center rounded-control"
                 />
               </div>
             )}
 
             <div className="flex flex-wrap gap-6 items-center">
               <div className="flex items-center gap-3">
-                <label className="text-sm font-mono text-stone-600 dark:text-stone-300">
+                <label className="text-sm font-mono text-fg-muted">
                   Foreground
                 </label>
                 <input
                   type="color"
                   value={fgColor}
                   onChange={(e) => setFgColor(e.target.value)}
-                  className="w-10 h-10 border border-stone-300 dark:border-stone-600 cursor-pointer bg-transparent"
+                  className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent"
                 />
-                <span className="text-xs font-mono text-stone-500">{fgColor}</span>
+                <span className="text-xs font-mono text-fg-muted">{fgColor}</span>
               </div>
               <div className={`flex items-center gap-3 ${transparentBg ? "opacity-40 pointer-events-none" : ""}`}>
-                <label className="text-sm font-mono text-stone-600 dark:text-stone-300">
+                <label className="text-sm font-mono text-fg-muted">
                   Background
                 </label>
                 <input
@@ -782,19 +778,19 @@ export default function FaviconGenerator({ onToast }) {
                   value={bgColor}
                   onChange={(e) => setBgColor(e.target.value)}
                   disabled={transparentBg}
-                  className="w-10 h-10 border border-stone-300 dark:border-stone-600 cursor-pointer bg-transparent disabled:cursor-not-allowed"
+                  className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent disabled:cursor-not-allowed"
                 />
-                <span className="text-xs font-mono text-stone-500">{bgColor}</span>
+                <span className="text-xs font-mono text-fg-muted">{bgColor}</span>
               </div>
             </div>
 
             <div className="space-y-3 max-w-md">
               <div>
                 <div className="flex justify-between items-baseline gap-4 mb-2">
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                  <Label>
                     Padding
-                  </label>
-                  <span className="text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums">
+                  </Label>
+                  <span className="text-xs font-mono text-fg-muted tabular-nums">
                     {paddingPercent}%
                   </span>
                 </div>
@@ -807,16 +803,16 @@ export default function FaviconGenerator({ onToast }) {
                   onChange={(e) => setPaddingPercent(Number(e.target.value))}
                   className="w-full h-2 accent-stone-700 dark:accent-stone-300"
                 />
-                <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400 mt-1.5">
+                <p className="text-[10px] font-mono text-fg-muted mt-1.5">
                   Inset around the glyph; scales with export size.
                 </p>
               </div>
               <div>
                 <div className="flex justify-between items-baseline gap-4 mb-2">
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                  <Label>
                     Border radius
-                  </label>
-                  <span className="text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums">
+                  </Label>
+                  <span className="text-xs font-mono text-fg-muted tabular-nums">
                     {borderRadiusPercent}%
                   </span>
                 </div>
@@ -829,7 +825,7 @@ export default function FaviconGenerator({ onToast }) {
                   onChange={(e) => setBorderRadiusPercent(Number(e.target.value))}
                   className="w-full h-2 accent-stone-700 dark:accent-stone-300"
                 />
-                <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400 mt-1.5">
+                <p className="text-[10px] font-mono text-fg-muted mt-1.5">
                   0% square, 100% circular; corners outside the shape are transparent.
                 </p>
               </div>
@@ -838,9 +834,9 @@ export default function FaviconGenerator({ onToast }) {
                   type="checkbox"
                   checked={transparentBg}
                   onChange={(e) => setTransparentBg(e.target.checked)}
-                  className="rounded border-stone-400 text-stone-900 focus:ring-stone-500"
+                  className="rounded border-border-muted text-fg focus:ring-focus"
                 />
-                <span className="text-sm font-mono text-stone-700 dark:text-stone-200">
+                <span className="text-sm font-mono text-fg-soft">
                   Transparent background
                 </span>
               </label>
@@ -861,7 +857,7 @@ export default function FaviconGenerator({ onToast }) {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-2 px-4 py-2 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-xs transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
                 <ImageIcon size={16} weight="thin" /> Choose PNG / JPEG / WebP
               </button>
@@ -869,13 +865,13 @@ export default function FaviconGenerator({ onToast }) {
                 <button
                   type="button"
                   onClick={clearUpload}
-                  className="text-[11px] font-mono text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 underline"
+                  className="text-[11px] font-mono text-fg-muted hover:text-fg underline"
                 >
                   Clear
                 </button>
               )}
             </div>
-            <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+            <p className="text-[11px] font-mono text-fg-muted">
               Square output; wide or tall images are center-cropped to fill.
             </p>
           </div>
@@ -887,28 +883,28 @@ export default function FaviconGenerator({ onToast }) {
 
         <div className="flex flex-wrap items-start gap-8">
           <div>
-            <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <p className="field-label mb-2">
               Source preview ({INTERNAL} px)
             </p>
-            <div className="p-4 bg-stone-100 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 w-fit max-w-[min(100%,310px)]">
+            <div className="p-4 bg-stage border border-border w-fit max-w-[min(100%,310px)]">
               {masterReady ? (
                 sourceKind === "generate" && transparentBg ? (
                   <span className={CHECKERBOARD_CLASS}>
                     <canvas
                       ref={previewRef}
-                      className="block max-w-[min(100%,280px)] h-auto border border-stone-300 dark:border-stone-600"
+                      className="block max-w-[min(100%,280px)] h-auto border border-border-strong"
                       style={{ imageRendering: "auto" }}
                     />
                   </span>
                 ) : (
                   <canvas
                     ref={previewRef}
-                    className="block max-w-[min(100%,280px)] h-auto border border-stone-300 dark:border-stone-600"
+                    className="block max-w-[min(100%,280px)] h-auto border border-border-strong"
                     style={{ imageRendering: "auto" }}
                   />
                 )
               ) : (
-                <div className="w-[200px] h-[200px] flex items-center justify-center text-[11px] font-mono text-stone-400 border border-dashed border-stone-300 dark:border-stone-600">
+                <div className="w-[200px] h-[200px] flex items-center justify-center text-[11px] font-mono text-fg-subtle border border-dashed border-border-strong">
                   {sourceKind === "upload" && !uploadImage ? "Choose an image" : "…"}
                 </div>
               )}
@@ -917,7 +913,7 @@ export default function FaviconGenerator({ onToast }) {
 
           {masterReady && (
             <div className="max-w-sm space-y-2 pt-1">
-              <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <p className="field-label">
                 This tab
               </p>
               <button
@@ -925,14 +921,14 @@ export default function FaviconGenerator({ onToast }) {
                 onClick={() => setTabPreview((v) => !v)}
                 className={`flex items-center gap-2 px-4 py-2 border font-mono text-xs transition-colors w-full sm:w-auto ${
                   tabPreview
-                    ? "border-stone-900 bg-stone-900 text-stone-50 dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900"
-                    : "border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200"
+                    ? "border-stone-900 bg-inverse text-inverse-fg rounded-button"
+                    : "border-border-strong bg-surface hover:bg-hover-muted text-fg-soft"
                 }`}
               >
                 <Eye size={16} weight={tabPreview ? "fill" : "thin"} aria-hidden />
                 {tabPreview ? "Tab preview on" : "Preview in this tab"}
               </button>
-              <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400 leading-relaxed">
+              <p className="text-[10px] font-mono text-fg-muted leading-relaxed">
                 Applies your icon as this page’s favicon ({TAB_FAVICON_SIZE}×{TAB_FAVICON_SIZE} PNG) so you
                 see it on the browser tab. Updates live while enabled; turn off to restore the default icon.
               </p>
@@ -940,18 +936,18 @@ export default function FaviconGenerator({ onToast }) {
           )}
         </div>
 
-        <div className="flex flex-wrap gap-3 items-center border-t border-stone-200 dark:border-stone-800 pt-6">
-          <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+        <div className="flex flex-wrap gap-3 items-center border-t border-border pt-6">
+          <span className="field-label">
             Export
           </span>
-          <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
             <button
               type="button"
               onClick={() => setOutputScope("web")}
               className={`px-3 py-1.5 transition-colors ${
                 outputScope === "web"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               Web favicon
@@ -961,8 +957,8 @@ export default function FaviconGenerator({ onToast }) {
               onClick={() => setOutputScope("mobile")}
               className={`px-3 py-1.5 transition-colors ${
                 outputScope === "mobile"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               Mobile (Android + iOS)
@@ -972,8 +968,8 @@ export default function FaviconGenerator({ onToast }) {
               onClick={() => setOutputScope("electron")}
               className={`px-3 py-1.5 transition-colors ${
                 outputScope === "electron"
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               Desktop app (Windows + macOS + Linux)
@@ -982,9 +978,9 @@ export default function FaviconGenerator({ onToast }) {
         </div>
 
         {masterReady && (
-          <div className="space-y-4 border-t border-stone-200 dark:border-stone-800 pt-6">
+          <div className="space-y-4 border-t border-border pt-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-sm font-mono text-stone-700 dark:text-stone-300">
+              <h3 className="text-sm font-mono text-fg-soft">
                 {outputScope === "web"
                   ? "Web sizes"
                   : outputScope === "mobile"
@@ -994,7 +990,7 @@ export default function FaviconGenerator({ onToast }) {
               <button
                 type="button"
                 onClick={() => downloadZip()}
-                className="flex items-center gap-2 px-4 py-2 border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-xs transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface-code hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
                 <Archive size={16} weight="thin" /> Download all (ZIP)
               </button>
@@ -1003,14 +999,14 @@ export default function FaviconGenerator({ onToast }) {
             {outputScope === "mobile" && (
               <div className="space-y-6">
                 <div>
-                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
                     Android
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ANDROID_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1020,14 +1016,14 @@ export default function FaviconGenerator({ onToast }) {
                           checkerboard={sourceKind === "generate" && transparentBg}
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                          <p className="font-mono text-xs text-fg">
                             {spec.label} px
                           </p>
-                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <p className="text-[10px] font-mono text-fg-muted truncate">{spec.hint}</p>
                           <button
                             type="button"
                             onClick={() => downloadOne(spec)}
-                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-fg-muted hover:text-fg"
                           >
                             <DownloadSimple size={12} weight="thin" /> {spec.file}
                           </button>
@@ -1037,14 +1033,14 @@ export default function FaviconGenerator({ onToast }) {
                   </ul>
                 </div>
                 <div>
-                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
                     iOS
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {IOS_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1054,14 +1050,14 @@ export default function FaviconGenerator({ onToast }) {
                           checkerboard={sourceKind === "generate" && transparentBg}
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                          <p className="font-mono text-xs text-fg">
                             {spec.label} × {spec.label}
                           </p>
-                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <p className="text-[10px] font-mono text-fg-muted truncate">{spec.hint}</p>
                           <button
                             type="button"
                             onClick={() => downloadOne(spec)}
-                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-fg-muted hover:text-fg"
                           >
                             <DownloadSimple size={12} weight="thin" /> {spec.file}
                           </button>
@@ -1079,31 +1075,31 @@ export default function FaviconGenerator({ onToast }) {
                   <button
                     type="button"
                     onClick={() => downloadElectronBundleFile("ico")}
-                    className="flex items-center gap-2 px-3 py-2 border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-[11px] transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 border border-border-strong bg-surface-code hover:bg-hover-muted text-fg-soft font-mono text-[11px] transition-colors"
                   >
                     <DownloadSimple size={14} weight="thin" /> Download `icon.ico`
                   </button>
                   <button
                     type="button"
                     onClick={() => downloadElectronBundleFile("icns")}
-                    className="flex items-center gap-2 px-3 py-2 border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-mono text-[11px] transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 border border-border-strong bg-surface-code hover:bg-hover-muted text-fg-soft font-mono text-[11px] transition-colors"
                   >
                     <DownloadSimple size={14} weight="thin" /> Download `icon.icns`
                   </button>
-                  <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                  <p className="text-[10px] font-mono text-fg-muted">
                     ZIP export includes both bundle files at root.
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
                     Windows (PNG set)
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ELECTRON_WINDOWS_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1113,14 +1109,14 @@ export default function FaviconGenerator({ onToast }) {
                           checkerboard={sourceKind === "generate" && transparentBg}
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                          <p className="font-mono text-xs text-fg">
                             {spec.label} px
                           </p>
-                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <p className="text-[10px] font-mono text-fg-muted truncate">{spec.hint}</p>
                           <button
                             type="button"
                             onClick={() => downloadOne(spec)}
-                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-fg-muted hover:text-fg"
                           >
                             <DownloadSimple size={12} weight="thin" /> {spec.file}
                           </button>
@@ -1131,14 +1127,14 @@ export default function FaviconGenerator({ onToast }) {
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
                     macOS (PNG set for ICNS pipeline)
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ELECTRON_MAC_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1148,14 +1144,14 @@ export default function FaviconGenerator({ onToast }) {
                           checkerboard={sourceKind === "generate" && transparentBg}
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                          <p className="font-mono text-xs text-fg">
                             {spec.label} px
                           </p>
-                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <p className="text-[10px] font-mono text-fg-muted truncate">{spec.hint}</p>
                           <button
                             type="button"
                             onClick={() => downloadOne(spec)}
-                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-fg-muted hover:text-fg"
                           >
                             <DownloadSimple size={12} weight="thin" /> {spec.file}
                           </button>
@@ -1166,14 +1162,14 @@ export default function FaviconGenerator({ onToast }) {
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-[0.14em]">
+                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
                     Linux
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ELECTRON_LINUX_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1183,14 +1179,14 @@ export default function FaviconGenerator({ onToast }) {
                           checkerboard={sourceKind === "generate" && transparentBg}
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="font-mono text-xs text-stone-800 dark:text-stone-100">
+                          <p className="font-mono text-xs text-fg">
                             {spec.label} px
                           </p>
-                          <p className="text-[10px] font-mono text-stone-500 truncate">{spec.hint}</p>
+                          <p className="text-[10px] font-mono text-fg-muted truncate">{spec.hint}</p>
                           <button
                             type="button"
                             onClick={() => downloadOne(spec)}
-                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                            className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-fg-muted hover:text-fg"
                           >
                             <DownloadSimple size={12} weight="thin" /> {spec.file}
                           </button>
@@ -1207,7 +1203,7 @@ export default function FaviconGenerator({ onToast }) {
                 {WEB_SPECS.map((spec) => (
                   <li
                     key={spec.file}
-                    className="flex gap-3 items-center p-3 border border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-950/50"
+                    className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
                   >
                     <SizePreview
                       sourceRef={masterRef}
@@ -1217,12 +1213,12 @@ export default function FaviconGenerator({ onToast }) {
                       checkerboard={sourceKind === "generate" && transparentBg}
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="font-mono text-xs text-stone-800 dark:text-stone-100">{spec.label}</p>
-                      <p className="text-[10px] font-mono text-stone-500">{spec.hint}</p>
+                      <p className="font-mono text-xs text-fg">{spec.label}</p>
+                      <p className="text-[10px] font-mono text-fg-muted">{spec.hint}</p>
                       <button
                         type="button"
                         onClick={() => downloadOne(spec)}
-                        className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                        className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-fg-muted hover:text-fg"
                       >
                         <DownloadSimple size={12} weight="thin" /> {spec.file}
                       </button>
@@ -1233,7 +1229,7 @@ export default function FaviconGenerator({ onToast }) {
             )}
           </div>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

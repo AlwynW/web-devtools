@@ -2,13 +2,19 @@ import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Check,
-  Wrench,
   Command,
   MagnifyingGlass,
   Sun,
   Moon,
   Star,
 } from "phosphor-react";
+import { brand } from "../theme/brand";
+import BrandMark from "../theme/BrandMark";
+import {
+  applyTheme,
+  resolveTheme,
+  THEME_STORAGE_KEY,
+} from "../theme/applyTheme";
 import { navGroups } from "./navConfig";
 import {
   FAVORITES_STORAGE_KEY,
@@ -25,13 +31,7 @@ export default function Layout({ toast }) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [theme, setTheme] = useState(() => {
-    if (typeof window === "undefined") return "light";
-    const saved = localStorage.getItem("theme");
-    if (saved === "light" || saved === "dark") return saved;
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    return systemPrefersDark ? "dark" : "light";
-  });
+  const [theme, setTheme] = useState(resolveTheme);
 
   const searchInputRef = useRef(null);
 
@@ -89,26 +89,19 @@ export default function Layout({ toast }) {
   const displayItem = (isToolLoading && loadingItem) || activeItem;
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    const body = window.document.body;
-
-    const shouldUseDark = theme === "dark";
-
-    if (shouldUseDark) {
-      root.classList.add("dark");
-      body.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-      body.classList.remove("dark");
-    }
-
-    const themeColor = shouldUseDark ? "#1c1917" : "#f5f5f4";
-    document
-      .querySelectorAll('meta[name="theme-color"]')
-      .forEach((meta) => meta.setAttribute("content", themeColor));
-
-    localStorage.setItem("theme", theme);
+    applyTheme(theme);
   }, [theme]);
+
+  useEffect(() => {
+    const onStorage = (event) => {
+      if (event.key !== THEME_STORAGE_KEY) return;
+      if (event.newValue === "light" || event.newValue === "dark") {
+        setTheme(event.newValue);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   // Restore last used tool on first load
   useEffect(() => {
@@ -253,31 +246,30 @@ export default function Layout({ toast }) {
   return (
     <div
       data-app-shell
-      className="min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100 selection:bg-stone-200 flex flex-col"
+      className="min-h-screen bg-shell text-fg selection:bg-selection flex flex-col"
     >
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-2">
-          <div className="bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 px-6 pl-3 py-3 border border-stone-700 dark:border-stone-300 flex items-center gap-3 font-mono text-xs tracking-tight">
-            <Check size={18} weight="thin" className="text-white dark:text-stone-900" />{" "}
-            {toast}
+          <div className="bg-inverse text-inverse-fg px-6 pl-3 py-3 border border-border-strong rounded-panel flex items-center gap-3 font-mono text-xs tracking-tight">
+            <Check size={18} weight="thin" /> {toast}
           </div>
         </div>
       )}
 
-      <header className="sticky top-0 z-40 flex items-center px-4 sm:px-6 h-16 border-stone-300/80 border-b dark:border-stone-700 bg-white/90 dark:bg-stone-900/95 ">
+      <header className="sticky top-0 z-40 flex items-center px-4 sm:px-6 h-[var(--header-height)] border-b border-border-strong/80 bg-chrome">
         <div className="relative flex items-center justify-between w-full max-w-6xl mx-auto">
           <div className="flex items-center gap-3 sm:gap-4 min-w-0">
             <NavLink
               to="/"
-              className="flex items-center gap-2 font-black text-lg sm:text-xl tracking-tight text-stone-900 dark:text-stone-50 uppercase"
+              className="flex items-center gap-2 font-black text-lg sm:text-xl tracking-tight text-fg-strong uppercase"
             >
-              <Wrench size={22} weight="thin" /> DevKit
+              <BrandMark size={22} /> {brand.name}
             </NavLink>
-            <div className="hidden sm:flex items-center text-xs sm:text-sm font-mono text-stone-600 dark:text-stone-400 truncate">
-              <span className="mx-1 text-stone-400 dark:text-stone-700">/</span>
-              <span className="text-stone-900 dark:text-stone-100 flex items-center gap-1.5 min-w-0">
+            <div className="hidden sm:flex items-center text-xs sm:text-sm font-mono text-fg-muted truncate">
+              <span className="mx-1 text-fg-subtle">/</span>
+              <span className="text-fg flex items-center gap-1.5 min-w-0">
                 {displayItem && (
-                  <displayItem.icon size={14} className="text-stone-500 shrink-0" />
+                  <displayItem.icon size={14} className="text-fg-muted shrink-0" />
                 )}
                 <span className="truncate">
                   {displayItem?.label || "Select a tool"}
@@ -289,18 +281,18 @@ export default function Layout({ toast }) {
           <div className="absolute inset-x-0 flex justify-center pointer-events-none">
             <button
               onClick={() => setIsMenuOpen((prev) => !prev)}
-              className="pointer-events-auto flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 border border-stone-300/80 dark:border-stone-700 bg-white/80 dark:bg-stone-900 text-xs sm:text-sm font-mono tracking-tight hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+              className="pointer-events-auto flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 border border-border-strong/80 rounded-control bg-surface-glass text-xs sm:text-sm font-mono tracking-tight hover:bg-hover transition-colors"
             >
               <MagnifyingGlass
                 size={14}
                 weight="thin"
-                className="text-stone-500 dark:text-stone-300"
+                className="text-fg-muted"
               />
               <span className="hidden sm:inline text-[11px] font-mono">
                 &gt; search tools
               </span>
               <span className="sm:hidden text-[11px] font-mono">&gt; tools</span>
-              <div className="hidden sm:flex items-center gap-1 text-[10px] sm:text-[11px] font-mono text-stone-600 dark:text-stone-400 px-2 py-[3px] border border-stone-400/60 dark:border-stone-600">
+              <div className="hidden sm:flex items-center gap-1 text-[10px] sm:text-[11px] font-mono text-fg-muted px-2 py-[3px] border border-border-muted/60 rounded-badge">
                 <Command size={12} weight="thin" />
                 <span>K</span>
               </div>
@@ -312,7 +304,7 @@ export default function Layout({ toast }) {
               <button
                 type="button"
                 onClick={handleInstall}
-                className="hidden sm:inline-flex items-center px-2.5 py-1.5 border border-stone-300 dark:border-stone-700 text-[11px] font-mono text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+                className="hidden sm:inline-flex items-center px-2.5 py-1.5 border border-border-strong rounded-control text-[11px] font-mono text-fg-soft hover:bg-hover transition-colors"
               >
                 Install
               </button>
@@ -320,13 +312,9 @@ export default function Layout({ toast }) {
             <button
               type="button"
               onClick={toggleTheme}
-              className="flex items-center 
-              gap-2 p-2 border border-stone-300 
-              dark:border-stone-700  text-[11px] sm:text-xs font-mono 
-              text-slate-700 dark:text-stone-200 
-              hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+              className="flex items-center gap-2 p-2 border border-border-strong rounded-control text-[11px] sm:text-xs font-mono text-fg-soft hover:bg-hover transition-colors"
             >
-              <span className="relative flex items-center justify-center w-5 h-5  dark:text-stone-200  text-stone-900 overflow-hidden">
+              <span className="relative flex items-center justify-center w-5 h-5 text-fg overflow-hidden">
                 <span
                   className={`absolute inset-0 flex items-center justify-center transition-transform duration-200 ${
                     theme === "dark" ? "translate-y-0" : "translate-y-full"
@@ -349,7 +337,7 @@ export default function Layout({ toast }) {
       </header>
 
       <div
-        className={`fixed inset-0 bg-stone-900/40  z-30 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-overlay z-30 transition-opacity duration-300 ${
           isMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -358,16 +346,16 @@ export default function Layout({ toast }) {
       />
 
       <div
-        className={`fixed top-16 left-0 right-0 z-40 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-all duration-500 ease-out flex flex-col overflow-hidden ${
+        className={`fixed top-[var(--header-height)] left-0 right-0 z-40 bg-surface border-b border-border transition-all duration-500 ease-out flex flex-col overflow-hidden ${
           isMenuOpen
-            ? "h-[calc(100dvh-4rem)] sm:h-[60vh] opacity-100 translate-y-0"
+            ? "h-[calc(100dvh-var(--header-height))] sm:h-[60vh] opacity-100 translate-y-0"
             : "h-0 opacity-0 -translate-y-4"
         }`}
       >
-        <div className="flex-shrink-0 p-4 sm:p-6 border-b border-stone-200 dark:border-stone-800/70">
+        <div className="flex-shrink-0 p-4 sm:p-6 border-b border-border">
           <div className="relative max-w-2xl mx-auto">
             <MagnifyingGlass
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-subtle"
               size={16}
               weight="thin"
             />
@@ -377,7 +365,7 @@ export default function Layout({ toast }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               ref={searchInputRef}
-              className="w-full pl-11 pr-4 py-2.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-base sm:text-sm font-mono text-stone-900 dark:text-stone-100"
+              className="w-full pl-11 pr-4 py-2.5 bg-surface border border-border-strong rounded-control focus:outline-none focus:ring-1 focus:ring-focus text-base sm:text-sm font-mono text-fg"
             />
           </div>
         </div>
@@ -385,16 +373,16 @@ export default function Layout({ toast }) {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
           <div className="max-w-5xl mx-auto space-y-8">
             {displayedGroups.length === 0 ? (
-              <div className="text-center py-10 text-stone-500 dark:text-stone-400 text-sm font-mono">
+              <div className="text-center py-10 text-fg-muted text-sm font-mono">
                 No utilities found matching "{searchQuery}"
               </div>
             ) : (
               displayedGroups.map((group) => (
                 <div key={group.name} className="space-y-2">
-                  <h3 className="text-[11px] font-mono tracking-[0.18em] text-stone-500 dark:text-stone-500 uppercase">
+                  <h3 className="field-label">
                     //<span className="ml-2">{group.name}</span>
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 border p-2 border-stone-200/60 dark:border-stone-900/80">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 border p-2 border-border/60 rounded-panel">
                     {group.items.map((item) => {
                       const isFav = favoritePaths.includes(item.path);
                       const subtitleSource =
@@ -412,15 +400,15 @@ export default function Layout({ toast }) {
                               setIsMenuOpen(false);
                               setSearchQuery("");
                             }}
-                            className={`relative flex items-start gap-3 p-3 pr-11 text-left transition-all duration-150 group text-sm border border-stone-200 dark:border-stone-800 ${
+                            className={`relative flex items-start gap-3 p-3 pr-11 text-left transition-all duration-150 group text-sm border border-border rounded-panel ${
                               location.pathname === item.path
-                                ? "bg-stone-700 text-stone-100 dark:bg-stone-300 dark:text-stone-900"
-                                : "bg-white text-slate-700 dark:bg-stone-900 dark:text-stone-300 hover:bg-stone-200 hover:text-stone-900"
+                                ? "bg-selected text-selected-fg"
+                                : "bg-surface text-fg-soft hover:bg-secondary-hover hover:text-fg"
                             }`}
                           ><button
                           type="button"
                           onClick={(e) => toggleFavorite(item.path, e)}
-                          className="absolute top-2 right-2 z-10 p-1 rounded border border-transparent hover:border-stone-300 dark:hover:border-stone-600 hover:bg-stone-100/80 dark:hover:bg-stone-800/80 transition-colors"
+                          className="absolute top-2 right-2 z-10 p-1 rounded-badge border border-transparent hover:border-border-strong hover:bg-hover-muted/80 transition-colors"
                           aria-label={
                             isFav
                               ? "Remove from favourites"
@@ -432,19 +420,19 @@ export default function Layout({ toast }) {
                             weight={isFav ? "fill" : "thin"}
                             className={
                               isFav
-                                ? "text-amber-500 dark:text-amber-400"
-                                : "text-stone-400 dark:text-stone-500"
+                                ? "text-favorite"
+                                : "text-fg-subtle"
                             }
                           />
                         </button>
                             <div
-                              className={`px-2 py-1 flex-shrink-0 aspect-square justify-center items-center flex transition-colors border border-stone-300 dark:border-stone-700 text-[11px] font-mono `}
+                              className="px-2 py-1 flex-shrink-0 aspect-square justify-center items-center flex transition-colors border border-border-strong rounded-control text-[11px] font-mono"
                             >
                               <item.icon size={14} weight="thin" />
                             </div>
                             <div className="min-w-0">
                               {item.label}
-                              <div className="text-[11px] font-mono  leading-snug line-clamp-2">
+                              <div className="text-[11px] font-mono leading-snug line-clamp-2">
                                 {item.description || subtitleSource}
                               </div>
                             </div>
@@ -471,7 +459,7 @@ export default function Layout({ toast }) {
         >
           <div className="relative min-h-[12rem]">
             {isToolLoading && (
-              <div className="absolute inset-0 z-10 flex items-start justify-center bg-stone-100 dark:bg-stone-900">
+              <div className="absolute inset-0 z-10 flex items-start justify-center bg-shell">
                 <ToolLoadingFallback label={loadingItem?.label ?? displayItem?.label} />
               </div>
             )}
@@ -489,7 +477,7 @@ export default function Layout({ toast }) {
           __html: `
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(120, 113, 108, 0.5); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: var(--scrollbar); }
       `,
         }}
       />

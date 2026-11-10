@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import * as jose from "jose";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const base64UrlDecode = (str) => {
   try {
@@ -192,17 +196,10 @@ export default function JwtDebugger({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          JWT Debugger
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Decode, verify (HS256), and create signed JWTs (HS256 / RS256).
-        </p>
-      </header>
+      <PageHeader title="JWT Debugger" description="Decode, verify (HS256), and create signed JWTs (HS256 / RS256)." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
-        <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+      <Panel className="space-y-6">
+        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
           {[
             { id: "decode", label: "Decode" },
             { id: "create", label: "Create" },
@@ -216,8 +213,8 @@ export default function JwtDebugger({ onToast }) {
               }}
               className={`px-3 py-1.5 transition-colors ${
                 mode === m.id
-                  ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                  : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                  : "text-fg-muted hover:bg-hover-muted"
               }`}
             >
               {m.label}
@@ -227,21 +224,21 @@ export default function JwtDebugger({ onToast }) {
 
         {mode === "decode" && (
           <>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               JWT Token
-            </label>
+            </Label>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-              className="w-full h-24 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+              className="w-full h-24 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
 
             {decoded && decodeHeaderAlg === "HS256" && (
-              <div className="space-y-2 p-4 border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950/50">
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <div className="space-y-2 p-4 border border-border bg-surface-code/50">
+                <Label>
                   Verify HS256 signature
-                </label>
+                </Label>
                 <input
                   type="password"
                   value={verifySecret}
@@ -250,18 +247,18 @@ export default function JwtDebugger({ onToast }) {
                     setVerifyResult(null);
                   }}
                   placeholder="Shared secret"
-                  className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 text-stone-900 dark:text-stone-100"
+                  className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 />
                 <button
                   type="button"
                   onClick={handleVerify}
-                  className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900 hover:opacity-90"
+                  className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg hover:opacity-90"
                 >
                   Verify
                 </button>
                 {verifyResult && (
                   <p
-                    className={`text-sm font-mono ${verifyResult.ok ? "text-green-700 dark:text-green-400" : "text-red-700 dark:text-red-300"}`}
+                    className={`text-sm font-mono ${verifyResult.ok ? "text-green-700 dark:text-green-400" : "text-danger-fg"}`}
                   >
                     {verifyResult.msg}
                   </p>
@@ -270,37 +267,37 @@ export default function JwtDebugger({ onToast }) {
             )}
 
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+              <ErrorBanner className="p-4 text-sm">
                 {error}
-              </div>
+              </ErrorBanner>
             )}
 
             {decoded && (
               <div className="space-y-4">
                 <div>
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
+                  <Label>
                     Header
-                  </label>
+                  </Label>
                   <CopyPre
                     text={decoded.header}
                     onCopySuccess={() => onToast("Header copied!")}
-                    className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 overflow-x-auto"
-                    preClassName="p-4 font-mono text-sm text-stone-800 dark:text-stone-200"
+                    className="border border-border bg-surface-muted overflow-x-auto"
+                    preClassName="p-4 font-mono text-sm text-fg-soft"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
+                  <Label>
                     Payload
-                  </label>
+                  </Label>
                   <CopyPre
                     text={decoded.payload}
                     onCopySuccess={() => onToast("Payload copied!")}
-                    className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 overflow-x-auto"
-                    preClassName="p-4 font-mono text-sm text-stone-800 dark:text-stone-200"
+                    className="border border-border bg-surface-muted overflow-x-auto"
+                    preClassName="p-4 font-mono text-sm text-fg-soft"
                   />
                   {(decoded.exp || decoded.iat || decoded.sub) && (
-                    <div className="mt-2 text-xs text-stone-500 space-y-1 font-mono">
+                    <div className="mt-2 text-xs text-fg-muted space-y-1 font-mono">
                       {decoded.exp && (
                         <div>
                           exp: {decoded.exp}{" "}
@@ -319,14 +316,14 @@ export default function JwtDebugger({ onToast }) {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
+                  <Label>
                     Signature (Base64URL)
-                  </label>
+                  </Label>
                   <CopyPre
                     text={decoded.signature}
                     onCopySuccess={() => onToast("Copied!")}
-                    className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900"
-                    preClassName="p-4 font-mono text-xs break-all text-stone-800 dark:text-stone-200"
+                    className="border border-border bg-surface-muted"
+                    preClassName="p-4 font-mono text-xs break-all text-fg-soft"
                   />
                 </div>
               </div>
@@ -337,26 +334,26 @@ export default function JwtDebugger({ onToast }) {
         {mode === "create" && (
           <>
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              <Label>
                 Header (JSON)
-              </label>
+              </Label>
               <textarea
                 value={createHeader}
                 onChange={(e) => setCreateHeader(e.target.value)}
-                className="w-full h-20 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full h-20 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 placeholder='{"alg":"HS256","typ":"JWT"}'
               />
-              <p className="text-xs text-stone-500 mt-1 font-mono">
-                Use <code className="text-stone-700 dark:text-stone-300">alg</code>{" "}
+              <p className="text-xs text-fg-muted mt-1 font-mono">
+                Use <code className="text-fg-soft">alg</code>{" "}
                 <strong className="font-normal">HS256</strong> (secret) or{" "}
                 <strong className="font-normal">RS256</strong> (PKCS#8 PEM private key
                 below).
               </p>
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              <Label>
                 Payload (JSON)
-              </label>
+              </Label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {[
                   { label: "+15m", s: 15 * 60 },
@@ -368,7 +365,7 @@ export default function JwtDebugger({ onToast }) {
                     key={p.label}
                     type="button"
                     onClick={() => applyExpiryPreset(p.s)}
-                    className="px-2 py-1 text-[11px] font-mono border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300"
+                    className="px-2 py-1 text-[11px] font-mono border border-border-strong hover:bg-hover-muted text-fg-soft"
                   >
                     exp {p.label}
                   </button>
@@ -377,56 +374,56 @@ export default function JwtDebugger({ onToast }) {
               <textarea
                 value={createPayload}
                 onChange={(e) => setCreatePayload(e.target.value)}
-                className="w-full h-36 p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full h-36 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 placeholder='{"sub":"user@example.com","iat":...,"exp":...}'
               />
-              <p className="text-xs text-stone-500 mt-1 font-mono">
-                Empty <code className="text-stone-700 dark:text-stone-300">iss</code>{" "}
-                / <code className="text-stone-700 dark:text-stone-300">aud</code> are
+              <p className="text-xs text-fg-muted mt-1 font-mono">
+                Empty <code className="text-fg-soft">iss</code>{" "}
+                / <code className="text-fg-soft">aud</code> are
                 omitted from the signed payload.
               </p>
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+              <Label>
                 Secret (HS256) or PKCS#8 PEM private key (RS256)
-              </label>
+              </Label>
               <textarea
                 value={createSecret}
                 onChange={(e) => setCreateSecret(e.target.value)}
                 placeholder="HS256: your-256-bit-secret — RS256: -----BEGIN PRIVATE KEY----- ..."
                 rows={4}
-                className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+              <ErrorBanner className="p-4 text-sm">
                 {error}
-              </div>
+              </ErrorBanner>
             )}
             <button
               type="button"
               onClick={handleCreate}
               disabled={signing}
-              className="w-full py-3 font-mono text-xs tracking-tight border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900 hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors disabled:opacity-50"
+              className="w-full py-3 font-mono text-xs tracking-tight border border-inverse-border bg-inverse text-primary-fg hover:bg-primary-hover transition-colors disabled:opacity-50"
             >
               {signing ? "Signing…" : " > Sign & Create JWT"}
             </button>
             {createdToken && (
               <div>
-                <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] block mb-2">
+                <Label>
                   Created Token
-                </label>
+                </Label>
                 <CopyPre
                   text={createdToken}
                   onCopySuccess={() => onToast("Token copied!")}
-                  className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 overflow-x-auto"
-                  preClassName="p-4 font-mono text-xs break-all text-stone-800 dark:text-stone-200"
+                  className="border border-border bg-surface-muted overflow-x-auto"
+                  preClassName="p-4 font-mono text-xs break-all text-fg-soft"
                 />
               </div>
             )}
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

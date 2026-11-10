@@ -7,6 +7,8 @@ import {
   DEFAULT_STOPS,
   gradientToCss,
 } from "../utils/gradientCss";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const FONTS = [
   { label: "System UI", value: "system-ui, sans-serif" },
@@ -105,18 +107,11 @@ export default function TextGradientCreator({ onToast }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Text Gradient
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Clip a gradient to text with background-clip. System fonts only.
-        </p>
-      </header>
+      <PageHeader title="Text Gradient" description="Clip a gradient to text with background-clip. System fonts only." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div
-          className="min-h-40 flex items-center justify-center p-8 border border-stone-200 dark:border-stone-700 overflow-hidden"
+          className="min-h-40 flex items-center justify-center p-8 border border-border overflow-hidden"
           style={{
             backgroundImage:
               "linear-gradient(45deg, #e7e5e4 25%, transparent 25%), linear-gradient(-45deg, #e7e5e4 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e7e5e4 75%), linear-gradient(-45deg, transparent 75%, #e7e5e4 75%)",
@@ -136,26 +131,26 @@ export default function TextGradientCreator({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+          <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
             Text
           </label>
           <input
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 font-mono text-sm"
+            className="w-full p-3 border border-border-strong bg-surface text-fg font-mono text-sm"
           />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Font
             </label>
             <select
               value={font}
               onChange={(e) => setFont(e.target.value)}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 text-sm"
+              className="w-full p-3 border border-border-strong bg-surface text-fg text-sm"
             >
               {FONTS.map((f) => (
                 <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>
@@ -165,13 +160,13 @@ export default function TextGradientCreator({ onToast }) {
             </select>
           </div>
           <div>
-            <label className="block text-[11px] text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
               Weight
             </label>
             <select
               value={weight}
               onChange={(e) => setWeight(Number(e.target.value))}
-              className="w-full p-3 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 text-sm"
+              className="w-full p-3 border border-border-strong bg-surface text-fg text-sm"
             >
               {WEIGHTS.map((w) => (
                 <option key={w.value} value={w.value}>
@@ -184,7 +179,7 @@ export default function TextGradientCreator({ onToast }) {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+            <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
               <span>Size</span>
               <span>{fontSize}px</span>
             </label>
@@ -194,11 +189,11 @@ export default function TextGradientCreator({ onToast }) {
               max={160}
               value={fontSize}
               onChange={(e) => setFontSize(Number(e.target.value))}
-              className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+              className="w-full h-2 bg-secondary-hover accent-fg"
             />
           </div>
           <div>
-            <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+            <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
               <span>Letter spacing</span>
               <span>{letterSpacing}px</span>
             </label>
@@ -208,13 +203,13 @@ export default function TextGradientCreator({ onToast }) {
               max={24}
               value={letterSpacing}
               onChange={(e) => setLetterSpacing(Number(e.target.value))}
-              className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+              className="w-full h-2 bg-secondary-hover accent-fg"
             />
           </div>
         </div>
 
-        <div className="space-y-4 p-4 border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-900/40">
-          <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-800 w-max text-xs font-mono">
+        <div className="space-y-4 p-4 border border-border bg-surface-muted/60 dark:bg-overlay">
+          <div className="flex gap-2 p-1 bg-hover-muted w-max text-xs font-mono">
             {["linear", "radial", "conic"].map((t) => (
               <button
                 key={t}
@@ -222,8 +217,8 @@ export default function TextGradientCreator({ onToast }) {
                 onClick={() => setType(t)}
                 className={`px-3 py-1.5 ${
                   type === t
-                    ? "bg-white dark:bg-stone-700 text-stone-700 dark:text-stone-200"
-                    : "text-stone-500"
+                    ? "bg-surface-inset text-fg-soft"
+                    : "text-fg-muted"
                 }`}
               >
                 {t}
@@ -233,7 +228,7 @@ export default function TextGradientCreator({ onToast }) {
 
           {(type === "linear" || type === "conic") && (
             <div>
-              <label className="flex justify-between text-xs font-medium mb-1 text-stone-500 dark:text-stone-400">
+              <label className="flex justify-between text-xs font-medium mb-1 text-fg-muted">
                 <span>{type === "conic" ? "From angle" : "Angle"}</span>
                 <span>{angle}deg</span>
               </label>
@@ -243,7 +238,7 @@ export default function TextGradientCreator({ onToast }) {
                 max={360}
                 value={angle}
                 onChange={(e) => setAngle(Number(e.target.value))}
-                className="w-full h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                className="w-full h-2 bg-secondary-hover accent-fg"
               />
             </div>
           )}
@@ -253,7 +248,7 @@ export default function TextGradientCreator({ onToast }) {
               <select
                 value={radialShape}
                 onChange={(e) => setRadialShape(e.target.value)}
-                className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
               >
                 <option value="circle">circle</option>
                 <option value="ellipse">ellipse</option>
@@ -261,7 +256,7 @@ export default function TextGradientCreator({ onToast }) {
               <select
                 value={radialSize}
                 onChange={(e) => setRadialSize(e.target.value)}
-                className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
               >
                 <option value="closest-side">closest-side</option>
                 <option value="closest-corner">closest-corner</option>
@@ -271,7 +266,7 @@ export default function TextGradientCreator({ onToast }) {
               <select
                 value={radialPos}
                 onChange={(e) => setRadialPos(e.target.value)}
-                className="w-full p-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
               >
                 <option value="center">center</option>
                 <option value="top">top</option>
@@ -284,13 +279,13 @@ export default function TextGradientCreator({ onToast }) {
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-stone-500 dark:text-stone-400">
+              <p className="text-xs font-bold text-fg-muted">
                 Color stops
               </p>
               <button
                 type="button"
                 onClick={addStop}
-                className="text-xs font-mono text-stone-600 dark:text-stone-400 hover:underline"
+                className="text-xs font-mono text-fg-muted hover:underline"
               >
                 + Add stop
               </button>
@@ -298,10 +293,10 @@ export default function TextGradientCreator({ onToast }) {
             {stops.map((stop, stopIndex) => (
               <div
                 key={`stop-${stopIndex}`}
-                className="p-3 border border-stone-200 dark:border-stone-700 bg-white/70 dark:bg-stone-950/50 space-y-2"
+                className="p-3 border border-border bg-surface-code/70 space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-stone-500">
+                  <span className="text-xs font-mono text-fg-muted">
                     Stop {stopIndex + 1}
                   </span>
                   <button
@@ -318,15 +313,15 @@ export default function TextGradientCreator({ onToast }) {
                     type="color"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-10 h-8 border border-stone-200 dark:border-stone-600 cursor-pointer"
+                    className="w-10 h-8 border border-border cursor-pointer"
                   />
                   <input
                     type="text"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-24 px-2 py-1 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs font-mono dark:text-white"
+                    className="w-24 px-2 py-1 bg-shell border border-border text-xs font-mono dark:text-white"
                   />
-                  <label className="text-xs font-mono text-stone-500">Opacity</label>
+                  <label className="text-xs font-mono text-fg-muted">Opacity</label>
                   <input
                     type="range"
                     min={0}
@@ -335,12 +330,12 @@ export default function TextGradientCreator({ onToast }) {
                     onChange={(e) =>
                       updateStop(stopIndex, "alpha", Number.parseInt(e.target.value, 10))
                     }
-                    className="w-28 h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                    className="w-28 h-2 bg-secondary-hover accent-fg"
                   />
-                  <span className="text-xs text-stone-500 w-8">{stop.alpha}%</span>
+                  <span className="text-xs text-fg-muted w-8">{stop.alpha}%</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <label className="text-xs font-mono text-stone-500">Position</label>
+                  <label className="text-xs font-mono text-fg-muted">Position</label>
                   <input
                     type="range"
                     min={0}
@@ -349,9 +344,9 @@ export default function TextGradientCreator({ onToast }) {
                     onChange={(e) =>
                       updateStop(stopIndex, "pos", Number.parseInt(e.target.value, 10))
                     }
-                    className="flex-1 h-2 bg-stone-200 dark:bg-stone-700 accent-stone-600"
+                    className="flex-1 h-2 bg-secondary-hover accent-fg"
                   />
-                  <span className="text-xs text-stone-500 w-8">{stop.pos}%</span>
+                  <span className="text-xs text-fg-muted w-8">{stop.pos}%</span>
                 </div>
               </div>
             ))}
@@ -363,7 +358,7 @@ export default function TextGradientCreator({ onToast }) {
         </Button>
 
         <CopyArea text={cssOutput} onCopySuccess={() => onToast("CSS copied!")} />
-      </div>
+      </Panel>
     </div>
   );
 }

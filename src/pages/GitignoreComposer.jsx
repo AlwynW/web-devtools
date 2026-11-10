@@ -4,6 +4,8 @@ import {
   GITIGNORE_PRESETS,
   PRESET_LABELS,
 } from "../data/gitignorePresets";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const IDS = Object.keys(GITIGNORE_PRESETS);
 
@@ -50,25 +52,18 @@ export default function GitignoreComposer({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          .gitignore
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Combine preset blocks and your own lines; duplicates removed.
-        </p>
-      </header>
+      <PageHeader title=".gitignore" description="Combine preset blocks and your own lines; duplicates removed." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-3">
+          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-3">
             Presets
           </label>
           <div className="grid sm:grid-cols-2 gap-2">
             {IDS.map((id) => (
               <label
                 key={id}
-                className="flex items-center gap-2 cursor-pointer font-mono text-sm text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700 p-2 hover:bg-stone-50 dark:hover:bg-stone-950"
+                className="flex items-center gap-2 cursor-pointer font-mono text-sm text-fg-soft border border-border p-2 hover:bg-hover dark:hover:bg-stone-950"
               >
                 <input
                   type="checkbox"
@@ -82,7 +77,7 @@ export default function GitignoreComposer({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
             Extra lines (one per row)
           </label>
           <textarea
@@ -90,24 +85,24 @@ export default function GitignoreComposer({ onToast }) {
             onChange={(e) => setExtra(e.target.value)}
             rows={4}
             placeholder="custom-folder/"
-            className="w-full p-3 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
           />
         </div>
 
         <div>
-          <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
             Preview
           </span>
           <CopyPre
             text={content || ""}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-64 overflow-y-auto"
-            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+            className="border border-border bg-surface-code max-h-64 overflow-y-auto"
+            preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
           >
             {content || "—"}
           </CopyPre>
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

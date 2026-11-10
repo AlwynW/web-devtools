@@ -1,6 +1,8 @@
 import { useMemo, useRef, useState } from "react";
 import { DownloadSimple, UploadSimple } from "phosphor-react";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const TABS = [
   { id: "optimize", label: "Optimize" },
@@ -234,8 +236,8 @@ function SvgFileDrop({ multiple = false, onFiles, onError }) {
       onDragLeave={() => setDragOver(false)}
       className={`border-2 border-dashed p-4 text-center cursor-pointer transition-colors ${
         dragOver
-          ? "border-stone-500 bg-stone-100/50 dark:bg-stone-800/50"
-          : "border-stone-300 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-500"
+          ? "border-focus bg-shell/50"
+          : "border-border-strong hover:border-border-muted"
       }`}
     >
       <input
@@ -250,8 +252,8 @@ function SvgFileDrop({ multiple = false, onFiles, onError }) {
         }}
       />
       <div className="flex flex-col items-center gap-2 pointer-events-none">
-        <UploadSimple size={28} weight="thin" className="text-stone-400" />
-        <span className="font-mono text-xs text-stone-600 dark:text-stone-300">
+        <UploadSimple size={28} weight="thin" className="text-fg-subtle" />
+        <span className="font-mono text-xs text-fg-muted">
           {multiple
             ? "Drop SVG files here or click to browse"
             : "Drop an SVG here or click to browse"}
@@ -284,7 +286,7 @@ function DownloadSvgButton({ text, filename, onToast }) {
     <button
       type="button"
       onClick={() => downloadSvg(text, filename, onToast)}
-      className="flex items-center gap-2 px-4 py-2 font-mono text-xs border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+      className="flex items-center gap-2 px-4 py-2 font-mono text-xs border border-border-strong text-fg-soft hover:bg-hover-muted transition-colors"
     >
       <DownloadSimple size={16} weight="thin" />
       Download SVG
@@ -372,14 +374,14 @@ export default function SvgTools({ onToast }) {
     return (
       <svg
         viewBox="0 0 200 120"
-        className="w-full max-w-md border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-950"
+        className="w-full max-w-md border border-border-strong bg-surface"
       >
         <path
           d={d}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
-          className="text-stone-900 dark:text-stone-100"
+          className="text-fg"
         />
       </svg>
     );
@@ -387,17 +389,10 @@ export default function SvgTools({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          SVG tools
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Optimize/minify, recolor, edit path <code className="text-stone-600 dark:text-stone-300">d</code>, build a
-          symbol sprite. Paste or upload SVG.
-        </p>
-      </header>
+      <PageHeader title="SVG tools" description={<>Optimize/minify, recolor, edit path <code className="text-fg-muted">d</code>, build a
+          symbol sprite. Paste or upload SVG.</>} />
 
-      <div className="flex gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px] mb-6">
+      <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px] mb-6">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -405,8 +400,8 @@ export default function SvgTools({ onToast }) {
             onClick={() => setTab(t.id)}
             className={`px-3 py-1.5 transition-colors ${
               tab === t.id
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
           >
             {t.label}
@@ -415,7 +410,7 @@ export default function SvgTools({ onToast }) {
       </div>
 
       {tab === "optimize" && (
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <Panel className="space-y-4">
           <SvgFileDrop
             onFiles={(texts, files) => {
               setOptErr(null);
@@ -432,12 +427,12 @@ export default function SvgTools({ onToast }) {
             value={optIn}
             onChange={(e) => setOptIn(e.target.value)}
             rows={8}
-            className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
           />
           <button
             type="button"
             onClick={runOptimize}
-            className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900"
+            className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
           >
             Optimize
           </button>
@@ -451,16 +446,16 @@ export default function SvgTools({ onToast }) {
                 text={optOut}
                 onCopySuccess={() => onToast("Copied!")}
                 title="Copy output"
-                className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-48 overflow-y-auto"
-                preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+                className="border border-border bg-surface-code max-h-48 overflow-y-auto"
+                preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-fg-soft"
               />
             </>
           )}
-        </div>
+        </Panel>
       )}
 
       {tab === "color" && (
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <Panel className="space-y-4">
           <SvgFileDrop
             onFiles={(texts, files) => {
               setColorErr(null);
@@ -477,13 +472,13 @@ export default function SvgTools({ onToast }) {
             value={colorIn}
             onChange={(e) => setColorIn(e.target.value)}
             rows={8}
-            className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
           />
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={runCurrentColor}
-              className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900"
+              className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
             >
               Use currentColor
             </button>
@@ -496,28 +491,28 @@ export default function SvgTools({ onToast }) {
                     : "#111111"
                 }
                 onChange={(e) => setRecolor(e.target.value)}
-                className="h-10 w-12 shrink-0 cursor-pointer border border-stone-300 dark:border-stone-600 bg-transparent"
+                className="h-10 w-12 shrink-0 cursor-pointer border border-border-strong bg-transparent"
                 aria-label="Replacement color"
               />
               <input
                 value={recolor}
                 onChange={(e) => setRecolor(e.target.value)}
-                className="w-28 p-2 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="w-28 p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
               />
               <button
                 type="button"
                 onClick={runRecolor}
-                className="px-4 py-2 font-mono text-xs border border-stone-400 dark:border-stone-600 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-900"
+                className="px-4 py-2 font-mono text-xs border border-border-muted text-fg-soft hover:bg-hover-muted"
               >
                 Apply color
               </button>
             </div>
           </div>
-          <p className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+          <p className="text-[11px] font-mono text-fg-muted">
             currentColor only rewrites defined fills and strokes. Apply color replaces all paint
-            colors. <code className="text-stone-600 dark:text-stone-300">none</code>,{" "}
-            <code className="text-stone-600 dark:text-stone-300">transparent</code>, and{" "}
-            <code className="text-stone-600 dark:text-stone-300">url()</code> are left alone.
+            colors. <code className="text-fg-muted">none</code>,{" "}
+            <code className="text-fg-muted">transparent</code>, and{" "}
+            <code className="text-fg-muted">url()</code> are left alone.
           </p>
           {colorErr && (
             <p className="text-sm text-red-600 dark:text-red-400 font-mono">{colorErr}</p>
@@ -525,7 +520,7 @@ export default function SvgTools({ onToast }) {
           {colorOut && (
             <>
               <div
-                className="p-6 border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 flex justify-center text-stone-900 dark:text-stone-100 [&_svg]:max-h-40 [&_svg]:max-w-full [&_svg]:h-auto"
+                className="p-6 border border-border bg-surface-code flex justify-center text-fg [&_svg]:max-h-40 [&_svg]:max-w-full [&_svg]:h-auto rounded-panel"
                 dangerouslySetInnerHTML={{ __html: colorOut }}
               />
               <DownloadSvgButton text={colorOut} filename={colorFileName} onToast={onToast} />
@@ -533,24 +528,24 @@ export default function SvgTools({ onToast }) {
                 text={colorOut}
                 onCopySuccess={() => onToast("Copied!")}
                 title="Copy output"
-                className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-48 overflow-y-auto"
-                preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+                className="border border-border bg-surface-code max-h-48 overflow-y-auto"
+                preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-fg-soft"
               />
             </>
           )}
-        </div>
+        </Panel>
       )}
 
       {tab === "path" && (
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-          <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+        <Panel className="space-y-4">
+          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
             d attribute
           </label>
           <textarea
             value={pathD}
             onChange={(e) => setPathD(e.target.value)}
             rows={4}
-            className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 border border-border-strong font-mono text-sm bg-surface text-fg"
           />
           <div className="flex justify-center">{pathPreview}</div>
           {pathD.trim() && (
@@ -560,14 +555,14 @@ export default function SvgTools({ onToast }) {
               onToast={onToast}
             />
           )}
-        </div>
+        </Panel>
       )}
 
       {tab === "sprite" && (
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
-          <p className="text-xs font-mono text-stone-500">
+        <Panel className="space-y-4">
+          <p className="text-xs font-mono text-fg-muted">
             Paste multiple SVGs separated by a line containing only{" "}
-            <code className="text-stone-600 dark:text-stone-300">---</code>, or upload several files.
+            <code className="text-fg-muted">---</code>, or upload several files.
           </p>
           <SvgFileDrop
             multiple
@@ -591,12 +586,12 @@ export default function SvgTools({ onToast }) {
             onChange={(e) => setSpriteIn(e.target.value)}
             rows={10}
             placeholder={'<svg ...>...</svg>\n---\n<svg ...>...</svg>'}
-            className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
           />
           <button
             type="button"
             onClick={runSprite}
-            className="px-4 py-2 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900"
+            className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
           >
             Build sprite
           </button>
@@ -605,20 +600,20 @@ export default function SvgTools({ onToast }) {
           )}
           {spriteResult.sprite && (
             <>
-              <span className="block text-[11px] font-mono text-stone-500 mb-2">Sprite</span>
+              <span className="block text-[11px] font-mono text-fg-muted mb-2">Sprite</span>
               <DownloadSvgButton text={spriteResult.sprite} filename="sprite.svg" onToast={onToast} />
               <CopyPre
                 text={spriteResult.sprite}
                 onCopySuccess={() => onToast("Copied!")}
-                className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 max-h-40 overflow-y-auto"
-                preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-stone-800 dark:text-stone-200"
+                className="border border-border bg-surface-code max-h-40 overflow-y-auto"
+                preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-fg-soft"
               />
-              <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-[11px] text-stone-600 dark:text-stone-400 whitespace-pre-wrap">
+              <pre className="p-3 bg-surface-code border border-border font-mono text-[11px] text-fg-muted whitespace-pre-wrap">
                 {spriteResult.uses}
               </pre>
             </>
           )}
-        </div>
+        </Panel>
       )}
     </div>
   );

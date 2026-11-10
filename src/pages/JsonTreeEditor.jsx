@@ -26,33 +26,35 @@ import {
   emptyObject,
   emptyArray,
 } from "../utils/jsonTreeEditor";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const inputClass =
-  "min-w-0 flex-1 px-2 py-1.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-xs text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400";
+  "min-w-0 flex-1 px-2 py-1.5 bg-surface border border-border-strong rounded-control font-mono text-xs text-fg focus:outline-none focus:ring-1 focus:ring-focus";
 
 const iconBtn =
-  "p-1 border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-50 dark:hover:bg-stone-800 disabled:opacity-30 disabled:pointer-events-none transition-colors";
+  "p-1 border border-border-strong bg-surface text-fg-muted hover:text-fg hover:bg-hover disabled:opacity-30 disabled:pointer-events-none transition-colors";
 
 const addLinkClass =
-  "text-[11px] font-mono text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:underline underline-offset-2";
+  "text-[11px] font-mono text-fg-muted hover:text-fg hover:underline underline-offset-2";
 
 /** @param {{ label: string; onAddPrimitive: () => void; onAddObject: () => void; onAddArray: () => void }} props */
 function AddChildRow({ label, onAddPrimitive, onAddObject, onAddArray }) {
   return (
     <div className="pl-1 pt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
-      <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-stone-400 dark:text-stone-500 shrink-0">
+      <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-fg-subtle shrink-0">
         {label}
       </span>
       <button type="button" className={addLinkClass} onClick={onAddPrimitive}>
         Add key
       </button>
-      <span className="text-stone-300 dark:text-stone-600 select-none" aria-hidden>
+      <span className="text-fg-subtle select-none" aria-hidden>
         ·
       </span>
       <button type="button" className={addLinkClass} onClick={onAddObject}>
         Add object
       </button>
-      <span className="text-stone-300 dark:text-stone-600 select-none" aria-hidden>
+      <span className="text-fg-subtle select-none" aria-hidden>
         ·
       </span>
       <button type="button" className={addLinkClass} onClick={onAddArray}>
@@ -66,19 +68,19 @@ function AddChildRow({ label, onAddPrimitive, onAddObject, onAddArray }) {
 function AddArrayItemRow({ onAddPrimitive, onAddObject, onAddArray }) {
   return (
     <div className="pl-1 pt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
-      <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-stone-400 dark:text-stone-500 shrink-0">
+      <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-fg-subtle shrink-0">
         New item
       </span>
       <button type="button" className={addLinkClass} onClick={onAddPrimitive}>
         Add value
       </button>
-      <span className="text-stone-300 dark:text-stone-600 select-none" aria-hidden>
+      <span className="text-fg-subtle select-none" aria-hidden>
         ·
       </span>
       <button type="button" className={addLinkClass} onClick={onAddObject}>
         Add object
       </button>
-      <span className="text-stone-300 dark:text-stone-600 select-none" aria-hidden>
+      <span className="text-fg-subtle select-none" aria-hidden>
         ·
       </span>
       <button type="button" className={addLinkClass} onClick={onAddArray}>
@@ -190,7 +192,7 @@ function NodeEditor({
 
   if (node.kind === "primitive") {
     return (
-      <div className="flex flex-wrap items-start gap-2 py-1.5 border-b border-stone-100 dark:border-stone-800/80" style={pad}>
+      <div className="flex flex-wrap items-start gap-2 py-1.5 border-b border-border/80" style={pad}>
         <Toolbar
           canCollapse={false}
           onMoveUp={onMoveUp}
@@ -225,7 +227,7 @@ function NodeEditor({
   if (node.kind === "object") {
     const summary = `${node.props.length} key${node.props.length === 1 ? "" : "s"}`;
     return (
-      <div className="py-1.5 border-b border-stone-100 dark:border-stone-800/80" style={pad}>
+      <div className="py-1.5 border-b border-border/80" style={pad}>
         <div className="flex flex-wrap items-start gap-2">
         <Toolbar
           canCollapse
@@ -247,13 +249,13 @@ function NodeEditor({
         />
         <div className="flex flex-1 min-w-0 gap-2 items-center flex-wrap sm:flex-nowrap">
           <div className="w-full sm:w-36 shrink-0">{keySlot}</div>
-          <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+          <span className="text-[11px] font-mono text-fg-muted">
             Object · {summary}
           </span>
         </div>
       </div>
         {!node.collapsed && (
-          <div className="mt-2 space-y-0 border-l border-stone-200 dark:border-stone-700 ml-1 pl-2">
+          <div className="mt-2 space-y-0 border-l border-border ml-1 pl-2">
             {node.props.map((prop, i) => (
               <ObjectPropRow
                 key={prop.id}
@@ -316,7 +318,7 @@ function NodeEditor({
             ))}
           </div>
         )}
-        <div className={node.collapsed ? "mt-2 ml-1 pl-2" : "mt-2 ml-1 pl-2 border-l border-stone-200 dark:border-stone-700"}>
+        <div className={node.collapsed ? "mt-2 ml-1 pl-2" : "mt-2 ml-1 pl-2 border-l border-border"}>
           <AddChildRow
             label="New property"
             onAddPrimitive={() => {
@@ -379,7 +381,7 @@ function NodeEditor({
   /* array */
   const summary = `${node.items.length} item${node.items.length === 1 ? "" : "s"}`;
   return (
-    <div className="py-1.5 border-b border-stone-100 dark:border-stone-800/80" style={pad}>
+    <div className="py-1.5 border-b border-border/80" style={pad}>
       <div className="flex flex-wrap items-start gap-2">
         <Toolbar
           canCollapse
@@ -401,13 +403,13 @@ function NodeEditor({
         />
         <div className="flex flex-1 min-w-0 gap-2 items-center flex-wrap sm:flex-nowrap">
           <div className="w-full sm:w-36 shrink-0">{keySlot}</div>
-          <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+          <span className="text-[11px] font-mono text-fg-muted">
             Array · {summary}
           </span>
         </div>
       </div>
       {!node.collapsed && (
-        <div className="mt-2 space-y-0 border-l border-stone-200 dark:border-stone-700 ml-1 pl-2">
+        <div className="mt-2 space-y-0 border-l border-border ml-1 pl-2">
           {node.items.map((item, i) => (
             <NodeEditor
               key={item.id}
@@ -421,7 +423,7 @@ function NodeEditor({
               }}
               depth={depth + 1}
               keySlot={
-                <span className="block px-2 py-1.5 font-mono text-[11px] text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700">
+                <span className="block px-2 py-1.5 font-mono text-[11px] text-fg-muted bg-surface-inset/50 border border-border">
                   [{i}]
                 </span>
               }
@@ -462,7 +464,7 @@ function NodeEditor({
           ))}
         </div>
       )}
-      <div className={node.collapsed ? "mt-2 ml-1 pl-2" : "mt-2 ml-1 pl-2 border-l border-stone-200 dark:border-stone-700"}>
+      <div className={node.collapsed ? "mt-2 ml-1 pl-2" : "mt-2 ml-1 pl-2 border-l border-border"}>
         <AddArrayItemRow
           onAddPrimitive={() => {
             const n = nodeRef.current;
@@ -592,11 +594,11 @@ export default function JsonTreeEditor({ onToast }) {
   return (
     <div className="max-w-none w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-8 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50 flex items-center justify-center gap-3">
-          <TreeStructure size={36} weight="thin" className="text-stone-500" />
+        <h2 className="text-4xl font-black mb-2 tracking-tight text-fg-strong flex items-center justify-center gap-3">
+          <TreeStructure size={36} weight="thin" className="text-fg-muted" />
           JSON Editor
         </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400 max-w-xl mx-auto">
+        <p className="text-[13px] font-mono text-fg-muted max-w-xl mx-auto">
           Load JSON from a file or paste text, then edit keys and values, reorder,
           collapse, duplicate, or remove nodes. Live JSON appears on the right.
         </p>
@@ -605,23 +607,23 @@ export default function JsonTreeEditor({ onToast }) {
       <div
         className={`mb-6 border-2 border-dashed transition-colors p-4 sm:p-6 ${
           dragOver
-            ? "border-stone-600 bg-stone-100 dark:bg-stone-800 dark:border-stone-400"
-            : "border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900"
+            ? "border-border-muted bg-hover-muted"
+            : "border-border-strong bg-surface"
         }`}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
       >
-        <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+        <Label>
           Drop a .json file or paste JSON
-        </label>
+        </Label>
         <textarea
           value={importText}
           onChange={(e) => setImportText(e.target.value)}
           onPaste={() => setImportError(null)}
           placeholder='{"example": true}'
           rows={5}
-          className="w-full p-4 bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+          className="w-full p-4 bg-surface-code border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           spellCheck={false}
         />
         <div className="flex flex-wrap items-center gap-2 mt-3">
@@ -653,13 +655,13 @@ export default function JsonTreeEditor({ onToast }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
-        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 min-h-[280px]">
-          <div className="px-3 py-2 border-b border-stone-200 dark:border-stone-800 text-[11px] font-mono uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400">
+        <div className="bg-surface border border-border min-h-[280px]">
+          <div className="px-3 py-2 border-b border-border field-label">
             Tree
           </div>
           <div className="p-2 max-h-[min(70vh,900px)] overflow-y-auto custom-json-editor-scroll">
             {!root ? (
-              <p className="p-4 text-sm font-mono text-stone-500 dark:text-stone-400">
+              <p className="p-4 text-sm font-mono text-fg-muted">
                 Load valid JSON above to start editing.
               </p>
             ) : (
@@ -668,7 +670,7 @@ export default function JsonTreeEditor({ onToast }) {
                 onChange={setRoot}
                 depth={0}
                 keySlot={
-                  <span className="block px-2 py-1.5 font-mono text-[11px] text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700">
+                  <span className="block px-2 py-1.5 font-mono text-[11px] text-fg-muted bg-hover-muted/80 border border-border">
                     root
                   </span>
                 }
@@ -686,15 +688,15 @@ export default function JsonTreeEditor({ onToast }) {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 min-h-[280px]">
-          <div className="px-3 py-2 border-b border-stone-200 dark:border-stone-800 text-[11px] font-mono uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400">
+        <div className="bg-surface border border-border min-h-[280px]">
+          <div className="px-3 py-2 border-b border-border field-label">
             Output JSON
           </div>
           <div className="p-4">
             {outputError && (
-              <div className="mb-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 font-mono text-xs">
+              <ErrorBanner className="mb-3 p-3 font-mono text-xs">
                 {outputError}
-              </div>
+              </ErrorBanner>
             )}
             <CopyArea
               text={output}

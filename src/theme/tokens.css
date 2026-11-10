@@ -1,0 +1,190 @@
+/*
+ * Fork edit surface for color, type, and radius.
+ * Light values live on :root. html.dark replaces the roles that invert.
+ * Utilities (bg-surface, text-fg, rounded-control, font-sans) read these
+ * variables, so pages do not repeat dark: color pairs.
+ *
+ * Neutrals point at Tailwind's stone scale. Recolor a role directly, or
+ * override --color-stone-* in the @theme block below to shift leftovers
+ * that still use stone utilities.
+ */
+
+:root {
+  --font-sans: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --radius-none: 0px;
+  --radius-control: 0px;
+  --radius-panel: 0px;
+  --radius-button: 0px;
+  --radius-badge: 0px;
+
+  --header-height: 4rem;
+  --label-size: 0.6875rem;
+  --label-tracking: 0.18em;
+
+  --shell: var(--color-stone-100);
+  --surface: #ffffff;
+  --surface-muted: var(--color-stone-50);
+  --surface-code: var(--color-stone-50);
+  --surface-inset: var(--color-stone-50);
+  --surface-sunken: var(--color-stone-100);
+  --surface-glass: color-mix(in srgb, white 80%, transparent);
+  --chrome: color-mix(in srgb, white 90%, transparent);
+  --fg: var(--color-stone-900);
+  --fg-strong: var(--color-stone-900);
+  --fg-soft: var(--color-stone-700);
+  --fg-muted: var(--color-stone-500);
+  --fg-subtle: var(--color-stone-400);
+  --border: var(--color-stone-200);
+  --border-strong: var(--color-stone-300);
+  --border-muted: var(--color-stone-400);
+  --primary: var(--color-stone-900);
+  --primary-hover: var(--color-stone-800);
+  --primary-fg: var(--color-stone-50);
+  --primary-border: var(--color-stone-900);
+  --secondary: var(--color-stone-100);
+  --secondary-hover: var(--color-stone-200);
+  --secondary-fg: var(--color-stone-800);
+  --secondary-border: var(--color-stone-300);
+  --focus: var(--color-stone-500);
+  --emphasis: var(--color-stone-900);
+  --selection: var(--color-stone-200);
+  --selected: var(--color-stone-700);
+  --selected-fg: var(--color-stone-100);
+  --hover: var(--color-stone-50);
+  --hover-muted: var(--color-stone-100);
+  --inverse: var(--color-stone-900);
+  --inverse-fg: #ffffff;
+  --inverse-border: var(--color-stone-900);
+  --stage: var(--color-stone-100);
+  --overlay: color-mix(in srgb, var(--color-stone-900) 40%, transparent);
+  --scrollbar: color-mix(in srgb, var(--color-stone-500) 50%, transparent);
+  --success: var(--color-emerald-500);
+  --favorite: var(--color-amber-500);
+  --favorite-muted: var(--color-amber-400);
+  --info: var(--color-sky-600);
+  --danger-fg: var(--color-red-700);
+  --danger-bg: var(--color-red-50);
+  --danger-border: var(--color-red-200);
+  --warning-fg: var(--color-amber-800);
+  --warning-bg: var(--color-amber-50);
+  --warning-border: var(--color-amber-200);
+}
+
+html.dark {
+  --shell: var(--color-stone-900);
+  --surface: var(--color-stone-900);
+  --surface-muted: var(--color-stone-900);
+  --surface-code: var(--color-stone-950);
+  --surface-inset: var(--color-stone-800);
+  --surface-sunken: var(--color-stone-900);
+  --surface-glass: var(--color-stone-900);
+  --chrome: color-mix(in srgb, var(--color-stone-900) 95%, transparent);
+  --fg: var(--color-stone-100);
+  --fg-strong: var(--color-stone-50);
+  --fg-soft: var(--color-stone-200);
+  --fg-muted: var(--color-stone-400);
+  --fg-subtle: var(--color-stone-500);
+  --border: var(--color-stone-800);
+  --border-strong: var(--color-stone-700);
+  --border-muted: var(--color-stone-600);
+  --primary: var(--color-stone-50);
+  --primary-hover: var(--color-stone-200);
+  --primary-fg: var(--color-stone-950);
+  --primary-border: var(--color-stone-200);
+  --secondary: var(--color-stone-900);
+  --secondary-hover: var(--color-stone-800);
+  --secondary-fg: var(--color-stone-100);
+  --secondary-border: var(--color-stone-700);
+  --focus: var(--color-stone-400);
+  --emphasis: var(--color-stone-300);
+  --selection: var(--color-stone-700);
+  --selected: var(--color-stone-300);
+  --selected-fg: var(--color-stone-900);
+  --hover: var(--color-stone-800);
+  --hover-muted: var(--color-stone-800);
+  --inverse: var(--color-stone-100);
+  --inverse-fg: var(--color-stone-900);
+  --inverse-border: var(--color-stone-100);
+  --stage: var(--color-stone-950);
+  --overlay: color-mix(in srgb, var(--color-stone-950) 40%, transparent);
+  --scrollbar: color-mix(in srgb, var(--color-stone-400) 50%, transparent);
+  --info: var(--color-sky-400);
+  --danger-fg: var(--color-red-300);
+  --danger-bg: color-mix(in srgb, var(--color-red-900) 20%, transparent);
+  --danger-border: var(--color-red-800);
+  --warning-fg: var(--color-amber-200);
+  --warning-bg: color-mix(in srgb, var(--color-amber-900) 20%, transparent);
+  --warning-border: var(--color-amber-800);
+}
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --radius-none: var(--radius-none);
+  --radius-control: var(--radius-control);
+  --radius-panel: var(--radius-panel);
+  --radius-button: var(--radius-button);
+  --radius-badge: var(--radius-badge);
+
+  --color-shell: var(--shell);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-code: var(--surface-code);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-glass: var(--surface-glass);
+  --color-chrome: var(--chrome);
+  --color-fg: var(--fg);
+  --color-fg-strong: var(--fg-strong);
+  --color-fg-soft: var(--fg-soft);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-border-muted: var(--border-muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-border: var(--primary-border);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-fg: var(--secondary-fg);
+  --color-secondary-border: var(--secondary-border);
+  --color-focus: var(--focus);
+  --color-emphasis: var(--emphasis);
+  --color-selection: var(--selection);
+  --color-selected: var(--selected);
+  --color-selected-fg: var(--selected-fg);
+  --color-hover: var(--hover);
+  --color-hover-muted: var(--hover-muted);
+  --color-inverse: var(--inverse);
+  --color-inverse-fg: var(--inverse-fg);
+  --color-inverse-border: var(--inverse-border);
+  --color-stage: var(--stage);
+  --color-overlay: var(--overlay);
+  --color-scrollbar: var(--scrollbar);
+  --color-success: var(--success);
+  --color-favorite: var(--favorite);
+  --color-favorite-muted: var(--favorite-muted);
+  --color-info: var(--info);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-border: var(--danger-border);
+  --color-warning-fg: var(--warning-fg);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+}
+
+@utility field-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}

@@ -5,6 +5,9 @@ import Button from "../components/Button";
 import CopyButton from "../components/CopyButton";
 import { copyToClipboard } from "../utils/clipboard";
 import useOnlineStatus from "../hooks/useOnlineStatus";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
 
 function initialsFromName(name) {
   return name
@@ -44,7 +47,7 @@ function Avatar({ name, avatarUrl, online }) {
   if (showFallback) {
     return (
       <div
-        className="w-full h-full flex items-center justify-center bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-200 text-3xl font-black tracking-tight"
+        className="w-full h-full flex items-center justify-center bg-secondary-hover text-fg-soft text-3xl font-black tracking-tight"
         aria-label={`${name} avatar initials`}
       >
         {initialsFromName(name) || "?"}
@@ -78,18 +81,11 @@ export default function PersonaGenerator({ onToast }) {
 
   return (
     <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Persona
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Quickly spin up fake personas for testing.
-        </p>
-      </header>
+      <PageHeader title="Persona" description="Quickly spin up fake personas for testing." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 sm:p-8 border border-stone-200 dark:border-stone-800 flex flex-col md:flex-row gap-8 items-center md:items-start">
+      <Panel className="sm:p-8 flex flex-col md:flex-row gap-8 items-center md:items-start">
         <div className="flex flex-col items-center gap-4 shrink-0">
-          <div className="w-40 h-40 border-4 border-stone-200 dark:border-stone-700 overflow-hidden bg-stone-50 dark:bg-stone-900">
+          <div className="w-40 h-40 border-4 border-border overflow-hidden bg-surface-muted">
             <Avatar
               key={persona.avatar}
               name={persona.name}
@@ -105,7 +101,7 @@ export default function PersonaGenerator({ onToast }) {
               className="w-full justify-center"
             />
           ) : (
-            <p className="text-[11px] font-mono text-stone-500 text-center">
+            <p className="text-[11px] font-mono text-fg-muted text-center">
               Offline — initials avatar (Dicebear needs network)
             </p>
           )}
@@ -118,11 +114,11 @@ export default function PersonaGenerator({ onToast }) {
             { label: "Email", val: persona.email },
           ].map((field) => (
             <div key={field.label}>
-              <label className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+              <Label>
                 {field.label}
-              </label>
-              <div className="flex justify-between items-center bg-stone-50 dark:bg-stone-900 p-3 border border-stone-200 dark:border-stone-700 mt-1">
-                <span className="text-lg font-mono truncate pr-4 text-stone-800 dark:text-stone-100">
+              </Label>
+              <div className="flex justify-between items-center bg-surface-muted p-3 border border-border mt-1">
+                <span className="text-lg font-mono truncate pr-4 text-fg">
                   {field.val}
                 </span>
                 <CopyButton
@@ -135,7 +131,7 @@ export default function PersonaGenerator({ onToast }) {
             </div>
           ))}
         </div>
-      </div>
+      </Panel>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-end">
         <Button variant="outline" onClick={copyFullPersona}>

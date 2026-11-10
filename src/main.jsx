@@ -4,6 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 import { registerSW } from "virtual:pwa-register";
 import "./index.css";
 import App from "./App.jsx";
+import { brand } from "./theme/brand.js";
+
+document.title = brand.title;
+document
+  .querySelector('meta[name="apple-mobile-web-app-title"]')
+  ?.setAttribute("content", brand.shortName);
 
 registerSW({ immediate: true });
 

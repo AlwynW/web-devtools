@@ -30,18 +30,21 @@ import {
   rectToPoints,
   renderCrop,
 } from "../utils/imageCrop";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const INPUT_CLASS =
-  "w-full px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100";
+  "w-full px-3 py-2 bg-surface border border-border-strong rounded-control font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg";
 
 const LABEL_CLASS =
-  "block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2";
+  "field-label mb-2";
 
 const STAGE_DOTS_CLASS =
-  "relative border border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-950 flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]";
+  "relative border border-border bg-stage flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]";
 
 const STAGE_BASE_CLASS =
-  "relative border border-stone-200 dark:border-stone-700 flex justify-center items-center overflow-hidden p-4 min-h-[280px]";
+  "relative border border-border flex justify-center items-center overflow-hidden p-4 min-h-[280px]";
 
 const MIN_SLIDER = 8;
 
@@ -59,7 +62,7 @@ function parseNumber(value, fallback, min, max) {
 
 function Segmented({ options, value, onChange }) {
   return (
-    <div className="flex flex-wrap gap-2 p-1 bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-max font-mono text-[11px]">
+    <div className="flex flex-wrap gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
       {options.map((opt) => {
         const Icon = opt.icon;
         return (
@@ -69,8 +72,8 @@ function Segmented({ options, value, onChange }) {
             onClick={() => onChange(opt.id)}
             className={`px-3 py-1.5 transition-colors flex items-center gap-1.5 ${
               value === opt.id
-                ? "bg-stone-900 text-stone-50 dark:bg-stone-50 dark:text-stone-900 border border-stone-700 dark:border-stone-400"
-                : "text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
+                : "text-fg-muted hover:bg-hover-muted"
             }`}
           >
             {Icon && <Icon size={14} weight="thin" />}
@@ -112,7 +115,7 @@ function clientToImage(event, svgEl, imgW, imgH) {
 }
 
 const KNOB_CLASS =
-  "pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-stone-500 dark:border-stone-400 shadow-sm";
+  "pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-focus shadow-sm";
 
 function pct(n, total) {
   if (!total) return "0%";
@@ -784,26 +787,19 @@ export default function ImageCrop({ onToast }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Crop
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Rect, circle, or polygon crop — fill outside with color or leave it transparent.
-        </p>
-      </header>
+      <PageHeader title="Crop" description="Rect, circle, or polygon crop — fill outside with color or leave it transparent." />
 
       <div className="space-y-6">
-        <section className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+        <Panel as="section" className="space-y-4">
           <div className="flex items-center justify-between gap-3">
-            <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+            <h3 className="field-label">
               Image
             </h3>
             {asset && (
               <button
                 type="button"
                 onClick={clearImage}
-                className="flex items-center gap-1 text-xs font-mono text-stone-500 hover:text-red-600 dark:hover:text-red-400"
+                className="flex items-center gap-1 text-xs font-mono text-fg-muted hover:text-red-600 dark:hover:text-red-400"
               >
                 <X size={14} weight="thin" /> Clear
               </button>
@@ -827,8 +823,8 @@ export default function ImageCrop({ onToast }) {
               asset ? "p-6" : "p-12"
             } ${
               dragOver
-                ? "border-stone-500 bg-stone-100/50 dark:bg-stone-800/50"
-                : "border-stone-300 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-500"
+                ? "border-focus bg-shell/50"
+                : "border-border-strong hover:border-border-muted"
             }`}
           >
             <input
@@ -846,9 +842,9 @@ export default function ImageCrop({ onToast }) {
               <UploadSimple
                 size={asset ? 32 : 48}
                 weight="thin"
-                className="text-stone-400"
+                className="text-fg-subtle"
               />
-              <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
+              <span className="font-mono text-sm text-fg-muted">
                 {asset
                   ? `${asset.name} · ${Math.round(imgW)}×${Math.round(imgH)}`
                   : "Drop an image here or click to browse"}
@@ -857,16 +853,16 @@ export default function ImageCrop({ onToast }) {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+            <ErrorBanner className="p-4 text-sm">
               {error}
-            </div>
+            </ErrorBanner>
           )}
-        </section>
+        </Panel>
 
         {asset && (
           <>
-            <section className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-5">
-              <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+            <Panel as="section" className="space-y-5">
+              <h3 className="field-label">
                 Settings
               </h3>
 
@@ -876,7 +872,7 @@ export default function ImageCrop({ onToast }) {
                   <button
                     type="button"
                     onClick={() => resetShapes(imgW, imgH, mode)}
-                    className="text-[10px] font-mono uppercase tracking-wider text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"
+                    className="text-[10px] font-mono uppercase tracking-wider text-fg-muted hover:text-fg"
                   >
                     Reset shape
                   </button>
@@ -908,7 +904,7 @@ export default function ImageCrop({ onToast }) {
                       />
                     ))}
                   </div>
-                  <p className="mt-2 text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                  <p className="mt-2 text-[10px] font-mono text-fg-muted">
                     Drag handles on the crop to resize.
                   </p>
                 </div>
@@ -944,7 +940,7 @@ export default function ImageCrop({ onToast }) {
                       onChange={(v) => patchCircle({ scale: v })}
                     />
                   </div>
-                  <p className="mt-2 text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                  <p className="mt-2 text-[10px] font-mono text-fg-muted">
                     Side handles change width or height. The outer handle scales uniformly.
                   </p>
                 </div>
@@ -959,7 +955,7 @@ export default function ImageCrop({ onToast }) {
                         type="button"
                         onClick={() => setPoints((prev) => prev.slice(0, -1))}
                         disabled={!points.length}
-                        className="text-[10px] font-mono uppercase tracking-wider text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 disabled:opacity-40"
+                        className="text-[10px] font-mono uppercase tracking-wider text-fg-muted hover:text-fg disabled:opacity-40"
                       >
                         Undo point
                       </button>
@@ -967,14 +963,14 @@ export default function ImageCrop({ onToast }) {
                         type="button"
                         onClick={() => setPoints([])}
                         disabled={!points.length}
-                        className="flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-stone-500 hover:text-red-600 dark:hover:text-red-400 disabled:opacity-40"
+                        className="flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-fg-muted hover:text-red-600 dark:hover:text-red-400 disabled:opacity-40"
                       >
                         <Trash size={12} weight="thin" />
                         Clear points
                       </button>
                     </div>
                   </div>
-                  <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                  <p className="text-[10px] font-mono text-fg-muted">
                     Click to add points. Drag to move. Click an edge to insert.
                     Double-click a point to remove.
                     {points.length < 3
@@ -1002,20 +998,20 @@ export default function ImageCrop({ onToast }) {
                         value={fillColor}
                         onChange={(e) => setFillColor(e.target.value)}
                         title="Fill color"
-                        className="h-9 w-12 shrink-0 cursor-pointer border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900 p-0.5"
+                        className="h-9 w-12 shrink-0 cursor-pointer border border-border-strong bg-surface p-0.5"
                       />
-                      <span className="text-[10px] font-mono text-stone-400 uppercase tracking-tighter">
+                      <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
                         {fillColor}
                       </span>
                     </div>
                   )}
                 </div>
-                <label className="mt-3 flex items-center gap-2 font-mono text-xs text-stone-600 dark:text-stone-300">
+                <label className="mt-3 flex items-center gap-2 font-mono text-xs text-fg-muted">
                   <input
                     type="checkbox"
                     checked={keepFullSize}
                     onChange={(e) => setKeepFullSize(e.target.checked)}
-                    className="accent-stone-800 dark:accent-stone-200"
+                    className="accent-fg"
                   />
                   Keep original image size
                 </label>
@@ -1039,9 +1035,9 @@ export default function ImageCrop({ onToast }) {
                         value={editorBgColor}
                         onChange={(e) => setEditorBgColor(e.target.value)}
                         title="Editor background color"
-                        className="h-9 w-12 shrink-0 cursor-pointer border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900 p-0.5"
+                        className="h-9 w-12 shrink-0 cursor-pointer border border-border-strong bg-surface p-0.5"
                       />
-                      <span className="text-[10px] font-mono text-stone-400 uppercase tracking-tighter">
+                      <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
                         {editorBgColor}
                       </span>
                     </div>
@@ -1049,7 +1045,7 @@ export default function ImageCrop({ onToast }) {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-stone-200 dark:border-stone-800">
+              <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border">
                 <Button onClick={() => download("image/png")} icon={DownloadSimple}>
                   Save PNG
                 </Button>
@@ -1057,19 +1053,19 @@ export default function ImageCrop({ onToast }) {
                   Save JPG
                 </Button>
                 {exportable && (
-                  <span className="text-[10px] font-mono text-stone-400 uppercase tracking-tighter">
+                  <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
                     {Math.round(imgW)}×{Math.round(imgH)}
                   </span>
                 )}
               </div>
-            </section>
+            </Panel>
 
-            <section className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+            <Panel as="section" className="space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                <h3 className="field-label">
                   Crop
                 </h3>
-                <span className="text-[10px] font-mono text-stone-400 uppercase tracking-tighter">
+                <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
                   {asset.name} · {Math.round(imgW)}×{Math.round(imgH)}
                 </span>
               </div>
@@ -1105,7 +1101,7 @@ export default function ImageCrop({ onToast }) {
 
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                  <h3 className="text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em]">
+                  <h3 className="field-label">
                     Result
                   </h3>
                 </div>
@@ -1118,12 +1114,12 @@ export default function ImageCrop({ onToast }) {
                     />
                   </div>
                 ) : (
-                  <p className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                  <p className="text-[10px] font-mono text-fg-muted">
                     Add at least three polygon points to preview the crop.
                   </p>
                 )}
               </div>
-            </section>
+            </Panel>
           </>
         )}
       </div>

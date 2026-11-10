@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { parse, formatHex, oklch, interpolate } from "culori";
 import CopyButton from "../components/CopyButton";
 import CopyPre from "../components/CopyPre";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 export default function ColorShades({ onToast }) {
   const [hex, setHex] = useState("#6366f1");
@@ -41,19 +43,12 @@ export default function ColorShades({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Color shades
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          OKLCH ramp from darker to lighter; copy hex table or CSS variables.
-        </p>
-      </header>
+      <PageHeader title="Color shades" description="OKLCH ramp from darker to lighter; copy hex table or CSS variables." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-4">
+      <Panel className="space-y-4">
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="sm:col-span-1">
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
               Base
             </label>
             <div className="flex gap-2">
@@ -68,17 +63,17 @@ export default function ColorShades({ onToast }) {
                   })()
                 }
                 onChange={(e) => setHex(e.target.value)}
-                className="h-10 w-12 shrink-0 cursor-pointer rounded border border-stone-300 dark:border-stone-600"
+                className="h-10 w-12 shrink-0 cursor-pointer rounded border border-border-strong"
               />
               <input
                 value={hex}
                 onChange={(e) => setHex(e.target.value)}
-                className="min-w-0 flex-1 p-2 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+                className="min-w-0 flex-1 p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
               />
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
               Steps (3–21)
             </label>
             <input
@@ -87,11 +82,11 @@ export default function ColorShades({ onToast }) {
               max={21}
               value={steps}
               onChange={(e) => setSteps(+e.target.value || 9)}
-              className="w-full p-2 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-1">
+            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
               Lightness spread
             </label>
             <input
@@ -101,7 +96,7 @@ export default function ColorShades({ onToast }) {
               max={0.5}
               value={spread}
               onChange={(e) => setSpread(+e.target.value || 0.42)}
-              className="w-full p-2 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+              className="w-full p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
             />
           </div>
         </div>
@@ -112,7 +107,7 @@ export default function ColorShades({ onToast }) {
 
         {!err && rows.length > 0 && (
           <>
-            <div className="flex flex-wrap gap-1 rounded overflow-hidden border border-stone-200 dark:border-stone-700">
+            <div className="flex flex-wrap gap-1 rounded overflow-hidden border border-border">
               {rows.map((r) => (
                 <div
                   key={r.step}
@@ -122,8 +117,8 @@ export default function ColorShades({ onToast }) {
                 />
               ))}
             </div>
-            <table className="w-full text-left font-mono text-xs border border-stone-200 dark:border-stone-700">
-              <thead className="bg-stone-100 dark:bg-stone-800 text-stone-500">
+            <table className="w-full text-left font-mono text-xs border border-border">
+              <thead className="bg-hover-muted text-fg-muted">
                 <tr>
                   <th className="p-2">#</th>
                   <th className="p-2">Hex</th>
@@ -134,7 +129,7 @@ export default function ColorShades({ onToast }) {
                 {rows.map((r) => (
                   <tr
                     key={r.step}
-                    className="border-t border-stone-100 dark:border-stone-800 group"
+                    className="border-t border-border group"
                   >
                     <td className="p-2">{r.step}</td>
                     <td className="p-2">{r.hex}</td>
@@ -151,19 +146,19 @@ export default function ColorShades({ onToast }) {
               </tbody>
             </table>
             <div>
-              <span className="block text-[11px] font-mono text-stone-500 uppercase tracking-[0.18em] mb-2">
+              <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
                 CSS variables
               </span>
               <CopyPre
                 text={cssVars}
                 onCopySuccess={() => onToast("Copied!")}
-                className="border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 overflow-x-auto"
-                preClassName="p-3 font-mono text-xs text-stone-800 dark:text-stone-200"
+                className="border border-border bg-surface-code overflow-x-auto"
+                preClassName="p-3 font-mono text-xs text-fg-soft"
               />
             </div>
           </>
         )}
-      </div>
+      </Panel>
     </div>
   );
 }

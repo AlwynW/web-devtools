@@ -2,6 +2,10 @@ import { useState, useMemo } from "react";
 import cronstrue from "cronstrue";
 import { CronExpressionParser } from "cron-parser";
 import CopyArea from "../components/CopyArea";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
+import Label from "../components/ui/Label";
+import ErrorBanner from "../components/ui/ErrorBanner";
 
 const DAYS = [
   { id: "mon", label: "Mon", cron: "1" },
@@ -74,20 +78,13 @@ export default function CrontabGenerator({ onToast }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Crontab Generator
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Build cron schedules, humanize them, and preview next run times.
-        </p>
-      </header>
+      <PageHeader title="Crontab Generator" description="Build cron schedules, humanize them, and preview next run times." />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-6">
+      <Panel className="space-y-6">
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Quick presets
-          </label>
+          </Label>
           <div className="grid grid-cols-2 gap-2">
             {PRESETS.map((p) => (
               <button
@@ -96,12 +93,12 @@ export default function CrontabGenerator({ onToast }) {
                 onClick={() => selectPreset(p)}
                 className={`p-3 border text-left text-sm font-mono transition-colors ${
                   preset === p.cron
-                    ? "border-stone-900 dark:border-stone-100 bg-stone-100 dark:bg-stone-900"
-                    : "border-stone-200 dark:border-stone-700 hover:border-stone-300 dark:hover:border-stone-600"
+                    ? "border-inverse-border bg-shell"
+                    : "border-border hover:border-border-strong"
                 }`}
               >
-                <div className="text-stone-800 dark:text-stone-200">{p.label}</div>
-                <div className="font-mono text-xs text-stone-500 mt-1">
+                <div className="text-fg-soft">{p.label}</div>
+                <div className="font-mono text-xs text-fg-muted mt-1">
                   {p.cron}
                 </div>
               </button>
@@ -110,15 +107,15 @@ export default function CrontabGenerator({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Build custom schedule
-          </label>
-          <p className="text-xs font-mono text-stone-500 mb-3">
+          </Label>
+          <p className="text-xs font-mono text-fg-muted mb-3">
             minute hour day-of-month month day-of-week (0-6, 0=Sun)
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
             <div>
-              <label className="block text-xs font-mono text-stone-500 mb-1">
+              <label className="block text-xs font-mono text-fg-muted mb-1">
                 Minute
               </label>
               <input
@@ -130,11 +127,11 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setMinute(parseInt(e.target.value) || 0);
                 }}
-                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
             <div>
-              <label className="block text-xs font-mono text-stone-500 mb-1">
+              <label className="block text-xs font-mono text-fg-muted mb-1">
                 Hour
               </label>
               <input
@@ -146,11 +143,11 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setHour(parseInt(e.target.value) || 0);
                 }}
-                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
             <div>
-              <label className="block text-xs font-mono text-stone-500 mb-1">
+              <label className="block text-xs font-mono text-fg-muted mb-1">
                 Day (1-31)
               </label>
               <input
@@ -162,11 +159,11 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setDayOfMonth(parseInt(e.target.value) || 1);
                 }}
-                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
             <div>
-              <label className="block text-xs font-mono text-stone-500 mb-1">
+              <label className="block text-xs font-mono text-fg-muted mb-1">
                 Month
               </label>
               <select
@@ -175,7 +172,7 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setMonth(e.target.value);
                 }}
-                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               >
                 <option value="*">* (every)</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => (
@@ -186,7 +183,7 @@ export default function CrontabGenerator({ onToast }) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-mono text-stone-500 mb-1">
+              <label className="block text-xs font-mono text-fg-muted mb-1">
                 Day of week
               </label>
               <select
@@ -195,7 +192,7 @@ export default function CrontabGenerator({ onToast }) {
                   setPreset(null);
                   setDayOfWeek(e.target.value);
                 }}
-                className="w-full p-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+                className="w-full p-2 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               >
                 <option value="*">* (every)</option>
                 {DAYS.map((d) => (
@@ -209,9 +206,9 @@ export default function CrontabGenerator({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+          <Label>
             Or paste custom cron expression
-          </label>
+          </Label>
           <input
             type="text"
             value={custom}
@@ -220,67 +217,67 @@ export default function CrontabGenerator({ onToast }) {
               setPreset(null);
             }}
             placeholder="* * * * *"
-            className="w-full p-4 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
         </div>
 
         <CopyArea text={cron} onCopySuccess={() => onToast("Cron copied!")} />
 
-        <div className="pt-4 border-t border-stone-200 dark:border-stone-800 space-y-4">
-          <h3 className="text-sm font-semibold text-stone-800 dark:text-stone-200 font-mono tracking-tight">
+        <div className="pt-4 border-t border-border space-y-4">
+          <h3 className="text-sm font-semibold text-fg-soft font-mono tracking-tight">
             Humanizer & next runs
           </h3>
-          <p className="text-xs font-mono text-stone-500">
+          <p className="text-xs font-mono text-fg-muted">
             Uses the built expression below unless you override. Standard 5-field
             cron (minute hour dom month dow).
           </p>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Current expression
-            </label>
-            <pre className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 font-mono text-sm text-stone-800 dark:text-stone-200">
+            </Label>
+            <pre className="p-3 bg-surface-code border border-border font-mono text-sm text-fg-soft">
               {cron}
             </pre>
             <button
               type="button"
               onClick={() => setHumanOverride("")}
-              className="mt-2 text-[11px] font-mono text-stone-600 dark:text-stone-400 underline hover:text-stone-900 dark:hover:text-stone-200"
+              className="mt-2 text-[11px] font-mono text-fg-muted underline hover:text-fg"
             >
               Analyze built expression (clear override)
             </button>
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+            <Label>
               Override (optional)
-            </label>
+            </Label>
             <input
               type="text"
               value={humanOverride}
               onChange={(e) => setHumanOverride(e.target.value)}
               placeholder="Paste any 5-field cron to analyze…"
-              className="w-full p-3 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 text-stone-900 dark:text-stone-100"
+              className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
           </div>
           {err && (
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm font-mono">
+            <ErrorBanner className="p-3 text-sm font-mono">
               {err}
-            </div>
+            </ErrorBanner>
           )}
           {!err && human && (
             <>
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Human-readable
-                </label>
-                <p className="p-4 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-200 text-sm leading-relaxed">
+                </Label>
+                <p className="p-4 bg-surface-code border border-border text-fg-soft text-sm leading-relaxed">
                   {human}
                 </p>
               </div>
               <div>
-                <label className="block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2">
+                <Label>
                   Next {NEXT_COUNT} runs (local time)
-                </label>
-                <ul className="font-mono text-xs text-stone-700 dark:text-stone-300 space-y-1 border border-stone-200 dark:border-stone-700 p-3 bg-white dark:bg-stone-900 max-h-48 overflow-y-auto">
+                </Label>
+                <ul className="font-mono text-xs text-fg-soft space-y-1 border border-border p-3 bg-surface max-h-48 overflow-y-auto">
                   {next.map((d, i) => (
                     <li key={i}>{d.toLocaleString()}</li>
                   ))}
@@ -289,7 +286,7 @@ export default function CrontabGenerator({ onToast }) {
             </>
           )}
         </div>
-      </div>
+      </Panel>
     </div>
   );
 }

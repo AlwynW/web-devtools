@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import useOnlineStatus from "../hooks/useOnlineStatus";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 function parseCurlTrace(text) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -92,19 +94,12 @@ export default function UrlExpand() {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          URL redirect inspector
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Paste <code className="text-stone-600 dark:text-stone-300">curl -IL</code>{" "}
-          output for a full chain, or try in-browser fetch (often CORS-blocked).
-        </p>
-      </header>
+      <PageHeader title="URL redirect inspector" description={<>Paste <code className="text-fg-muted">curl -IL</code>{" "}
+          output for a full chain, or try in-browser fetch (often CORS-blocked).</>} />
 
       <div className="space-y-8">
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-3">
-          <h3 className="text-sm font-mono text-stone-700 dark:text-stone-300">
+        <Panel className="space-y-3">
+          <h3 className="text-sm font-mono text-fg-soft">
             From curl -IL (recommended)
           </h3>
           <textarea
@@ -112,11 +107,11 @@ export default function UrlExpand() {
             onChange={(e) => setCurlPaste(e.target.value)}
             rows={10}
             placeholder={`HTTP/2 301 \nlocation: https://...\n\nHTTP/2 200 ...`}
-            className="w-full p-4 border border-stone-300 dark:border-stone-700 font-mono text-xs bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100"
+            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
           />
           {hops.length > 0 && (
-            <table className="w-full text-left text-xs font-mono border border-stone-200 dark:border-stone-700">
-              <thead className="bg-stone-100 dark:bg-stone-800 text-stone-500">
+            <table className="w-full text-left text-xs font-mono border border-border">
+              <thead className="bg-hover-muted text-fg-muted">
                 <tr>
                   <th className="p-2">#</th>
                   <th className="p-2">Status</th>
@@ -127,11 +122,11 @@ export default function UrlExpand() {
                 {hops.map((h, i) => (
                   <tr
                     key={i}
-                    className="border-t border-stone-100 dark:border-stone-800"
+                    className="border-t border-border"
                   >
                     <td className="p-2">{i + 1}</td>
                     <td className="p-2">{h.status}</td>
-                    <td className="p-2 break-all text-stone-700 dark:text-stone-300">
+                    <td className="p-2 break-all text-fg-soft">
                       {h.location || "—"}
                     </td>
                   </tr>
@@ -139,15 +134,15 @@ export default function UrlExpand() {
               </tbody>
             </table>
           )}
-        </div>
+        </Panel>
 
-        <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-3">
-          <h3 className="text-sm font-mono text-stone-700 dark:text-stone-300">
+        <Panel className="space-y-3">
+          <h3 className="text-sm font-mono text-fg-soft">
             In-browser fetch (manual redirects)
           </h3>
-          <p className="text-xs font-mono text-stone-500">
+          <p className="text-xs font-mono text-fg-muted">
             Works only when the browser can read status and{" "}
-            <code className="text-stone-600 dark:text-stone-300">Location</code>{" "}
+            <code className="text-fg-muted">Location</code>{" "}
             (rare for third-party shorteners).
           </p>
           {!online && (
@@ -160,13 +155,13 @@ export default function UrlExpand() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               disabled={!online}
-              className="flex-1 p-3 border border-stone-300 dark:border-stone-700 font-mono text-sm bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 disabled:opacity-50"
+              className="flex-1 p-3 border border-border-strong font-mono text-sm bg-surface text-fg disabled:opacity-50"
             />
             <button
               type="button"
               onClick={runFetch}
               disabled={fetchBusy || !online}
-              className="px-4 py-3 font-mono text-xs border border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900 disabled:opacity-50"
+              className="px-4 py-3 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg disabled:opacity-50"
             >
               {fetchBusy ? "…" : "Follow"}
             </button>
@@ -177,14 +172,14 @@ export default function UrlExpand() {
             </p>
           )}
           {fetchLog.length > 0 && (
-            <ul className="text-xs font-mono space-y-2 border border-stone-200 dark:border-stone-700 p-3 bg-stone-50 dark:bg-stone-950 max-h-64 overflow-y-auto">
+            <ul className="text-xs font-mono space-y-2 border border-border p-3 bg-surface-code max-h-64 overflow-y-auto">
               {fetchLog.map((h, i) => (
                 <li key={i} className="space-y-0.5">
-                  <div className="text-stone-500">Hop {i + 1}</div>
+                  <div className="text-fg-muted">Hop {i + 1}</div>
                   <div className="break-all">{h.url}</div>
                   <div>status {h.status}</div>
                   {h.location && (
-                    <div className="break-all text-stone-600 dark:text-stone-400">
+                    <div className="break-all text-fg-muted">
                       → {h.location}
                     </div>
                   )}
@@ -192,7 +187,7 @@ export default function UrlExpand() {
               ))}
             </ul>
           )}
-        </div>
+        </Panel>
       </div>
     </div>
   );

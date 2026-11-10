@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PageHeader from "../components/ui/PageHeader";
 
 const MESSAGES = [
   "You've been here {time}. Why?",
@@ -35,20 +36,13 @@ export default function ExistentialTimer() {
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Existential Timer
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Counts seconds. Asks questions. Provides no answers.
-        </p>
-      </header>
+      <PageHeader title="Existential Timer" description="Counts seconds. Asks questions. Provides no answers." />
 
-      <div className="bg-white dark:bg-stone-900 p-12 border border-stone-200 dark:border-stone-800 text-center">
-        <div className="font-mono text-6xl font-bold text-stone-800 dark:text-stone-200 mb-6">
+      <div className="bg-surface p-12 border border-border text-center">
+        <div className="font-mono text-6xl font-bold text-fg-soft mb-6">
           {formatTime(seconds)}
         </div>
-        <p className="font-mono text-lg text-stone-600 dark:text-stone-400 italic">
+        <p className="font-mono text-lg text-fg-muted italic">
           {getMessage(seconds)}
         </p>
       </div>

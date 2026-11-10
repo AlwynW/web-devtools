@@ -27,15 +27,17 @@ import {
   quoteFontFamily,
   sortFaceIds,
 } from "../utils/fontMeta";
+import PageHeader from "../components/ui/PageHeader";
+import Panel from "../components/ui/Panel";
 
 const INPUT_CLASS =
-  "w-full px-3 py-2 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100";
+  "w-full px-3 py-2 bg-surface border border-border-strong rounded-control font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg";
 
 const LABEL_CLASS =
-  "block text-[11px] font-mono text-stone-500 dark:text-stone-400 uppercase tracking-[0.18em] mb-2";
+  "field-label mb-2";
 
 const SELECT_CLASS =
-  "px-2 py-1.5 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 font-mono text-xs focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 text-stone-900 dark:text-stone-100";
+  "px-2 py-1.5 bg-surface border border-border-strong rounded-control font-mono text-xs focus:outline-none focus:ring-1 focus:ring-focus text-fg";
 
 const FACE_DRAG = "devkit-face:";
 const PREVIEW_FAMILY_PREFIX = "dk-face-";
@@ -73,7 +75,7 @@ function LicenseNotice({ count, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-stone-900/50 dark:bg-black/60"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-overlay"
       onClick={onClose}
       role="presentation"
     >
@@ -81,25 +83,25 @@ function LicenseNotice({ count, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="font-license-title"
-        className="bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 w-full max-w-md shadow-xl"
+        className="bg-surface border border-border-strong w-full max-w-md shadow-xl"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="flex items-start gap-3 px-5 py-4 border-b border-stone-200 dark:border-stone-800">
+        <div className="flex items-start gap-3 px-5 py-4 border-b border-border">
           <WarningCircle
             size={22}
             weight="thin"
-            className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400"
+            className="mt-0.5 shrink-0 text-favorite"
           />
           <div className="min-w-0 flex-1">
             <h3
               id="font-license-title"
-              className="font-mono text-sm font-bold text-stone-900 dark:text-stone-100"
+              className="font-mono text-sm font-bold text-fg"
             >
               {many
                 ? "You need the rights to use these fonts"
                 : "You need the rights to use this font"}
             </h3>
-            <p className="mt-2 font-mono text-xs leading-relaxed text-stone-600 dark:text-stone-400">
+            <p className="mt-2 font-mono text-xs leading-relaxed text-fg-muted">
               Conversion happens in your browser and does not grant a license.
               Only continue if you own {many ? "these files" : "this file"} or
               your license allows converting, embedding, and redistributing{" "}
@@ -125,17 +127,17 @@ function FaceCard({
 }) {
   return (
     <div
-      className={`p-3 border bg-white dark:bg-stone-900 ${
+      className={`p-3 border bg-surface ${
         duplicate
           ? "border-amber-400 dark:border-amber-600"
-          : "border-stone-200 dark:border-stone-700"
+          : "border-border"
       }`}
     >
       <div className="flex items-start gap-2">
         <div
           draggable
           onDragStart={(event) => onDragStart(event, face.id)}
-          className="mt-0.5 shrink-0 text-stone-400 cursor-grab active:cursor-grabbing"
+          className="mt-0.5 shrink-0 text-fg-subtle cursor-grab active:cursor-grabbing"
           title="Drag to another family"
         >
           <DotsSixVertical size={18} weight="thin" />
@@ -143,10 +145,10 @@ function FaceCard({
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <div className="font-mono text-sm truncate text-stone-800 dark:text-stone-200">
+              <div className="font-mono text-sm truncate text-fg-soft">
                 {face.fileName}
               </div>
-              <div className="text-[10px] font-mono text-stone-500">
+              <div className="text-[10px] font-mono text-fg-muted">
                 {face.sourceFormat.toUpperCase()}
                 {face.flavor !== face.sourceFormat
                   ? ` → ${face.flavor.toUpperCase()}`
@@ -160,7 +162,7 @@ function FaceCard({
             <button
               type="button"
               onClick={() => onRemove(face.id)}
-              className="p-1 text-stone-400 hover:text-red-600"
+              className="p-1 text-fg-subtle hover:text-red-600"
               title={removeTitle}
             >
               <X size={14} weight="thin" />
@@ -168,7 +170,7 @@ function FaceCard({
           </div>
 
           {face.isVariable && (
-            <label className="flex items-center gap-2 font-mono text-[11px] text-stone-600 dark:text-stone-300">
+            <label className="flex items-center gap-2 font-mono text-[11px] text-fg-muted">
               <input
                 type="checkbox"
                 checked={face.useRange}
@@ -183,7 +185,7 @@ function FaceCard({
           <div className="flex flex-wrap gap-2">
             {face.useRange ? (
               <>
-                <label className="flex items-center gap-1 font-mono text-[10px] text-stone-500">
+                <label className="flex items-center gap-1 font-mono text-[10px] text-fg-muted">
                   Min
                   <input
                     type="number"
@@ -199,7 +201,7 @@ function FaceCard({
                     className={`${SELECT_CLASS} w-20`}
                   />
                 </label>
-                <label className="flex items-center gap-1 font-mono text-[10px] text-stone-500">
+                <label className="flex items-center gap-1 font-mono text-[10px] text-fg-muted">
                   Max
                   <input
                     type="number"
@@ -585,24 +587,17 @@ export default function FontConverter({ onToast }) {
   const zoneClass = (key) =>
     `min-h-[4.5rem] flex-1 p-3 border-2 border-dashed transition-colors space-y-2 ${
       dropTarget === key
-        ? "border-stone-700 bg-stone-100/70 dark:border-stone-300 dark:bg-stone-800/40"
-        : "border-stone-300 dark:border-stone-600"
+        ? "border-border-strong bg-shell/70 "
+        : "border-border-strong"
     }`;
 
   return (
     <>
     <div className="max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-12 text-center">
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-stone-900 dark:text-stone-50">
-          Font Converter
-        </h2>
-        <p className="text-[13px] font-mono text-stone-500 dark:text-stone-400">
-          Convert TTF, OTF, WOFF, and WOFF2 in the browser. Group families, set
-          weights, preview, and copy @font-face CSS.
-        </p>
-      </header>
+      <PageHeader title="Font Converter" description={<>Convert TTF, OTF, WOFF, and WOFF2 in the browser. Group families, set
+          weights, preview, and copy @font-face CSS.</>} />
 
-      <div className="bg-white dark:bg-stone-900 p-6 border border-stone-200 dark:border-stone-800 space-y-8">
+      <Panel className="space-y-8">
         <div
           onDragOver={(event) => {
             if (!isFileDrag(event)) return;
@@ -620,8 +615,8 @@ export default function FontConverter({ onToast }) {
           }}
           className={`border-2 border-dashed p-10 text-center transition-colors ${
             fileOver
-              ? "border-stone-500 bg-stone-100/50 dark:bg-stone-800/40"
-              : "border-stone-300 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-500"
+              ? "border-focus bg-shell/50"
+              : "border-border-strong hover:border-border-muted"
           }`}
         >
           <input
@@ -640,13 +635,13 @@ export default function FontConverter({ onToast }) {
             onClick={() => fileInputRef.current?.click()}
             className="cursor-pointer flex flex-col items-center gap-3 w-full"
           >
-            <UploadSimple size={48} weight="thin" className="text-stone-400" />
-            <span className="font-mono text-sm text-stone-600 dark:text-stone-300">
+            <UploadSimple size={48} weight="thin" className="text-fg-subtle" />
+            <span className="font-mono text-sm text-fg-muted">
               {busy
                 ? "Reading fonts…"
                 : "Drop font files here or click to browse"}
             </span>
-            <span className="font-mono text-[11px] text-stone-400">
+            <span className="font-mono text-[11px] text-fg-subtle">
               TTF, OTF, WOFF, WOFF2 · files stay in this browser
             </span>
           </button>
@@ -669,7 +664,7 @@ export default function FontConverter({ onToast }) {
               <Button onClick={clearAll} variant="outline" icon={Trash}>
                 Clear
               </Button>
-              <span className="font-mono text-[11px] text-stone-500 ml-auto">
+              <span className="font-mono text-[11px] text-fg-muted ml-auto">
                 {faces.length} font{faces.length === 1 ? "" : "s"} · check the
                 license before converting
               </span>
@@ -728,7 +723,7 @@ export default function FontConverter({ onToast }) {
                         <button
                           type="button"
                           onClick={() => removeFamily(family.id)}
-                          className="mb-[1px] p-2 border border-stone-300 dark:border-stone-700 text-stone-500 hover:text-red-600"
+                          className="mb-[1px] p-2 border border-border-strong text-fg-muted hover:text-red-600"
                           title="Remove family (fonts become unassigned)"
                         >
                           <Trash size={16} weight="thin" />
@@ -751,7 +746,7 @@ export default function FontConverter({ onToast }) {
                       className={zoneClass(family.id)}
                     >
                       {ordered.length === 0 && (
-                        <p className="font-mono text-[11px] text-stone-400 text-center py-4">
+                        <p className="font-mono text-[11px] text-fg-subtle text-center py-4">
                           Drag fonts into this family
                         </p>
                       )}
@@ -811,7 +806,7 @@ export default function FontConverter({ onToast }) {
                       onChange={(event) =>
                         setPreviewSize(Number(event.target.value))
                       }
-                      className="w-full h-2 bg-stone-200 dark:bg-stone-700 appearance-none cursor-pointer accent-stone-800 dark:accent-stone-200"
+                      className="w-full h-2 bg-secondary-hover appearance-none cursor-pointer accent-fg"
                     />
                   </div>
                 </div>
@@ -821,20 +816,20 @@ export default function FontConverter({ onToast }) {
                       key={preset}
                       type="button"
                       onClick={() => setSample(preset)}
-                      className="px-2 py-1 font-mono text-[10px] border border-stone-300 dark:border-stone-700 text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                      className="px-2 py-1 font-mono text-[10px] border border-border-strong text-fg-muted hover:bg-hover-muted"
                     >
                       {preset.length > 24 ? `${preset.slice(0, 22)}…` : preset}
                     </button>
                   ))}
                 </div>
 
-                <div className="border border-stone-200 dark:border-stone-700 divide-y divide-stone-200 dark:divide-stone-800">
+                <div className="border border-border divide-y divide-border">
                   {sortFaceIds(previewFamily.faceIds, facesById).map((id) => {
                     const face = facesById.get(id);
                     if (!face) return null;
                     return (
                       <div key={id} className="p-4">
-                        <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-stone-400 mb-2">
+                        <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-subtle mb-2">
                           {face.fileName}
                           {" · "}
                           {face.useRange
@@ -843,7 +838,7 @@ export default function FontConverter({ onToast }) {
                           {face.style}
                         </div>
                         <p
-                          className="text-stone-900 dark:text-stone-50 break-words"
+                          className="text-fg-strong break-words"
                           style={{
                             fontFamily: quoteFontFamily(
                               `${PREVIEW_FAMILY_PREFIX}${face.id}`,
@@ -862,14 +857,14 @@ export default function FontConverter({ onToast }) {
 
                 <div>
                   <label className={LABEL_CLASS}>Weight ladder</label>
-                  <div className="border border-stone-200 dark:border-stone-700 divide-y divide-stone-200 dark:divide-stone-800">
+                  <div className="border border-border divide-y divide-border">
                     {WEIGHT_OPTIONS.map((opt) => (
                       <div key={opt.value} className="flex items-baseline gap-4 p-3">
-                        <span className="w-24 shrink-0 font-mono text-[10px] text-stone-400">
+                        <span className="w-24 shrink-0 font-mono text-[10px] text-fg-subtle">
                           {opt.label}
                         </span>
                         <p
-                          className="min-w-0 text-stone-900 dark:text-stone-50 break-words"
+                          className="min-w-0 text-fg-strong break-words"
                           style={{
                             fontFamily: quoteFontFamily(
                               `${PREVIEW_FAMILY_PREFIX}fam-${previewFamily.id}`,
@@ -894,7 +889,7 @@ export default function FontConverter({ onToast }) {
               <div className="grid sm:grid-cols-3 gap-4">
                 <div>
                   <label className={LABEL_CLASS}>Output formats</label>
-                  <div className="space-y-2 font-mono text-sm text-stone-800 dark:text-stone-200">
+                  <div className="space-y-2 font-mono text-sm text-fg-soft">
                     {[
                       ["woff2", "WOFF2"],
                       ["woff", "WOFF"],
@@ -941,8 +936,8 @@ export default function FontConverter({ onToast }) {
                 <CopyPre
                   text={css}
                   onCopySuccess={() => onToast?.("CSS copied!")}
-                  className="max-h-80 overflow-y-auto overflow-x-auto border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950"
-                  preClassName="px-4 pb-4 pt-8 font-mono text-xs text-stone-800 dark:text-stone-200 whitespace-pre"
+                  className="max-h-80 overflow-y-auto overflow-x-auto border border-border bg-surface-code"
+                  preClassName="px-4 pb-4 pt-8 font-mono text-xs text-fg-soft whitespace-pre"
                 />
               </div>
 
@@ -950,7 +945,7 @@ export default function FontConverter({ onToast }) {
                 <Button
                   onClick={() => downloadZip("fonts")}
                   icon={DownloadSimple}
-                  
+
                   className={zipping ? "opacity-60 pointer-events-none" : ""}
                 >
                   {zipping === "fonts" ? "Building ZIP…" : "Download fonts"}
@@ -966,7 +961,7 @@ export default function FontConverter({ onToast }) {
             </section>
             )}
           </>
-      </div>
+      </Panel>
     </div>
     {licenseOpen && (
       <LicenseNotice
