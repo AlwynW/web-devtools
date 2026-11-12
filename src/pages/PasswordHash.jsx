@@ -5,6 +5,8 @@ import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import Button from "../components/Button";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 export default function PasswordHash({ onToast }) {
   const [mode, setMode] = useState("hash");
@@ -48,28 +50,14 @@ export default function PasswordHash({ onToast }) {
       <PageHeader title="Bcrypt / Password Hash" description="Hash passwords with bcrypt and verify against stored hashes." />
 
       <Panel className="space-y-6">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-          <button
-            onClick={() => setMode("hash")}
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "hash"
-                ? "bg-primary text-primary-fg rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-          >
-            Hash
-          </button>
-          <button
-            onClick={() => setMode("verify")}
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "verify"
-                ? "bg-primary text-primary-fg rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-          >
-            Verify
-          </button>
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "hash", label: "Hash" },
+            { value: "verify", label: "Verify" },
+          ]}
+          value={mode}
+          onChange={setMode}
+        />
 
         {mode === "hash" && (
           <>
@@ -98,13 +86,14 @@ export default function PasswordHash({ onToast }) {
                 className="w-24 p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
-            <button
+            <Button
+              variant="outline"
               onClick={doHash}
               disabled={!password || loading}
-              className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors disabled:opacity-50"
+              className="w-fit"
             >
               {loading ? "Hashing…" : "Hash"}
-            </button>
+            </Button>
             {hashOutput && (
               <>
                 {hashOutput.startsWith("Error") ? (
@@ -150,20 +139,21 @@ export default function PasswordHash({ onToast }) {
                 className="w-full p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
               />
             </div>
-            <button
+            <Button
+              variant="outline"
               onClick={doVerify}
               disabled={!password || !hash || loading}
-              className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors disabled:opacity-50"
+              className="w-fit"
             >
               {loading ? "Verifying…" : "Verify"}
-            </button>
+            </Button>
             {verifyResult && (
               <div
-                className={`p-4 font-mono text-sm ${
+                className={`p-4 font-mono text-sm rounded-control ${
                   verifyResult === "Match"
                     ? "bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300"
                     : verifyResult === "No match"
-                      ? "bg-warning-bg border border-warning-border text-amber-700 dark:text-amber-300"
+                      ? "bg-warning-bg border border-warning-border text-warning-fg"
                       : "bg-danger-bg border border-danger-border text-danger-fg"
                 }`}
               >

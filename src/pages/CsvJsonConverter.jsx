@@ -4,6 +4,7 @@ import CopyArea from "../components/CopyArea";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 import ErrorBanner from "../components/ui/ErrorBanner";
 
 const DELIMITERS = [
@@ -56,28 +57,14 @@ export default function CsvJsonConverter({ onToast }) {
       <Panel className="space-y-4">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
-              <button
-                onClick={() => setDirection("csvToJson")}
-                className={`px-3 py-1.5 transition-colors ${
-                  direction === "csvToJson"
-                    ? "bg-primary text-primary-fg rounded-button"
-                    : "text-fg-muted hover:bg-hover-muted"
-                }`}
-              >
-                CSV → JSON
-              </button>
-              <button
-                onClick={() => setDirection("jsonToCsv")}
-                className={`px-3 py-1.5 transition-colors ${
-                  direction === "jsonToCsv"
-                    ? "bg-primary text-primary-fg rounded-button"
-                    : "text-fg-muted hover:bg-hover-muted"
-                }`}
-              >
-                JSON → CSV
-              </button>
-            </div>
+            <SegmentedControl
+              options={[
+                { value: "csvToJson", label: "CSV → JSON" },
+                { value: "jsonToCsv", label: "JSON → CSV" },
+              ]}
+              value={direction}
+              onChange={setDirection}
+            />
             {output && (
               <button
                 onClick={swapDirection}
@@ -88,21 +75,11 @@ export default function CsvJsonConverter({ onToast }) {
             )}
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
-              {DELIMITERS.map((d) => (
-                <button
-                  key={d.key}
-                  onClick={() => setDelimiterKey(d.key)}
-                  className={`px-3 py-1.5 transition-colors ${
-                    delimiterKey === d.key
-                      ? "bg-primary text-primary-fg rounded-button"
-                      : "text-fg-muted hover:bg-hover-muted"
-                  }`}
-                >
-                  {d.label}
-                </button>
-              ))}
-            </div>
+            <SegmentedControl
+              options={DELIMITERS.map((d) => ({ value: d.key, label: d.label }))}
+              value={delimiterKey}
+              onChange={setDelimiterKey}
+            />
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"

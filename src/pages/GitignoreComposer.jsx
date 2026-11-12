@@ -6,6 +6,7 @@ import {
 } from "../data/gitignorePresets";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import { brand } from "../theme/brand";
 
 const IDS = Object.keys(GITIGNORE_PRESETS);
 
@@ -47,7 +48,7 @@ export default function GitignoreComposer({ onToast }) {
       if (!lines.includes(l)) lines.push(l);
     }
     const body = lines.join("\n");
-    return body ? `# DevKit .gitignore\n${body}\n` : "";
+    return body ? `# ${brand.name} .gitignore\n${body}\n` : "";
   }, [selected, extra]);
 
   return (
@@ -56,14 +57,14 @@ export default function GitignoreComposer({ onToast }) {
 
       <Panel className="space-y-6">
         <div>
-          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-3">
+          <label className="field-label mb-3">
             Presets
           </label>
           <div className="grid sm:grid-cols-2 gap-2">
             {IDS.map((id) => (
               <label
                 key={id}
-                className="flex items-center gap-2 cursor-pointer font-mono text-sm text-fg-soft border border-border p-2 hover:bg-hover dark:hover:bg-stone-950"
+                className="flex items-center gap-2 cursor-pointer font-mono text-sm text-fg-soft border border-border rounded-control p-2 hover:bg-hover dark:hover:bg-stone-950"
               >
                 <input
                   type="checkbox"
@@ -77,7 +78,7 @@ export default function GitignoreComposer({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+          <label className="field-label mb-2">
             Extra lines (one per row)
           </label>
           <textarea
@@ -85,18 +86,18 @@ export default function GitignoreComposer({ onToast }) {
             onChange={(e) => setExtra(e.target.value)}
             rows={4}
             placeholder="custom-folder/"
-            className="w-full p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
+            className="w-full p-3 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
           />
         </div>
 
         <div>
-          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+          <span className="field-label mb-2">
             Preview
           </span>
           <CopyPre
             text={content || ""}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-border bg-surface-code max-h-64 overflow-y-auto"
+            className="border border-border rounded-control bg-surface-code max-h-64 overflow-y-auto"
             preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
           >
             {content || "—"}

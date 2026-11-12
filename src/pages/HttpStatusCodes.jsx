@@ -54,7 +54,7 @@ export default function HttpStatusCodes() {
           {filtered.map((c) => (
             <div
               key={c.code}
-              className="flex items-center gap-4 p-4 border border-border hover:bg-hover transition-colors"
+              className="flex items-center gap-4 p-4 border border-border rounded-control hover:bg-hover transition-colors"
             >
               <span
                 className={`w-16 text-center font-mono font-bold text-lg ${

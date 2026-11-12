@@ -9,6 +9,7 @@ import {
 } from "../utils/gradientCss";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const FONTS = [
   { label: "System UI", value: "system-ui, sans-serif" },
@@ -111,7 +112,7 @@ export default function TextGradientCreator({ onToast }) {
 
       <Panel className="space-y-6">
         <div
-          className="min-h-40 flex items-center justify-center p-8 border border-border overflow-hidden"
+          className="min-h-40 flex items-center justify-center p-8 border border-border rounded-control overflow-hidden"
           style={{
             backgroundImage:
               "linear-gradient(45deg, #e7e5e4 25%, transparent 25%), linear-gradient(-45deg, #e7e5e4 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e7e5e4 75%), linear-gradient(-45deg, transparent 75%, #e7e5e4 75%)",
@@ -131,26 +132,26 @@ export default function TextGradientCreator({ onToast }) {
         </div>
 
         <div>
-          <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
+          <label className="field-label mb-1">
             Text
           </label>
           <input
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full p-3 border border-border-strong bg-surface text-fg font-mono text-sm"
+            className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg font-mono text-sm"
           />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               Font
             </label>
             <select
               value={font}
               onChange={(e) => setFont(e.target.value)}
-              className="w-full p-3 border border-border-strong bg-surface text-fg text-sm"
+              className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg text-sm"
             >
               {FONTS.map((f) => (
                 <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>
@@ -160,13 +161,13 @@ export default function TextGradientCreator({ onToast }) {
             </select>
           </div>
           <div>
-            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               Weight
             </label>
             <select
               value={weight}
               onChange={(e) => setWeight(Number(e.target.value))}
-              className="w-full p-3 border border-border-strong bg-surface text-fg text-sm"
+              className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg text-sm"
             >
               {WEIGHTS.map((w) => (
                 <option key={w.value} value={w.value}>
@@ -208,23 +209,12 @@ export default function TextGradientCreator({ onToast }) {
           </div>
         </div>
 
-        <div className="space-y-4 p-4 border border-border bg-surface-muted/60 dark:bg-overlay">
-          <div className="flex gap-2 p-1 bg-hover-muted w-max text-xs font-mono">
-            {["linear", "radial", "conic"].map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setType(t)}
-                className={`px-3 py-1.5 ${
-                  type === t
-                    ? "bg-surface-inset text-fg-soft"
-                    : "text-fg-muted"
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
+        <div className="space-y-4 p-4 border border-border rounded-control bg-surface-muted/60 dark:bg-overlay">
+          <SegmentedControl
+            options={["linear", "radial", "conic"]}
+            value={type}
+            onChange={setType}
+          />
 
           {(type === "linear" || type === "conic") && (
             <div>
@@ -248,7 +238,7 @@ export default function TextGradientCreator({ onToast }) {
               <select
                 value={radialShape}
                 onChange={(e) => setRadialShape(e.target.value)}
-                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm dark:text-white"
               >
                 <option value="circle">circle</option>
                 <option value="ellipse">ellipse</option>
@@ -256,7 +246,7 @@ export default function TextGradientCreator({ onToast }) {
               <select
                 value={radialSize}
                 onChange={(e) => setRadialSize(e.target.value)}
-                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm dark:text-white"
               >
                 <option value="closest-side">closest-side</option>
                 <option value="closest-corner">closest-corner</option>
@@ -266,7 +256,7 @@ export default function TextGradientCreator({ onToast }) {
               <select
                 value={radialPos}
                 onChange={(e) => setRadialPos(e.target.value)}
-                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm dark:text-white"
               >
                 <option value="center">center</option>
                 <option value="top">top</option>
@@ -293,7 +283,7 @@ export default function TextGradientCreator({ onToast }) {
             {stops.map((stop, stopIndex) => (
               <div
                 key={`stop-${stopIndex}`}
-                className="p-3 border border-border bg-surface-code/70 space-y-2"
+                className="p-3 border border-border rounded-control bg-surface-code/70 space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-fg-muted">
@@ -313,13 +303,13 @@ export default function TextGradientCreator({ onToast }) {
                     type="color"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-10 h-8 border border-border cursor-pointer"
+                    className="w-10 h-8 border border-border rounded-control cursor-pointer"
                   />
                   <input
                     type="text"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-24 px-2 py-1 bg-shell border border-border text-xs font-mono dark:text-white"
+                    className="w-24 px-2 py-1 bg-shell border border-border rounded-control text-xs font-mono dark:text-white"
                   />
                   <label className="text-xs font-mono text-fg-muted">Opacity</label>
                   <input

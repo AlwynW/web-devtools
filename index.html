@@ -7,14 +7,13 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <!-- theme-color hexes: keep in sync with src/theme/brand.js themeColor -->
     <meta name="theme-color" content="#f5f5f4" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1c1917" media="(prefers-color-scheme: dark)" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="DevKit" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dev & lifestyle utilities</title>
+    <title>Dev &amp; lifestyle utilities</title>
     <script>
       (function () {
         try {
@@ -23,8 +22,11 @@
             ? saved === "dark"
             : window.matchMedia("(prefers-color-scheme: dark)").matches;
           document.documentElement.classList.toggle("dark", dark);
-          var color = dark ? "#1c1917" : "#f5f5f4";
-          document.querySelectorAll('meta[name="theme-color"]').forEach(function (meta) {
+          var metas = document.querySelectorAll('meta[name="theme-color"]');
+          var color = document
+            .querySelector('meta[name="theme-color"][media*="' + (dark ? "dark" : "light") + '"]')
+            .getAttribute("content");
+          metas.forEach(function (meta) {
             meta.setAttribute("content", color);
           });
         } catch (e) {}

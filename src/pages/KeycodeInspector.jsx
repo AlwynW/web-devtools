@@ -65,7 +65,7 @@ export default function KeycodeInspector({ onToast }) {
               text={json}
               onCopySuccess={() => onToast("JSON copied!")}
               title="Copy as JSON"
-              className="border border-border bg-surface-code"
+              className="border border-border rounded-control bg-surface-code"
               preClassName="p-3 font-mono text-xs text-fg-soft"
             />
           </>

@@ -1,4 +1,5 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
+import Button from "../components/Button";
 import CopyPre from "../components/CopyPre";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
@@ -114,9 +115,10 @@ export default function EasingEditor({ onToast }) {
       <Panel className="space-y-6">
         <div className="flex flex-wrap gap-2">
           {PRESETS.map((p) => (
-            <button
+            <Button
               key={p.name}
-              type="button"
+              variant="outline"
+              size="sm"
               onClick={() => {
                 const [a, b, c, d] = p.v;
                 setP1x(a);
@@ -124,10 +126,9 @@ export default function EasingEditor({ onToast }) {
                 setP2x(c);
                 setP2y(d);
               }}
-              className="px-3 py-1 text-xs font-mono border border-border-strong hover:bg-hover-muted"
             >
               {p.name}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -137,7 +138,7 @@ export default function EasingEditor({ onToast }) {
             width={VIEW}
             height={VIEW}
             viewBox={`0 0 ${VIEW} ${VIEW}`}
-            className="border border-border-strong bg-surface-code touch-none shrink-0 overflow-visible"
+            className="border border-border-strong rounded-control bg-surface-code touch-none shrink-0 overflow-visible"
             onPointerMove={onPointerMove}
           >
             {/* Bounding box for the unit square */}
@@ -238,7 +239,7 @@ export default function EasingEditor({ onToast }) {
                   max={1}
                   value={val}
                   onChange={(e) => set(parseFloat(e.target.value) || 0)}
-                  className="flex-1 p-2 border border-border-strong bg-surface text-fg"
+                  className="flex-1 p-2 border border-border-strong rounded-control bg-surface text-fg"
                 />
               </label>
             ))}
@@ -246,19 +247,19 @@ export default function EasingEditor({ onToast }) {
         </div>
 
         <div className="space-y-2">
-          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
+          <span className="field-label">
             CSS
           </span>
           <CopyPre
             text={`transition-timing-function: ${css};`}
             onCopySuccess={() => onToast("Copied!")}
             title="Copy cubic-bezier"
-            className="border border-border bg-surface-code"
+            className="border border-border rounded-control bg-surface-code"
             preClassName="p-4 font-mono text-sm text-fg-soft"
           />
         </div>
 
-        <div className="relative h-14 border border-border-strong bg-surface-code rounded overflow-hidden">
+        <div className="relative h-14 border border-border-strong bg-surface-code rounded-control overflow-hidden">
           <div
             className="absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded bg-inverse"
             style={{

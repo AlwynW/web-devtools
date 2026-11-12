@@ -5,6 +5,7 @@ import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const DEFAULT_LAYER = () => ({
   type: "linear",
@@ -69,10 +70,10 @@ function layerToCss(layer) {
 }
 
 const PREVIEW_MODES = [
-  { id: "strip", label: "Current" },
-  { id: "square", label: "Square" },
-  { id: "wide", label: "16:9" },
-  { id: "page", label: "Page" },
+  { value: "strip", label: "Current" },
+  { value: "square", label: "Square" },
+  { value: "wide", label: "16:9" },
+  { value: "page", label: "Page" },
 ];
 
 const PREVIEW_FRAME = {
@@ -177,22 +178,11 @@ export default function GradientBuilder({ onToast }) {
   };
 
   const previewModeSwitch = (
-    <div className="flex flex-wrap gap-2 p-1 bg-hover-muted w-max text-xs font-mono">
-      {PREVIEW_MODES.map((mode) => (
-        <button
-          key={mode.id}
-          type="button"
-          onClick={() => setPreviewMode(mode.id)}
-          className={`px-3 py-1.5 ${
-            previewMode === mode.id
-              ? "bg-surface-inset text-fg-soft"
-              : "text-fg-muted"
-          }`}
-        >
-          {mode.label}
-        </button>
-      ))}
-    </div>
+    <SegmentedControl
+      options={PREVIEW_MODES}
+      value={previewMode}
+      onChange={setPreviewMode}
+    />
   );
 
   const controls = (
@@ -213,7 +203,7 @@ export default function GradientBuilder({ onToast }) {
           {layers.map((layer, layerIndex) => (
             <div
               key={`layer-${layerIndex}`}
-              className="p-4 border border-border bg-surface-muted/60 dark:bg-overlay space-y-4"
+              className="p-4 border border-border rounded-control bg-surface-muted/60 dark:bg-overlay space-y-4"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-bold text-fg-soft">
@@ -224,7 +214,7 @@ export default function GradientBuilder({ onToast }) {
                     type="button"
                     onClick={() => moveLayer(layerIndex, -1)}
                     disabled={layerIndex === 0}
-                    className="p-1.5 border border-border-strong disabled:opacity-40"
+                    className="p-1.5 border border-border-strong rounded-button disabled:opacity-40"
                     title="Move up"
                   >
                     <ArrowUp size={14} weight="thin" />
@@ -233,7 +223,7 @@ export default function GradientBuilder({ onToast }) {
                     type="button"
                     onClick={() => moveLayer(layerIndex, 1)}
                     disabled={layerIndex === layers.length - 1}
-                    className="p-1.5 border border-border-strong disabled:opacity-40"
+                    className="p-1.5 border border-border-strong rounded-button disabled:opacity-40"
                     title="Move down"
                   >
                     <ArrowDown size={14} weight="thin" />
@@ -242,7 +232,7 @@ export default function GradientBuilder({ onToast }) {
                     type="button"
                     onClick={() => removeLayer(layerIndex)}
                     disabled={layers.length <= 1}
-                    className="p-1.5 border border-border-strong disabled:opacity-40"
+                    className="p-1.5 border border-border-strong rounded-button disabled:opacity-40"
                     title="Delete layer"
                   >
                     <Trash size={14} weight="thin" />
@@ -250,22 +240,11 @@ export default function GradientBuilder({ onToast }) {
                 </div>
               </div>
 
-              <div className="flex gap-2 p-1 bg-hover-muted w-max text-xs font-mono">
-                {["linear", "radial"].map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => updateLayer(layerIndex, "type", type)}
-                    className={`px-3 py-1.5 ${
-                      layer.type === type
-                        ? "bg-surface-inset text-fg-soft"
-                        : "text-fg-muted"
-                    }`}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
+              <SegmentedControl
+                options={["linear", "radial"]}
+                value={layer.type}
+                onChange={(type) => updateLayer(layerIndex, "type", type)}
+              />
 
               {layer.type === "linear" && (
                 <div>
@@ -289,7 +268,7 @@ export default function GradientBuilder({ onToast }) {
                   <select
                     value={layer.radialShape}
                     onChange={(e) => updateLayer(layerIndex, "radialShape", e.target.value)}
-                    className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                    className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm text-fg"
                   >
                     <option value="circle">circle</option>
                     <option value="ellipse">ellipse</option>
@@ -297,7 +276,7 @@ export default function GradientBuilder({ onToast }) {
                   <select
                     value={layer.radialSize}
                     onChange={(e) => updateLayer(layerIndex, "radialSize", e.target.value)}
-                    className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                    className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm text-fg"
                   >
                     <option value="closest-side">closest-side</option>
                     <option value="closest-corner">closest-corner</option>
@@ -340,7 +319,7 @@ export default function GradientBuilder({ onToast }) {
                             clamp(Number.parseInt(e.target.value || "0", 10), -100, 200),
                           )
                         }
-                        className="w-16 px-2 py-1 bg-shell border border-border text-xs dark:text-white"
+                        className="w-16 px-2 py-1 bg-shell border border-border rounded-control text-xs text-fg"
                       />
                       <span className="text-xs text-fg-muted">%</span>
                     </div>
@@ -362,7 +341,7 @@ export default function GradientBuilder({ onToast }) {
                 {layer.stops.map((stop, stopIndex) => (
                   <div
                     key={`stop-${stopIndex}`}
-                    className="p-3 border border-border bg-surface-code/70 space-y-2"
+                    className="p-3 border border-border rounded-control bg-surface-code/70 space-y-2"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-mono text-fg-muted">Stop {stopIndex + 1}</span>
@@ -380,13 +359,13 @@ export default function GradientBuilder({ onToast }) {
                         type="color"
                         value={stop.color}
                         onChange={(e) => updateStop(layerIndex, stopIndex, "color", e.target.value)}
-                        className="w-10 h-8 border border-border cursor-pointer"
+                        className="w-10 h-8 border border-border rounded-control cursor-pointer"
                       />
                       <input
                         type="text"
                         value={stop.color}
                         onChange={(e) => updateStop(layerIndex, stopIndex, "color", e.target.value)}
-                        className="w-24 px-2 py-1 bg-shell border border-border text-xs font-mono dark:text-white"
+                        className="w-24 px-2 py-1 bg-shell border border-border rounded-control text-xs font-mono text-fg"
                       />
                       <label className="text-xs font-mono text-fg-muted">Opacity</label>
                       <input
@@ -412,7 +391,7 @@ export default function GradientBuilder({ onToast }) {
                             clamp(Number.parseInt(e.target.value || "0", 10), 0, 100),
                           )
                         }
-                        className="w-14 px-2 py-1 bg-shell border border-border text-xs dark:text-white"
+                        className="w-14 px-2 py-1 bg-shell border border-border rounded-control text-xs text-fg"
                       />
                       <span className="text-xs text-fg-muted">%</span>
                     </div>
@@ -441,7 +420,7 @@ export default function GradientBuilder({ onToast }) {
                             clamp(Number.parseInt(e.target.value || "0", 10), 0, 100),
                           )
                         }
-                        className="w-14 px-2 py-1 bg-shell border border-border text-xs dark:text-white"
+                        className="w-14 px-2 py-1 bg-shell border border-border rounded-control text-xs text-fg"
                       />
                       <span className="text-xs text-fg-muted">%</span>
                     </div>
@@ -462,7 +441,7 @@ export default function GradientBuilder({ onToast }) {
 
   if (pagePreview) {
     return createPortal(
-      <aside className="fixed top-16 right-0 bottom-0 z-20 w-[min(100vw-2.5rem,24rem)] overflow-y-auto border-l border-border bg-white/95/95 p-4 space-y-4 shadow-xl">
+      <aside className="fixed top-16 right-0 bottom-0 z-20 w-[min(100vw-2.5rem,24rem)] overflow-y-auto border-l border-border bg-surface/95 p-4 space-y-4 shadow-xl">
         <div>
           <h2 className="text-lg font-black tracking-tight text-fg-strong">
             Gradient Builder
@@ -485,7 +464,7 @@ export default function GradientBuilder({ onToast }) {
       <Panel className="space-y-6">
         {previewModeSwitch}
         <div
-          className={`${PREVIEW_FRAME[previewMode]} border border-border`}
+          className={`${PREVIEW_FRAME[previewMode]} border border-border rounded-control overflow-hidden`}
           style={{ backgroundImage }}
         />
         {controls}

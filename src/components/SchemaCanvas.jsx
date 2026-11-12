@@ -112,9 +112,9 @@ function getLayoutedElements(tables, selectedTable, onSelect) {
           type: "smoothstep",
           animated: false,
           markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16 },
-          style: { stroke: "var(--schema-edge, #78716c)", strokeWidth: 1.5 },
-          labelStyle: { fontSize: 9, fontFamily: "JetBrains Mono, monospace" },
-          labelBgStyle: { fill: "var(--schema-label-bg, #f5f5f4)" },
+          style: { stroke: "var(--fg-muted)", strokeWidth: 1.5 },
+          labelStyle: { fontSize: 9, fontFamily: "var(--font-mono)" },
+          labelBgStyle: { fill: "var(--shell)" },
         });
       }
     }
@@ -159,7 +159,7 @@ export default function SchemaCanvas({ tables, selectedTable, onSelectTable }) {
 
   return (
     <div
-      className="h-full w-full schema-canvas [--schema-edge:#78716c] [--schema-label-bg:#f5f5f4] dark:[--schema-edge:#a8a29e] dark:[--schema-label-bg:#292524]"
+      className="h-full w-full schema-canvas"
     >
       <ReactFlow
         nodes={nodes}

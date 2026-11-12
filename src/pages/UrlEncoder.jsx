@@ -1,8 +1,10 @@
 import { useState, useCallback } from "react";
+import Button from "../components/Button";
 import CopyArea from "../components/CopyArea";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 import ErrorBanner from "../components/ui/ErrorBanner";
 
 export default function UrlEncoder({ onToast }) {
@@ -34,28 +36,14 @@ export default function UrlEncoder({ onToast }) {
       <PageHeader title="URL Encoder" description="Encode and decode URL-encoded strings." />
 
       <Panel className="space-y-4">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-          <button
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "encode"
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-            onClick={() => setMode("encode")}
-          >
-            Encode
-          </button>
-          <button
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "decode"
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-            onClick={() => setMode("decode")}
-          >
-            Decode
-          </button>
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "encode", label: "Encode" },
+            { value: "decode", label: "Decode" },
+          ]}
+          value={mode}
+          onChange={setMode}
+        />
 
         <Label>
           Input
@@ -73,12 +61,9 @@ export default function UrlEncoder({ onToast }) {
         />
 
         <div className="flex justify-end">
-          <button
-            onClick={process}
-            className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors"
-          >
+          <Button variant="outline" onClick={process}>
             {mode === "encode" ? "> encode" : "> decode"}
-          </button>
+          </Button>
         </div>
 
         {error && (

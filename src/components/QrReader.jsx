@@ -346,7 +346,7 @@ export default function QrReader({ onToast }) {
       onDragLeave={() => setDragOver(false)}
       onDrop={onDrop}
     >
-      <div className="flex flex-wrap gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
+      <div className="flex flex-wrap gap-1 p-1 bg-surface-sunken border border-border-strong rounded-button w-max font-medium text-xs">
         {SOURCES.map((item) => {
           const Icon = item.icon;
           const selected = source === item.id;
@@ -356,10 +356,10 @@ export default function QrReader({ onToast }) {
               type="button"
               onClick={() => setSource(item.id)}
               aria-pressed={selected}
-              className={`px-3 py-1.5 transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-button transition-colors flex items-center gap-1.5 ${
                 selected
-                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
+                  ? "bg-primary text-primary-fg"
+                  : "text-fg-muted hover:bg-hover-muted hover:text-fg"
               }`}
             >
               <Icon size={14} weight="thin" />
@@ -371,7 +371,7 @@ export default function QrReader({ onToast }) {
 
       {source === "upload" && (
         <div
-          className={`border-2 border-dashed p-12 text-center transition-colors ${
+          className={`border-2 border-dashed rounded-control p-12 text-center transition-colors ${
             dragOver
               ? "border-focus bg-shell/50"
               : "border-border-strong hover:border-border-muted"
@@ -402,7 +402,7 @@ export default function QrReader({ onToast }) {
 
       {source === "clipboard" && (
         <div
-          className={`border-2 border-dashed p-12 text-center space-y-4 transition-colors ${
+          className={`border-2 border-dashed rounded-control p-12 text-center space-y-4 transition-colors ${
             dragOver
               ? "border-focus bg-shell/50"
               : "border-border-strong"
@@ -423,7 +423,7 @@ export default function QrReader({ onToast }) {
       {source === "webcam" && (
         <div className="space-y-3">
           <div
-            className={`relative border border-border min-h-[220px] flex items-center justify-center overflow-hidden ${
+            className={`relative border border-border rounded-control min-h-[220px] flex items-center justify-center overflow-hidden ${
               showVideo ? "bg-stone-950" : "bg-stage"
             }`}
           >
@@ -443,7 +443,7 @@ export default function QrReader({ onToast }) {
             )}
             {cameraState === "scanning" && (
               <div className="absolute bottom-3 left-3 right-3 text-center pointer-events-none">
-                <span className="inline-block px-3 py-1 bg-stone-900/80 text-stone-50 font-mono text-[11px]">
+                <span className="inline-block px-3 py-1 rounded-badge bg-stone-900/80 text-stone-50 font-mono text-[11px]">
                   Point the camera at a QR code
                 </span>
               </div>
@@ -489,7 +489,7 @@ export default function QrReader({ onToast }) {
       )}
 
       {busy && (
-        <div className="p-4 bg-surface-muted border border-border text-sm font-mono text-fg-muted">
+        <div className="p-4 bg-surface-muted border border-border rounded-control text-sm font-mono text-fg-muted">
           Reading QR code…
         </div>
       )}
@@ -497,7 +497,7 @@ export default function QrReader({ onToast }) {
       {error && (
         <div className="space-y-3">
           {preview && !contents && (
-            <div className="w-28 h-28 border border-border bg-white overflow-hidden">
+            <div className="w-28 h-28 border border-border rounded-control bg-white overflow-hidden">
               <img src={preview} alt="Image that was scanned" className="w-full h-full object-contain" />
             </div>
           )}
@@ -508,10 +508,10 @@ export default function QrReader({ onToast }) {
       )}
 
       {contents && info && (
-        <div className="space-y-4 border border-border p-4">
+        <div className="space-y-4 border border-border rounded-control p-4">
           <div className="flex items-start gap-4">
             {preview && (
-              <div className="w-28 h-28 border border-border bg-white shrink-0 overflow-hidden">
+              <div className="w-28 h-28 border border-border rounded-control bg-white shrink-0 overflow-hidden">
                 <img src={preview} alt="QR code that was read" className="w-full h-full object-contain" />
               </div>
             )}
@@ -541,7 +541,7 @@ export default function QrReader({ onToast }) {
                   href={info.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-2 border border-border-muted rounded-button text-fg-soft hover:bg-hover-muted font-medium text-sm transition-colors"
                 >
                   <ArrowSquareOut size={16} weight="thin" />
                   Open
@@ -555,7 +555,7 @@ export default function QrReader({ onToast }) {
               Contents
             </div>
             <div className="relative">
-              <pre className="w-full max-h-64 overflow-auto bg-surface-code border border-border-strong p-4 pr-14 text-sm font-mono text-fg whitespace-pre-wrap break-all">
+              <pre className="w-full max-h-64 overflow-auto bg-surface-code border border-border-strong rounded-control p-4 pr-14 text-sm font-mono text-fg whitespace-pre-wrap break-all">
                 {contents}
               </pre>
               <CopyButton

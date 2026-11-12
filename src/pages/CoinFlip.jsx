@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import Button from "../components/Button";
 
 export default function CoinFlip() {
   const [side, setSide] = useState(null);
@@ -40,14 +41,9 @@ export default function CoinFlip() {
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={flip}
-          disabled={flipping}
-          className="px-8 py-3 font-mono text-sm bg-primary text-primary-fg rounded-button border border-border-strong hover:opacity-90 disabled:opacity-50"
-        >
+        <Button onClick={flip} disabled={flipping} className="mx-auto w-fit">
           Flip
-        </button>
+        </Button>
       </Panel>
     </div>
   );

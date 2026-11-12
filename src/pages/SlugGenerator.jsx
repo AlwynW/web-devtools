@@ -181,7 +181,7 @@ export default function SlugGenerator({ onToast }) {
                   value={r.from}
                   onChange={(e) => updateReplacement(i, "from", e.target.value)}
                   placeholder="from"
-                  className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
+                  className="flex-1 p-2 bg-surface border border-border-strong rounded-control font-mono text-sm"
                 />
                 <span className="text-fg-subtle">→</span>
                 <input
@@ -189,7 +189,7 @@ export default function SlugGenerator({ onToast }) {
                   value={r.to}
                   onChange={(e) => updateReplacement(i, "to", e.target.value)}
                   placeholder="to"
-                  className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
+                  className="flex-1 p-2 bg-surface border border-border-strong rounded-control font-mono text-sm"
                 />
                 <button
                   onClick={() => removeReplacement(i)}

@@ -145,7 +145,7 @@ export default function CurlConverter({ onToast }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={4}
-          className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+          className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
         />
 
         {parsed.error && (
@@ -166,13 +166,13 @@ export default function CurlConverter({ onToast }) {
           { title: "axios", code: `import axios from "axios";\n\n${axiosCode}` },
         ].map((b) => (
           <div key={b.title}>
-            <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <span className="field-label mb-2">
               {b.title}
             </span>
             <CopyPre
               text={b.code}
               onCopySuccess={() => onToast("Copied!")}
-              className="border border-border bg-surface-code max-h-56 overflow-y-auto"
+              className="border border-border rounded-control bg-surface-code max-h-56 overflow-y-auto"
               preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
             />
           </div>

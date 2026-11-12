@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import useOnlineStatus from "../hooks/useOnlineStatus";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import Button from "../components/Button";
 
 function parseCurlTrace(text) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -107,32 +108,34 @@ export default function UrlExpand() {
             onChange={(e) => setCurlPaste(e.target.value)}
             rows={10}
             placeholder={`HTTP/2 301 \nlocation: https://...\n\nHTTP/2 200 ...`}
-            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+            className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
           />
           {hops.length > 0 && (
-            <table className="w-full text-left text-xs font-mono border border-border">
-              <thead className="bg-hover-muted text-fg-muted">
-                <tr>
-                  <th className="p-2">#</th>
-                  <th className="p-2">Status</th>
-                  <th className="p-2">Location</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hops.map((h, i) => (
-                  <tr
-                    key={i}
-                    className="border-t border-border"
-                  >
-                    <td className="p-2">{i + 1}</td>
-                    <td className="p-2">{h.status}</td>
-                    <td className="p-2 break-all text-fg-soft">
-                      {h.location || "—"}
-                    </td>
+            <div className="border border-border rounded-control overflow-hidden">
+              <table className="w-full text-left text-xs font-mono">
+                <thead className="bg-hover-muted text-fg-muted">
+                  <tr>
+                    <th className="p-2">#</th>
+                    <th className="p-2">Status</th>
+                    <th className="p-2">Location</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {hops.map((h, i) => (
+                    <tr
+                      key={i}
+                      className="border-t border-border"
+                    >
+                      <td className="p-2">{i + 1}</td>
+                      <td className="p-2">{h.status}</td>
+                      <td className="p-2 break-all text-fg-soft">
+                        {h.location || "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </Panel>
 
@@ -155,16 +158,11 @@ export default function UrlExpand() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               disabled={!online}
-              className="flex-1 p-3 border border-border-strong font-mono text-sm bg-surface text-fg disabled:opacity-50"
+              className="flex-1 p-3 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg disabled:opacity-50"
             />
-            <button
-              type="button"
-              onClick={runFetch}
-              disabled={fetchBusy || !online}
-              className="px-4 py-3 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg disabled:opacity-50"
-            >
+            <Button onClick={runFetch} disabled={fetchBusy || !online}>
               {fetchBusy ? "…" : "Follow"}
-            </button>
+            </Button>
           </div>
           {fetchErr && (
             <p className="text-sm text-amber-800 dark:text-amber-300 font-mono">
@@ -172,7 +170,7 @@ export default function UrlExpand() {
             </p>
           )}
           {fetchLog.length > 0 && (
-            <ul className="text-xs font-mono space-y-2 border border-border p-3 bg-surface-code max-h-64 overflow-y-auto">
+            <ul className="text-xs font-mono space-y-2 border border-border rounded-control p-3 bg-surface-code max-h-64 overflow-y-auto">
               {fetchLog.map((h, i) => (
                 <li key={i} className="space-y-0.5">
                   <div className="text-fg-muted">Hop {i + 1}</div>

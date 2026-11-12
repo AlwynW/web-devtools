@@ -2,6 +2,7 @@ import { useMemo, useState, useCallback } from "react";
 import CopyButton from "../components/CopyButton";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import Button from "../components/Button";
 
 const labels = [
   { key: "r", name: "Read" },
@@ -123,7 +124,7 @@ export default function ChmodCalculator({ onToast }) {
 
         <div className="grid sm:grid-cols-2 gap-4 pt-2">
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <label className="field-label mb-2">
               Octal (3 digits)
             </label>
             <p className="text-[11px] font-mono text-fg-muted mb-2">
@@ -134,21 +135,15 @@ export default function ChmodCalculator({ onToast }) {
               <input
                 value={octInput}
                 onChange={(e) => setOctInput(e.target.value)}
-                className="flex-1 p-3 font-mono text-lg border border-border-strong bg-surface text-fg"
+                className="flex-1 p-3 font-mono text-lg border border-border-strong rounded-control bg-surface text-fg"
                 maxLength={3}
                 placeholder="e.g. 644"
               />
-              <button
-                type="button"
-                onClick={applyOctal}
-                className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
-              >
-                Apply
-              </button>
+              <Button onClick={applyOctal}>Apply</Button>
             </div>
           </div>
           <div className="space-y-2 font-mono text-sm">
-            <div className="flex justify-between items-center border border-border p-3 bg-surface-code">
+            <div className="flex justify-between items-center border border-border rounded-control p-3 bg-surface-code">
               <span className="text-fg-muted">Octal</span>
               <div className="flex items-center gap-2">
                 <span className="text-fg font-semibold font-mono">
@@ -157,7 +152,7 @@ export default function ChmodCalculator({ onToast }) {
                 <CopyButton text={octStr} onCopySuccess={copyToast} size={16} />
               </div>
             </div>
-            <div className="flex justify-between items-center border border-border p-3 bg-surface-code">
+            <div className="flex justify-between items-center border border-border rounded-control p-3 bg-surface-code">
               <span className="text-fg-muted">Symbolic</span>
               <div className="flex items-center gap-2">
                 <span className="text-fg font-mono">
@@ -166,7 +161,7 @@ export default function ChmodCalculator({ onToast }) {
                 <CopyButton text={symbolic} onCopySuccess={copyToast} size={16} />
               </div>
             </div>
-            <div className="flex justify-between items-center border border-border p-3 bg-surface-code gap-2">
+            <div className="flex justify-between items-center border border-border rounded-control p-3 bg-surface-code gap-2">
               <span className="text-fg-muted shrink-0">chmod</span>
               <div className="flex items-center gap-2 min-w-0">
                 <span className="text-xs text-left text-fg-soft font-mono break-all">

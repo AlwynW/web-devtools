@@ -10,6 +10,8 @@ import JSZip from "jszip";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
+import Button from "../components/Button";
 
 const INTERNAL = 1024;
 const TAB_FAVICON_SIZE = 32;
@@ -671,14 +673,14 @@ export default function FaviconGenerator({ onToast }) {
           <span className="field-label">
             Source
           </span>
-          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
+          <div className="flex gap-1 p-1 bg-surface-sunken border border-border-strong rounded-button w-max font-medium text-xs">
             <button
               type="button"
               onClick={() => setSourceKind("generate")}
-              className={`px-3 py-1.5 transition-colors ${
+              className={`px-3 py-1.5 rounded-button transition-colors ${
                 sourceKind === "generate"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
+                  ? "bg-primary text-primary-fg"
+                  : "text-fg-muted hover:bg-hover-muted hover:text-fg"
               }`}
             >
               Text / emoji
@@ -686,10 +688,10 @@ export default function FaviconGenerator({ onToast }) {
             <button
               type="button"
               onClick={() => setSourceKind("upload")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-button transition-colors ${
                 sourceKind === "upload"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
+                  ? "bg-primary text-primary-fg"
+                  : "text-fg-muted hover:bg-hover-muted hover:text-fg"
               }`}
             >
               <UploadSimple size={14} weight="thin" aria-hidden />
@@ -700,30 +702,14 @@ export default function FaviconGenerator({ onToast }) {
 
         {sourceKind === "generate" && (
           <>
-            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-              <button
-                type="button"
-                onClick={() => setMode("text")}
-                className={`px-3 py-1.5 transition-colors ${
-                  mode === "text"
-                    ? "bg-primary text-primary-fg rounded-button"
-                    : "text-fg-muted hover:bg-hover-muted"
-                }`}
-              >
-                Text
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode("emoji")}
-                className={`px-3 py-1.5 transition-colors ${
-                  mode === "emoji"
-                    ? "bg-primary text-primary-fg rounded-button"
-                    : "text-fg-muted hover:bg-hover-muted"
-                }`}
-              >
-                Emoji
-              </button>
-            </div>
+            <SegmentedControl
+              options={[
+                { value: "text", label: "Text" },
+                { value: "emoji", label: "Emoji" },
+              ]}
+              value={mode}
+              onChange={setMode}
+            />
 
             {mode === "text" && (
               <div>
@@ -765,7 +751,7 @@ export default function FaviconGenerator({ onToast }) {
                   type="color"
                   value={fgColor}
                   onChange={(e) => setFgColor(e.target.value)}
-                  className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent"
+                  className="w-10 h-10 border border-border-strong rounded-control cursor-pointer bg-transparent"
                 />
                 <span className="text-xs font-mono text-fg-muted">{fgColor}</span>
               </div>
@@ -778,7 +764,7 @@ export default function FaviconGenerator({ onToast }) {
                   value={bgColor}
                   onChange={(e) => setBgColor(e.target.value)}
                   disabled={transparentBg}
-                  className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent disabled:cursor-not-allowed"
+                  className="w-10 h-10 border border-border-strong rounded-control cursor-pointer bg-transparent disabled:cursor-not-allowed"
                 />
                 <span className="text-xs font-mono text-fg-muted">{bgColor}</span>
               </div>
@@ -854,13 +840,13 @@ export default function FaviconGenerator({ onToast }) {
                 className="hidden"
                 onChange={onPickFile}
               />
-              <button
-                type="button"
+              <Button
+                variant="outline"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
+                icon={ImageIcon}
               >
-                <ImageIcon size={16} weight="thin" /> Choose PNG / JPEG / WebP
-              </button>
+                Choose PNG / JPEG / WebP
+              </Button>
               {uploadImage && (
                 <button
                   type="button"
@@ -886,7 +872,7 @@ export default function FaviconGenerator({ onToast }) {
             <p className="field-label mb-2">
               Source preview ({INTERNAL} px)
             </p>
-            <div className="p-4 bg-stage border border-border w-fit max-w-[min(100%,310px)]">
+            <div className="p-4 bg-stage border border-border rounded-control w-fit max-w-[min(100%,310px)]">
               {masterReady ? (
                 sourceKind === "generate" && transparentBg ? (
                   <span className={CHECKERBOARD_CLASS}>
@@ -904,7 +890,7 @@ export default function FaviconGenerator({ onToast }) {
                   />
                 )
               ) : (
-                <div className="w-[200px] h-[200px] flex items-center justify-center text-[11px] font-mono text-fg-subtle border border-dashed border-border-strong">
+                <div className="w-[200px] h-[200px] flex items-center justify-center text-[11px] font-mono text-fg-subtle border border-dashed border-border-strong rounded-control">
                   {sourceKind === "upload" && !uploadImage ? "Choose an image" : "…"}
                 </div>
               )}
@@ -916,18 +902,14 @@ export default function FaviconGenerator({ onToast }) {
               <p className="field-label">
                 This tab
               </p>
-              <button
-                type="button"
+              <Button
+                variant={tabPreview ? "primary" : "outline"}
                 onClick={() => setTabPreview((v) => !v)}
-                className={`flex items-center gap-2 px-4 py-2 border font-mono text-xs transition-colors w-full sm:w-auto ${
-                  tabPreview
-                    ? "border-stone-900 bg-inverse text-inverse-fg rounded-button"
-                    : "border-border-strong bg-surface hover:bg-hover-muted text-fg-soft"
-                }`}
+                className="w-full sm:w-auto"
               >
                 <Eye size={16} weight={tabPreview ? "fill" : "thin"} aria-hidden />
                 {tabPreview ? "Tab preview on" : "Preview in this tab"}
-              </button>
+              </Button>
               <p className="text-[10px] font-mono text-fg-muted leading-relaxed">
                 Applies your icon as this page’s favicon ({TAB_FAVICON_SIZE}×{TAB_FAVICON_SIZE} PNG) so you
                 see it on the browser tab. Updates live while enabled; turn off to restore the default icon.
@@ -940,41 +922,15 @@ export default function FaviconGenerator({ onToast }) {
           <span className="field-label">
             Export
           </span>
-          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-            <button
-              type="button"
-              onClick={() => setOutputScope("web")}
-              className={`px-3 py-1.5 transition-colors ${
-                outputScope === "web"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              Web favicon
-            </button>
-            <button
-              type="button"
-              onClick={() => setOutputScope("mobile")}
-              className={`px-3 py-1.5 transition-colors ${
-                outputScope === "mobile"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              Mobile (Android + iOS)
-            </button>
-            <button
-              type="button"
-              onClick={() => setOutputScope("electron")}
-              className={`px-3 py-1.5 transition-colors ${
-                outputScope === "electron"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              Desktop app (Windows + macOS + Linux)
-            </button>
-          </div>
+          <SegmentedControl
+            options={[
+              { value: "web", label: "Web favicon" },
+              { value: "mobile", label: "Mobile (Android + iOS)" },
+              { value: "electron", label: "Desktop app (Windows + macOS + Linux)" },
+            ]}
+            value={outputScope}
+            onChange={setOutputScope}
+          />
         </div>
 
         {masterReady && (
@@ -987,26 +943,26 @@ export default function FaviconGenerator({ onToast }) {
                     ? "Android & iOS — all sizes"
                     : "Desktop app — all platform sizes"}
               </h3>
-              <button
-                type="button"
+              <Button
+                variant="outline"
                 onClick={() => downloadZip()}
-                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface-code hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
+                icon={Archive}
               >
-                <Archive size={16} weight="thin" /> Download all (ZIP)
-              </button>
+                Download all (ZIP)
+              </Button>
             </div>
 
             {outputScope === "mobile" && (
               <div className="space-y-6">
                 <div>
-                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
+                  <p className="field-label mb-3">
                     Android
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ANDROID_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
+                        className="flex gap-3 items-center p-3 border border-border rounded-control bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1033,14 +989,14 @@ export default function FaviconGenerator({ onToast }) {
                   </ul>
                 </div>
                 <div>
-                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
+                  <p className="field-label mb-3">
                     iOS
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {IOS_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
+                        className="flex gap-3 items-center p-3 border border-border rounded-control bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1072,34 +1028,36 @@ export default function FaviconGenerator({ onToast }) {
             {outputScope === "electron" && (
               <div className="space-y-6">
                 <div className="flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => downloadElectronBundleFile("ico")}
-                    className="flex items-center gap-2 px-3 py-2 border border-border-strong bg-surface-code hover:bg-hover-muted text-fg-soft font-mono text-[11px] transition-colors"
+                    icon={DownloadSimple}
                   >
-                    <DownloadSimple size={14} weight="thin" /> Download `icon.ico`
-                  </button>
-                  <button
-                    type="button"
+                    Download `icon.ico`
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => downloadElectronBundleFile("icns")}
-                    className="flex items-center gap-2 px-3 py-2 border border-border-strong bg-surface-code hover:bg-hover-muted text-fg-soft font-mono text-[11px] transition-colors"
+                    icon={DownloadSimple}
                   >
-                    <DownloadSimple size={14} weight="thin" /> Download `icon.icns`
-                  </button>
+                    Download `icon.icns`
+                  </Button>
                   <p className="text-[10px] font-mono text-fg-muted">
                     ZIP export includes both bundle files at root.
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
+                  <p className="field-label mb-3">
                     Windows (PNG set)
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ELECTRON_WINDOWS_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
+                        className="flex gap-3 items-center p-3 border border-border rounded-control bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1127,14 +1085,14 @@ export default function FaviconGenerator({ onToast }) {
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
+                  <p className="field-label mb-3">
                     macOS (PNG set for ICNS pipeline)
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ELECTRON_MAC_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
+                        className="flex gap-3 items-center p-3 border border-border rounded-control bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1162,14 +1120,14 @@ export default function FaviconGenerator({ onToast }) {
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-mono text-fg-muted mb-3 uppercase tracking-[0.14em]">
+                  <p className="field-label mb-3">
                     Linux
                   </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ELECTRON_LINUX_SPECS.map((spec) => (
                       <li
                         key={spec.file}
-                        className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
+                        className="flex gap-3 items-center p-3 border border-border rounded-control bg-surface-muted/80"
                       >
                         <SizePreview
                           sourceRef={masterRef}
@@ -1203,7 +1161,7 @@ export default function FaviconGenerator({ onToast }) {
                 {WEB_SPECS.map((spec) => (
                   <li
                     key={spec.file}
-                    className="flex gap-3 items-center p-3 border border-border bg-surface-muted/80"
+                    className="flex gap-3 items-center p-3 border border-border rounded-control bg-surface-muted/80"
                   >
                     <SizePreview
                       sourceRef={masterRef}

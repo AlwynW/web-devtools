@@ -5,6 +5,7 @@ import { copyToClipboard } from "../utils/clipboard";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const BRAILLE_START = 0x2800;
 const NUMBER_SIGN = "\u283c";
@@ -193,30 +194,14 @@ export default function Braille({ onToast }) {
           <h3 className="field-label">
             Converter
           </h3>
-          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-            <button
-              type="button"
-              onClick={() => setMode("encode")}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === "encode"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              Text → Braille
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("decode")}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === "decode"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              Braille → Text
-            </button>
-          </div>
+          <SegmentedControl
+            options={[
+              { value: "encode", label: "Text → Braille" },
+              { value: "decode", label: "Braille → Text" },
+            ]}
+            value={mode}
+            onChange={setMode}
+          />
           <div>
             <div className="flex items-center justify-between mb-1">
               <Label>
@@ -282,7 +267,7 @@ export default function Braille({ onToast }) {
                 key={key}
                 type="button"
                 onClick={() => copySym(symbol)}
-                className="p-2 border border-border hover:bg-hover text-center font-mono text-lg leading-snug"
+                className="p-2 border border-border rounded-control hover:bg-hover text-center font-mono text-lg leading-snug"
               >
                 <span className="block text-xs font-bold text-fg-soft mb-1">
                   {label}

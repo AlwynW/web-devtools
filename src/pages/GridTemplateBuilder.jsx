@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const PRESET_VALUES = ["1fr", "2fr", "auto", "minmax(0, 1fr)", "100px", "repeat(3, 1fr)"];
 
@@ -69,24 +70,14 @@ grid-template-areas:
       <PageHeader title="Grid Template Builder" description="Build CSS grid layouts with parameters or named areas." />
 
       <Panel className="space-y-6">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-          {[
-            { id: "params", label: "Parameters" },
-            { id: "areas", label: "Named Areas" },
-          ].map((m) => (
-            <button
-              key={m.id}
-              onClick={() => setMode(m.id)}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === m.id
-                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "params", label: "Parameters" },
+            { value: "areas", label: "Named Areas" },
+          ]}
+          value={mode}
+          onChange={setMode}
+        />
 
         {mode === "params" && (
           <>
@@ -95,7 +86,7 @@ grid-template-areas:
                 <Label>
                   Columns
                 </Label>
-                <Button onClick={addColumn} icon={Plus} variant="outline" className="text-xs">
+                <Button onClick={addColumn} icon={Plus} variant="outline" size="sm">
                   Add
                 </Button>
               </div>
@@ -112,7 +103,7 @@ grid-template-areas:
                     <button
                       onClick={() => removeColumn(i)}
                       disabled={columns.length <= 1}
-                      className="p-2 border border-border-strong text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
+                      className="p-2 border border-border-strong rounded-button text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
                     >
                       <Trash size={16} weight="thin" />
                     </button>
@@ -121,13 +112,14 @@ grid-template-areas:
               </div>
               <div className="mt-2 flex flex-wrap gap-1">
                 {PRESET_VALUES.map((v) => (
-                  <button
+                  <Button
                     key={v}
+                    variant="outline"
+                    size="sm"
                     onClick={() => setColumns([...columns, v])}
-                    className="px-2 py-1 text-xs font-mono border border-border-strong bg-surface hover:bg-hover-muted"
                   >
                     + {v}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -137,7 +129,7 @@ grid-template-areas:
                 <Label>
                   Rows
                 </Label>
-                <Button onClick={addRow} icon={Plus} variant="outline" className="text-xs">
+                <Button onClick={addRow} icon={Plus} variant="outline" size="sm">
                   Add
                 </Button>
               </div>
@@ -154,7 +146,7 @@ grid-template-areas:
                     <button
                       onClick={() => removeRow(i)}
                       disabled={rows.length <= 1}
-                      className="p-2 border border-border-strong text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
+                      className="p-2 border border-border-strong rounded-button text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
                     >
                       <Trash size={16} weight="thin" />
                     </button>
@@ -201,7 +193,7 @@ grid-template-areas:
               </div>
             </div>
 
-            <div className="p-4 bg-surface-muted border border-border">
+            <div className="p-4 bg-surface-muted border border-border rounded-control">
               <div
                 className="grid gap-2 min-h-[8rem]"
                 style={{
@@ -255,7 +247,7 @@ grid-template-areas:
                   Preview
                 </Label>
                 <div
-                  className="grid gap-2 p-4 bg-surface-muted border border-border min-h-[10rem]"
+                  className="grid gap-2 p-4 bg-surface-muted border border-border rounded-control min-h-[10rem]"
                   style={{
                     gridTemplateColumns: `repeat(${Math.max(...areasPreview.map((r) => r.length), 1)}, 1fr)`,
                     gridTemplateRows: `repeat(${areasPreview.length}, 1fr)`,

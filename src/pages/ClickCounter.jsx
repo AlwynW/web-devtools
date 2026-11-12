@@ -29,12 +29,12 @@ export default function ClickCounter() {
         </p>
         <div
           ref={containerRef}
-          className="relative h-64 rounded border border-border bg-surface-muted/50"
+          className="relative h-64 rounded-control border border-border bg-surface-muted/50"
         >
           <button
             type="button"
             onClick={handleClick}
-            className="absolute px-6 py-3 font-mono text-sm bg-primary text-primary-fg rounded-button border border-border-strong hover:bg-primary-hover transition-colors"
+            className="absolute px-6 py-3 font-mono text-sm bg-primary text-primary-fg rounded-button border border-primary-border hover:bg-primary-hover transition-colors"
             style={{
               left: position.x,
               top: position.y,

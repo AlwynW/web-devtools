@@ -3,6 +3,7 @@ import CopyArea from "../components/CopyArea";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 export default function TimestampGenerator({ onToast }) {
   const [mode, setMode] = useState("current");
@@ -38,28 +39,15 @@ export default function TimestampGenerator({ onToast }) {
     <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <PageHeader title="Timestamp" description="Convert to/from Unix timestamps." />
 
-      <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max mb-6 mx-auto font-mono text-[11px]">
-        <button
-          className={`px-3 py-1.5 transition-colors ${
-            mode === "current"
-              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-              : "text-fg-muted hover:bg-hover-muted"
-          }`}
-          onClick={() => setMode("current")}
-        >
-          Live Clock
-        </button>
-        <button
-          className={`px-3 py-1.5 transition-colors ${
-            mode === "custom"
-              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-              : "text-fg-muted hover:bg-hover-muted"
-          }`}
-          onClick={() => setMode("custom")}
-        >
-          Select Time
-        </button>
-      </div>
+      <SegmentedControl
+        options={[
+          { value: "current", label: "Live Clock" },
+          { value: "custom", label: "Select Time" },
+        ]}
+        value={mode}
+        onChange={setMode}
+        className="mb-6 mx-auto"
+      />
 
       <Panel>
         {mode === "custom" && (

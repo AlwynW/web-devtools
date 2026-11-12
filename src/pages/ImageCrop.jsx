@@ -41,10 +41,10 @@ const LABEL_CLASS =
   "field-label mb-2";
 
 const STAGE_DOTS_CLASS =
-  "relative border border-border bg-stage flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]";
+  "relative border border-border rounded-control bg-stage flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]";
 
 const STAGE_BASE_CLASS =
-  "relative border border-border flex justify-center items-center overflow-hidden p-4 min-h-[280px]";
+  "relative border border-border rounded-control flex justify-center items-center overflow-hidden p-4 min-h-[280px]";
 
 const MIN_SLIDER = 8;
 
@@ -62,7 +62,7 @@ function parseNumber(value, fallback, min, max) {
 
 function Segmented({ options, value, onChange }) {
   return (
-    <div className="flex flex-wrap gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
+    <div className="flex flex-wrap gap-1 p-1 bg-surface-sunken border border-border-strong rounded-button w-max font-medium text-xs">
       {options.map((opt) => {
         const Icon = opt.icon;
         return (
@@ -70,10 +70,10 @@ function Segmented({ options, value, onChange }) {
             key={opt.id}
             type="button"
             onClick={() => onChange(opt.id)}
-            className={`px-3 py-1.5 transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-button transition-colors flex items-center gap-1.5 ${
               value === opt.id
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
+                ? "bg-primary text-primary-fg"
+                : "text-fg-muted hover:bg-hover-muted hover:text-fg"
             }`}
           >
             {Icon && <Icon size={14} weight="thin" />}
@@ -819,7 +819,7 @@ export default function ImageCrop({ onToast }) {
               setDragOver(true);
             }}
             onDragLeave={() => setDragOver(false)}
-            className={`border-2 border-dashed text-center cursor-pointer transition-colors ${
+            className={`border-2 border-dashed rounded-control text-center cursor-pointer transition-colors ${
               asset ? "p-6" : "p-12"
             } ${
               dragOver
@@ -998,7 +998,7 @@ export default function ImageCrop({ onToast }) {
                         value={fillColor}
                         onChange={(e) => setFillColor(e.target.value)}
                         title="Fill color"
-                        className="h-9 w-12 shrink-0 cursor-pointer border border-border-strong bg-surface p-0.5"
+                        className="h-9 w-12 shrink-0 cursor-pointer border border-border-strong rounded-control bg-surface p-0.5"
                       />
                       <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
                         {fillColor}
@@ -1035,7 +1035,7 @@ export default function ImageCrop({ onToast }) {
                         value={editorBgColor}
                         onChange={(e) => setEditorBgColor(e.target.value)}
                         title="Editor background color"
-                        className="h-9 w-12 shrink-0 cursor-pointer border border-border-strong bg-surface p-0.5"
+                        className="h-9 w-12 shrink-0 cursor-pointer border border-border-strong rounded-control bg-surface p-0.5"
                       />
                       <span className="text-[10px] font-mono text-fg-subtle uppercase tracking-tighter">
                         {editorBgColor}

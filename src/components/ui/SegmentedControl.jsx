@@ -9,7 +9,7 @@ export default function SegmentedControl({
     <div
       role="group"
       aria-label={ariaLabel}
-      className={`flex flex-wrap gap-2 p-1 bg-surface-sunken border border-border-strong w-max font-mono text-[11px] rounded-control ${className}`}
+      className={`flex flex-wrap gap-1 p-1 bg-surface-sunken border border-border-strong w-max button-text-sm rounded-button ${className}`}
     >
       {options.map((opt) => {
         const id = typeof opt === "object" ? opt.value : opt;

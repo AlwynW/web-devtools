@@ -4,6 +4,7 @@ import CopyArea from "../components/CopyArea";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 export default function Base64Image({ onToast }) {
   const [file, setFile] = useState(null);
@@ -74,7 +75,7 @@ export default function Base64Image({ onToast }) {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`border-2 border-dashed p-12 text-center transition-colors ${
+          className={`border-2 border-dashed rounded-control p-12 text-center transition-colors ${
             dragOver
               ? "border-focus bg-shell/50"
               : "border-border-strong hover:border-border-muted"
@@ -107,7 +108,7 @@ export default function Base64Image({ onToast }) {
         {file && base64 && (
           <>
             <div className="flex items-center gap-4">
-              <div className="w-32 h-32 border border-border overflow-hidden bg-shell shrink-0">
+              <div className="w-32 h-32 border border-border rounded-control overflow-hidden bg-shell shrink-0">
                 <img
                   src={base64}
                   alt="Preview"
@@ -130,25 +131,15 @@ export default function Base64Image({ onToast }) {
               </div>
             </div>
 
-            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-              {[
-                { id: "raw", label: "Raw" },
-                { id: "css", label: "CSS url()" },
-                { id: "html", label: "HTML img" },
-              ].map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => setFormat(m.id)}
-                  className={`px-3 py-1.5 transition-colors ${
-                    format === m.id
-                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                      : "text-fg-muted hover:bg-hover-muted"
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
+            <SegmentedControl
+              options={[
+                { value: "raw", label: "Raw" },
+                { value: "css", label: "CSS url()" },
+                { value: "html", label: "HTML img" },
+              ]}
+              value={format}
+              onChange={setFormat}
+            />
 
             <CopyArea
               text={output}

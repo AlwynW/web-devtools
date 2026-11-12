@@ -39,14 +39,14 @@ export default function MimeLookup({ onToast }) {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search extension or MIME (e.g. svg, json, image/)"
-          className="w-full p-4 border border-border-strong font-mono text-sm bg-surface text-fg"
+          className="w-full p-4 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
         />
-        <label className="inline-flex items-center gap-2 text-xs font-mono text-fg-muted cursor-pointer border border-dashed border-border-muted px-3 py-2">
+        <label className="inline-flex items-center gap-2 text-xs font-mono text-fg-muted cursor-pointer border border-dashed border-border-muted rounded-button px-3 py-2">
           <input type="file" className="sr-only" onChange={onFile} />
           Choose file (hint only)
         </label>
 
-        <div className="max-h-[28rem] overflow-y-auto border border-border">
+        <div className="max-h-[28rem] overflow-y-auto border border-border rounded-control">
           <table className="w-full text-left text-sm font-mono">
             <thead className="sticky top-0 bg-hover-muted text-[11px] uppercase tracking-wider text-fg-muted">
               <tr>

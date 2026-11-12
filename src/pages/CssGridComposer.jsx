@@ -41,8 +41,8 @@ function Field({ label, children }) {
 
 function LineStyleControls({ title, value, onChange }) {
   return (
-    <div className="space-y-3 border border-border p-4">
-      <p className="text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
+    <div className="space-y-3 border border-border rounded-control p-4">
+      <p className="field-label">
         {title}
       </p>
       <div className="grid grid-cols-2 gap-3">
@@ -62,7 +62,7 @@ function LineStyleControls({ title, value, onChange }) {
             type="color"
             value={value.color}
             onChange={(e) => onChange({ ...value, color: e.target.value })}
-            className="h-10 w-full cursor-pointer border border-border-strong bg-surface"
+            className="h-10 w-full cursor-pointer border border-border-strong rounded-control bg-surface"
           />
         </Field>
         <Field label={`Width (${value.width}px)`}>
@@ -238,7 +238,7 @@ export default function CssGridComposer({ onToast }) {
             </div>
           </div>
           <div
-            className="relative h-72 sm:h-96 border border-border-strong overflow-hidden isolate"
+            className="relative h-72 sm:h-96 border border-border-strong rounded-control overflow-hidden isolate"
             style={{ background: bgColor }}
           >
             <div
@@ -276,7 +276,7 @@ export default function CssGridComposer({ onToast }) {
         {/* Distance */}
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-[11px] text-fg-muted uppercase tracking-[0.18em]">
+            <p className="field-label">
               Distance
             </p>
             <label className="flex items-center gap-2 text-[11px] text-fg-muted cursor-pointer">
@@ -336,13 +336,13 @@ export default function CssGridComposer({ onToast }) {
         {/* Subgrid — subdivisions per major cell */}
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <label className="flex items-center gap-2 text-[11px] text-fg-muted uppercase tracking-[0.18em] cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={subEnabled}
                 onChange={(e) => setSubEnabled(e.target.checked)}
               />
-              Subgrid
+              <span className="field-label">Subgrid</span>
             </label>
             {subEnabled && (
               <label className="flex items-center gap-2 text-[11px] text-fg-muted cursor-pointer">
@@ -428,7 +428,7 @@ export default function CssGridComposer({ onToast }) {
         {enable3d && (
           <>
             <div className="space-y-3">
-              <p className="text-[11px] text-fg-muted uppercase tracking-[0.18em]">
+              <p className="field-label">
                 3D angle
               </p>
               <div className="grid sm:grid-cols-3 gap-4">
@@ -466,7 +466,7 @@ export default function CssGridComposer({ onToast }) {
             </div>
 
             <div className="space-y-3">
-              <p className="text-[11px] text-fg-muted uppercase tracking-[0.18em]">
+              <p className="field-label">
                 Perspective point
               </p>
               <div className="grid sm:grid-cols-3 gap-4">
@@ -511,7 +511,7 @@ export default function CssGridComposer({ onToast }) {
             type="color"
             value={bgColor}
             onChange={(e) => setBgColor(e.target.value)}
-            className="h-10 w-24 cursor-pointer border border-border-strong bg-surface"
+            className="h-10 w-24 cursor-pointer border border-border-strong rounded-control bg-surface"
           />
         </Field>
 
@@ -520,7 +520,7 @@ export default function CssGridComposer({ onToast }) {
           <CopyPre
             text={cssOutput}
             onCopySuccess={() => onToast?.("Copied!")}
-            className="border border-border bg-surface-code max-h-72 overflow-auto"
+            className="border border-border rounded-control bg-surface-code max-h-72 overflow-auto"
             preClassName="p-4 text-fg-soft text-xs whitespace-pre-wrap break-all"
           />
         </div>

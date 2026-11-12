@@ -70,9 +70,9 @@ export default function UuidGenerator({ onToast }) {
             key={t.id}
             type="button"
             onClick={() => setUuidType(t.id)}
-            className={`p-3 border text-left transition-colors font-mono text-sm ${
+            className={`p-3 border rounded-control text-left transition-colors font-mono text-sm ${
               uuidType === t.id
-                ? "border-inverse-border bg-shell"
+                ? "border-emphasis bg-shell"
                 : "border-border hover:border-border-strong"
             }`}
           >
@@ -120,7 +120,7 @@ export default function UuidGenerator({ onToast }) {
               readOnly
               value={bulkText}
               rows={Math.min(16, Math.max(6, safeCount))}
-              className="w-full p-4 bg-surface-code border border-border-strong font-mono text-sm text-fg resize-y min-h-[8rem]"
+              className="w-full p-4 bg-surface-code border border-border-strong rounded-control font-mono text-sm text-fg resize-y min-h-[8rem]"
             />
           </div>
         )}

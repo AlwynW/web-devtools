@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { copyToClipboard } from "../utils/clipboard";
+import Button from "../components/Button";
 
 /** Virtual line height (px) — counting only, not DOM rows. */
 const LINE_PX = 28;
@@ -143,7 +144,7 @@ function InlineScrollMessage({ id, topPx, text, onLeftViewport }) {
       style={{ top: topPx }}
     >
       <div
-        className={`w-full max-w-3xl py-3 px-4 rounded-md bg-white/95 dark:bg-stone-900/95 backdrop-blur-sm font-mono text-xs text-fg-soft transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+        className={`w-full max-w-3xl py-3 px-4 rounded-panel bg-white/95 dark:bg-stone-900/95 backdrop-blur-sm font-mono text-xs text-fg-soft transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
           entered ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}
         role="note"
@@ -297,20 +298,12 @@ export default function ScrollSanctifier({ onToast }) {
             </span>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={handleGetCertificate}
-              className="px-3 py-1.5 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg hover:opacity-90"
-            >
+            <Button size="sm" onClick={handleGetCertificate}>
               Get certificate
-            </button>
-            <button
-              type="button"
-              onClick={handleFakeReturnToTop}
-              className="px-3 py-1.5 font-mono text-xs border border-border-strong text-fg-soft hover:bg-secondary-hover"
-            >
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleFakeReturnToTop}>
               Return to top
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -335,7 +328,7 @@ export default function ScrollSanctifier({ onToast }) {
           </p>
         </header>
 
-        <div className="bg-stone-950 text-stone-100 p-8 sm:p-10 border border-border-strong shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset] space-y-5">
+        <div className="bg-stone-950 text-stone-100 p-8 sm:p-10 border border-border-strong rounded-panel shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset] space-y-5">
           <p className="font-serif text-lg sm:text-xl leading-snug text-stone-100 italic">
             You are witnessed. Every line surrendered to the fall is etched
             into nothing—and that nothing is enough. Whispers may rise from the

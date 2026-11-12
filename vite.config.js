@@ -4,9 +4,33 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { brand, themeColor } from "./src/theme/brand.js";
 
+const escapeHtml = (value) =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+
+// index.html keeps readable values; brand.js overwrites them on build and dev.
+const brandHtml = {
+  name: "brand-html",
+  transformIndexHtml: (html) =>
+    html
+      .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(brand.title)}</title>`)
+      .replace(
+        /(name="apple-mobile-web-app-title" content=")[^"]*/,
+        `$1${escapeHtml(brand.shortName)}`,
+      )
+      .replace(
+        /(name="theme-color" content=")[^"]*(" media="\(prefers-color-scheme: light\)")/,
+        `$1${themeColor.light}$2`,
+      )
+      .replace(
+        /(name="theme-color" content=")[^"]*(" media="\(prefers-color-scheme: dark\)")/,
+        `$1${themeColor.dark}$2`,
+      ),
+};
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    brandHtml,
     react(),
     tailwindcss(),
     VitePWA({

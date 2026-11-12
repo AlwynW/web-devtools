@@ -83,7 +83,7 @@ function LicenseNotice({ count, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="font-license-title"
-        className="bg-surface border border-border-strong w-full max-w-md shadow-xl"
+        className="bg-surface border border-border-strong rounded-panel overflow-hidden w-full max-w-md shadow-xl"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-start gap-3 px-5 py-4 border-b border-border">
@@ -127,7 +127,7 @@ function FaceCard({
 }) {
   return (
     <div
-      className={`p-3 border bg-surface ${
+      className={`p-3 border rounded-control bg-surface ${
         duplicate
           ? "border-amber-400 dark:border-amber-600"
           : "border-border"
@@ -585,7 +585,7 @@ export default function FontConverter({ onToast }) {
   };
 
   const zoneClass = (key) =>
-    `min-h-[4.5rem] flex-1 p-3 border-2 border-dashed transition-colors space-y-2 ${
+    `min-h-[4.5rem] flex-1 p-3 border-2 border-dashed rounded-control transition-colors space-y-2 ${
       dropTarget === key
         ? "border-border-strong bg-shell/70 "
         : "border-border-strong"
@@ -613,7 +613,7 @@ export default function FontConverter({ onToast }) {
             setFileOver(false);
             addFiles(event.dataTransfer.files);
           }}
-          className={`border-2 border-dashed p-10 text-center transition-colors ${
+          className={`border-2 border-dashed rounded-control p-10 text-center transition-colors ${
             fileOver
               ? "border-focus bg-shell/50"
               : "border-border-strong hover:border-border-muted"
@@ -723,7 +723,7 @@ export default function FontConverter({ onToast }) {
                         <button
                           type="button"
                           onClick={() => removeFamily(family.id)}
-                          className="mb-[1px] p-2 border border-border-strong text-fg-muted hover:text-red-600"
+                          className="mb-[1px] p-2 border border-border-strong rounded-button text-fg-muted hover:text-red-600"
                           title="Remove family (fonts become unassigned)"
                         >
                           <Trash size={16} weight="thin" />
@@ -812,24 +812,24 @@ export default function FontConverter({ onToast }) {
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {SAMPLE_PRESETS.map((preset) => (
-                    <button
+                    <Button
                       key={preset}
-                      type="button"
+                      variant="outline"
+                      size="sm"
                       onClick={() => setSample(preset)}
-                      className="px-2 py-1 font-mono text-[10px] border border-border-strong text-fg-muted hover:bg-hover-muted"
                     >
                       {preset.length > 24 ? `${preset.slice(0, 22)}…` : preset}
-                    </button>
+                    </Button>
                   ))}
                 </div>
 
-                <div className="border border-border divide-y divide-border">
+                <div className="border border-border rounded-control divide-y divide-border">
                   {sortFaceIds(previewFamily.faceIds, facesById).map((id) => {
                     const face = facesById.get(id);
                     if (!face) return null;
                     return (
                       <div key={id} className="p-4">
-                        <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-subtle mb-2">
+                        <div className="field-label mb-2">
                           {face.fileName}
                           {" · "}
                           {face.useRange
@@ -857,7 +857,7 @@ export default function FontConverter({ onToast }) {
 
                 <div>
                   <label className={LABEL_CLASS}>Weight ladder</label>
-                  <div className="border border-border divide-y divide-border">
+                  <div className="border border-border rounded-control divide-y divide-border">
                     {WEIGHT_OPTIONS.map((opt) => (
                       <div key={opt.value} className="flex items-baseline gap-4 p-3">
                         <span className="w-24 shrink-0 font-mono text-[10px] text-fg-subtle">
@@ -936,7 +936,7 @@ export default function FontConverter({ onToast }) {
                 <CopyPre
                   text={css}
                   onCopySuccess={() => onToast?.("CSS copied!")}
-                  className="max-h-80 overflow-y-auto overflow-x-auto border border-border bg-surface-code"
+                  className="max-h-80 overflow-y-auto overflow-x-auto border border-border rounded-control bg-surface-code"
                   preClassName="px-4 pb-4 pt-8 font-mono text-xs text-fg-soft whitespace-pre"
                 />
               </div>

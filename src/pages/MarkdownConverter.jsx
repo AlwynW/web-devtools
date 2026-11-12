@@ -6,6 +6,8 @@ import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
+import Button from "../components/Button";
 
 const turndown = new TurndownService({
   headingStyle: "atx",
@@ -43,34 +45,17 @@ export default function MarkdownConverter({ onToast }) {
       <PageHeader title="Markdown Converter" description="Convert between Markdown and HTML." />
 
       <Panel className="space-y-4">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-          <button
-            onClick={() => {
-              setMode("md2html");
-              setOutputView("rendered");
-            }}
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "md2html"
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-          >
-            Markdown → HTML
-          </button>
-          <button
-            onClick={() => {
-              setMode("html2md");
-              setOutputView("code");
-            }}
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "html2md"
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-          >
-            HTML → Markdown
-          </button>
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "md2html", label: "Markdown → HTML" },
+            { value: "html2md", label: "HTML → Markdown" },
+          ]}
+          value={mode}
+          onChange={(m) => {
+            setMode(m);
+            setOutputView(m === "md2html" ? "rendered" : "code");
+          }}
+        />
 
         <div>
           <Label>
@@ -90,12 +75,9 @@ export default function MarkdownConverter({ onToast }) {
         </div>
 
         <div className="flex justify-end">
-          <button
-            onClick={convert}
-            className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors"
-          >
+          <Button variant="outline" onClick={convert}>
             {" > Convert"}
-          </button>
+          </Button>
         </div>
 
         {error && (
@@ -110,34 +92,20 @@ export default function MarkdownConverter({ onToast }) {
               <Label>
                 Output ({mode === "md2html" ? "HTML" : "Markdown"})
               </Label>
-              <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-                <button
-                  onClick={() => setOutputView("rendered")}
-                  className={`px-3 py-1.5 transition-colors ${
-                    outputView === "rendered"
-                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                      : "text-fg-muted hover:bg-hover-muted"
-                  }`}
-                >
-                  Rendered
-                </button>
-                <button
-                  onClick={() => setOutputView("code")}
-                  className={`px-3 py-1.5 transition-colors ${
-                    outputView === "code"
-                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                      : "text-fg-muted hover:bg-hover-muted"
-                  }`}
-                >
-                  Code
-                </button>
-              </div>
+              <SegmentedControl
+                options={[
+                  { value: "rendered", label: "Rendered" },
+                  { value: "code", label: "Code" },
+                ]}
+                value={outputView}
+                onChange={setOutputView}
+              />
             </div>
 
             {outputView === "rendered" && (
               <div className="mb-2">
                 <div
-                  className="p-4 bg-surface border border-border text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4 [&_code]:bg-surface-inset [&_code]:px-1 [&_pre]:p-3 [&_pre]:overflow-x-auto [&_pre]:bg-surface-inset [&_a]:text-fg-soft [&_a]:underline"
+                  className="p-4 bg-surface border border-border rounded-control text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4 [&_code]:bg-surface-inset [&_code]:px-1 [&_pre]:p-3 [&_pre]:overflow-x-auto [&_pre]:bg-surface-inset [&_a]:text-fg-soft [&_a]:underline"
                   dangerouslySetInnerHTML={{
                     __html:
                       mode === "md2html"

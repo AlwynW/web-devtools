@@ -8,6 +8,7 @@ import {
 } from "../utils/gradientCss";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 /**
  * Gradient border via a masked ::before ring so the element's own
@@ -158,7 +159,7 @@ ${beforeRules.join("\n")}
 
       <Panel className="space-y-6">
         <div
-          className="min-h-48 flex items-center justify-center p-10 border border-border"
+          className="min-h-48 flex items-center justify-center p-10 border border-border rounded-control overflow-hidden"
           style={{
             backgroundImage:
               "linear-gradient(45deg, #d6d3d1 25%, transparent 25%), linear-gradient(-45deg, #d6d3d1 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #d6d3d1 75%), linear-gradient(-45deg, transparent 75%, #d6d3d1 75%)",
@@ -245,7 +246,7 @@ ${beforeRules.join("\n")}
             />
           </div>
           <div>
-            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               Fill color
             </label>
             <div className="flex flex-wrap items-center gap-2">
@@ -253,13 +254,13 @@ ${beforeRules.join("\n")}
                 type="color"
                 value={fillColor}
                 onChange={(e) => setFillColor(e.target.value)}
-                className="w-10 h-8 border border-border cursor-pointer"
+                className="w-10 h-8 border border-border rounded-control cursor-pointer"
               />
               <input
                 type="text"
                 value={fillColor}
                 onChange={(e) => setFillColor(e.target.value)}
-                className="w-24 px-2 py-1 bg-shell border border-border text-xs font-mono dark:text-white"
+                className="w-24 px-2 py-1 bg-shell border border-border rounded-control text-xs font-mono text-fg"
               />
               <label className="text-xs font-mono text-fg-muted">Opacity</label>
               <input
@@ -275,7 +276,7 @@ ${beforeRules.join("\n")}
           </div>
         </div>
 
-        <div className="space-y-3 p-4 border border-border bg-surface-muted/60 dark:bg-overlay">
+        <div className="space-y-3 p-4 border border-border rounded-control bg-surface-muted/60 dark:bg-overlay">
           <label className="flex items-center gap-2 text-sm font-mono text-fg-soft">
             <input
               type="checkbox"
@@ -309,27 +310,16 @@ ${beforeRules.join("\n")}
           )}
         </div>
 
-        <div className="space-y-4 p-4 border border-border bg-surface-muted/60 dark:bg-overlay">
+        <div className="space-y-4 p-4 border border-border rounded-control bg-surface-muted/60 dark:bg-overlay">
           <p className="text-xs font-bold text-fg-muted">
             Border gradient
           </p>
 
-          <div className="flex gap-2 p-1 bg-hover-muted w-max text-xs font-mono">
-            {["linear", "radial", "conic"].map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setType(t)}
-                className={`px-3 py-1.5 ${
-                  type === t
-                    ? "bg-surface-inset text-fg-soft"
-                    : "text-fg-muted"
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            options={["linear", "radial", "conic"]}
+            value={type}
+            onChange={setType}
+          />
 
           {(type === "linear" || type === "conic") && (
             <div>
@@ -359,7 +349,7 @@ ${beforeRules.join("\n")}
               <select
                 value={radialShape}
                 onChange={(e) => setRadialShape(e.target.value)}
-                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm text-fg"
               >
                 <option value="circle">circle</option>
                 <option value="ellipse">ellipse</option>
@@ -367,7 +357,7 @@ ${beforeRules.join("\n")}
               <select
                 value={radialSize}
                 onChange={(e) => setRadialSize(e.target.value)}
-                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm text-fg"
               >
                 <option value="closest-side">closest-side</option>
                 <option value="closest-corner">closest-corner</option>
@@ -377,7 +367,7 @@ ${beforeRules.join("\n")}
               <select
                 value={radialPos}
                 onChange={(e) => setRadialPos(e.target.value)}
-                className="w-full p-2 bg-surface-muted border border-border text-sm dark:text-white"
+                className="w-full p-2 bg-surface-muted border border-border rounded-control text-sm text-fg"
               >
                 <option value="center">center</option>
                 <option value="top">top</option>
@@ -404,7 +394,7 @@ ${beforeRules.join("\n")}
             {stops.map((stop, stopIndex) => (
               <div
                 key={`stop-${stopIndex}`}
-                className="p-3 border border-border bg-surface-code/70 space-y-2"
+                className="p-3 border border-border rounded-control bg-surface-code/70 space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-fg-muted">
@@ -424,13 +414,13 @@ ${beforeRules.join("\n")}
                     type="color"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-10 h-8 border border-border cursor-pointer"
+                    className="w-10 h-8 border border-border rounded-control cursor-pointer"
                   />
                   <input
                     type="text"
                     value={stop.color}
                     onChange={(e) => updateStop(stopIndex, "color", e.target.value)}
-                    className="w-24 px-2 py-1 bg-shell border border-border text-xs font-mono dark:text-white"
+                    className="w-24 px-2 py-1 bg-shell border border-border rounded-control text-xs font-mono text-fg"
                   />
                   <label className="text-xs font-mono text-fg-muted">Opacity</label>
                   <input

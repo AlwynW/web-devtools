@@ -4,13 +4,14 @@ import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const CONTEXTS = [
-  { id: "json", label: "JSON" },
-  { id: "regex", label: "Regex" },
-  { id: "sql", label: "SQL" },
-  { id: "html", label: "HTML" },
-  { id: "shell", label: "Shell" },
+  { value: "json", label: "JSON" },
+  { value: "regex", label: "Regex" },
+  { value: "sql", label: "SQL" },
+  { value: "html", label: "HTML" },
+  { value: "shell", label: "Shell" },
 ];
 
 const HTML_ENTITIES = {
@@ -102,48 +103,24 @@ export default function EscapeUnescape({ onToast }) {
             <Label className="mb-1">
               Context
             </Label>
-            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px] flex-wrap">
-              {CONTEXTS.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => setContext(c.id)}
-                  className={`px-3 py-1.5 transition-colors ${
-                    context === c.id
-                      ? "bg-primary text-primary-fg rounded-button"
-                      : "text-fg-muted hover:bg-hover-muted"
-                  }`}
-                >
-                  {c.label}
-                </button>
-              ))}
-            </div>
+            <SegmentedControl
+              options={CONTEXTS}
+              value={context}
+              onChange={setContext}
+            />
           </div>
           <div>
             <Label className="mb-1">
               Mode
             </Label>
-            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
-              <button
-                onClick={() => setMode("escape")}
-                className={`px-3 py-1.5 transition-colors ${
-                  mode === "escape"
-                    ? "bg-primary text-primary-fg rounded-button"
-                    : "text-fg-muted hover:bg-hover-muted"
-                }`}
-              >
-                Escape
-              </button>
-              <button
-                onClick={() => setMode("unescape")}
-                className={`px-3 py-1.5 transition-colors ${
-                  mode === "unescape"
-                    ? "bg-primary text-primary-fg rounded-button"
-                    : "text-fg-muted hover:bg-hover-muted"
-                }`}
-              >
-                Unescape
-              </button>
-            </div>
+            <SegmentedControl
+              options={[
+                { value: "escape", label: "Escape" },
+                { value: "unescape", label: "Unescape" },
+              ]}
+              value={mode}
+              onChange={setMode}
+            />
           </div>
         </div>
 

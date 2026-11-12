@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { diffLines } from "diff";
 import CopyPre from "../components/CopyPre";
 import PageHeader from "../components/ui/PageHeader";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 function prepare(text, ignoreTrim, ignoreCase) {
   let lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -106,50 +107,43 @@ export default function TextDiff({ onToast }) {
             />
             Ignore case
           </label>
-          <div className="flex gap-2 p-1 border border-border-strong">
-            {[
-              { id: "unified", label: "Unified" },
-              { id: "split", label: "Side by side" },
-            ].map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => setMode(m.id)}
-                className={`px-2 py-1 ${mode === m.id ? "bg-inverse text-primary-fg" : "text-fg-muted"}`}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            options={[
+              { value: "unified", label: "Unified" },
+              { value: "split", label: "Side by side" },
+            ]}
+            value={mode}
+            onChange={setMode}
+          />
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               A
             </label>
             <textarea
               value={left}
               onChange={(e) => setLeft(e.target.value)}
               rows={12}
-              className="w-full p-3 border border-border-strong font-mono text-xs bg-surface text-fg"
+              className="w-full p-3 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               B
             </label>
             <textarea
               value={right}
               onChange={(e) => setRight(e.target.value)}
               rows={12}
-              className="w-full p-3 border border-border-strong font-mono text-xs bg-surface text-fg"
+              className="w-full p-3 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
             />
           </div>
         </div>
 
-        <div className="bg-surface p-4 border border-border">
-          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+        <div className="bg-surface p-4 border border-border rounded-panel">
+          <span className="field-label mb-2">
             {mode === "unified" ? "Unified" : "Side by side"}
           </span>
           {mode === "unified" ? (
@@ -157,13 +151,13 @@ export default function TextDiff({ onToast }) {
               text={unified || ""}
               onCopySuccess={() => onToast("Copied!")}
               title="Copy unified"
-              className="border border-border bg-surface-code max-h-[28rem] overflow-y-auto overflow-x-auto"
+              className="border border-border rounded-control bg-surface-code max-h-[28rem] overflow-y-auto overflow-x-auto"
               preClassName="p-3 font-mono text-xs whitespace-pre text-fg-soft"
             >
               {unified || "—"}
             </CopyPre>
           ) : (
-            <div className="grid grid-cols-2 gap-0 border border-border max-h-[28rem] overflow-y-auto font-mono text-xs">
+            <div className="grid grid-cols-2 gap-0 border border-border rounded-control max-h-[28rem] overflow-y-auto font-mono text-xs">
               <div className="border-r border-border">
                 {sideBySide.outL.map((row, i) => (
                   <div

@@ -68,7 +68,7 @@ export default function RegexTester({ onToast }) {
             Regular expression
           </Label>
           <div className="flex gap-2">
-            <span className="flex items-center px-3 bg-shell border border-border-strong font-mono text-fg-muted">
+            <span className="flex items-center px-3 bg-shell border border-border-strong rounded-control font-mono text-fg-muted">
               /
             </span>
             <input
@@ -78,7 +78,7 @@ export default function RegexTester({ onToast }) {
               placeholder="\\d+"
               className="flex-1 px-4 py-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
             />
-            <span className="flex items-center px-3 bg-shell border-y border-border-strong font-mono text-fg-muted">
+            <span className="flex items-center px-3 bg-shell border border-border-strong rounded-control font-mono text-fg-muted">
               /
             </span>
             <input
@@ -120,7 +120,7 @@ export default function RegexTester({ onToast }) {
                   {result.matches.map((m, i) => (
                     <div
                       key={i}
-                      className="p-3 bg-surface-muted border border-border"
+                      className="p-3 bg-surface-muted border border-border rounded-control"
                     >
                       <div className="font-mono text-fg-soft">
                         {m[0]}
@@ -141,7 +141,7 @@ export default function RegexTester({ onToast }) {
                   ))}
                 </div>
               ) : (
-                <div className="p-4 bg-surface-muted border border-border text-fg-muted text-center font-mono text-sm">
+                <div className="p-4 bg-surface-muted border border-border rounded-control text-fg-muted text-center font-mono text-sm">
                   No matches
                 </div>
               )}
@@ -159,7 +159,7 @@ export default function RegexTester({ onToast }) {
                   placeholder="> replacement string"
                   className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg mb-2 rounded-control"
                 />
-                <div className="p-4 bg-surface-muted border border-border font-mono text-sm whitespace-pre-wrap text-fg-soft">
+                <div className="p-4 bg-surface-muted border border-border rounded-control font-mono text-sm whitespace-pre-wrap text-fg-soft">
                   {result.replace}
                 </div>
               </div>
@@ -195,7 +195,7 @@ export default function RegexTester({ onToast }) {
             {showExplainer ? "Hide" : "Show"} regex syntax reference
           </button>
           {showExplainer && (
-            <div className="mt-3 p-4 bg-surface-muted border border-border overflow-x-auto">
+            <div className="mt-3 p-4 bg-surface-muted border border-border rounded-control overflow-x-auto">
               <table className="w-full text-sm font-mono">
                 <thead>
                   <tr className="text-left text-fg-muted">

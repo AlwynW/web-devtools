@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CopyButton from "../components/CopyButton";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import Button from "../components/Button";
 
 const STORAGE_KEY = "devkit-local-notes";
 
@@ -52,12 +53,7 @@ export default function LocalNotes({ onToast }) {
             placeholder="Add a note..."
             className="flex-1 p-4 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
           />
-          <button
-            onClick={add}
-            className="px-6 py-2 bg-primary text-primary-fg rounded-button border border-inverse-border font-mono text-sm hover:bg-primary-hover transition-colors"
-          >
-            Add
-          </button>
+          <Button onClick={add}>Add</Button>
         </div>
 
         <div className="space-y-2">
@@ -69,7 +65,7 @@ export default function LocalNotes({ onToast }) {
           {notes.map((note) => (
             <div
               key={note.id}
-              className="flex items-center gap-3 p-4 border border-border bg-surface-muted/50"
+              className="flex items-center gap-3 p-4 border border-border rounded-control bg-surface-muted/50"
             >
               <span className="flex-1 font-mono text-sm text-fg-soft">
                 {note.text}
@@ -81,7 +77,7 @@ export default function LocalNotes({ onToast }) {
               />
               <button
                 onClick={() => remove(note.id)}
-                className="px-3 py-1 font-mono text-xs text-fg-muted hover:text-red-600 dark:hover:text-red-400 border border-border-strong hover:border-red-400 transition-colors"
+                className="px-3 py-1 font-mono text-xs text-fg-muted hover:text-red-600 dark:hover:text-red-400 border border-border-strong rounded-button hover:border-red-400 transition-colors"
               >
                 Remove
               </button>

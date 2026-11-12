@@ -187,7 +187,7 @@ export default function NatoPhonetic({ onToast }) {
                 key={key}
                 type="button"
                 onClick={() => copyWord(word)}
-                className="p-2 border border-border hover:bg-hover text-left font-mono text-sm"
+                className="p-2 border border-border rounded-control hover:bg-hover text-left font-mono text-sm"
               >
                 <span className="font-bold text-fg-soft">
                   {label}

@@ -5,6 +5,7 @@ import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 export default function TomlJsonConverter({ onToast }) {
   const [direction, setDirection] = useState("tomlToJson");
@@ -38,30 +39,14 @@ enabled = true`);
 
       <Panel className="space-y-4">
         <div className="flex items-center gap-2">
-          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
-            <button
-              type="button"
-              onClick={() => setDirection("tomlToJson")}
-              className={`px-3 py-1.5 transition-colors ${
-                direction === "tomlToJson"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              TOML → JSON
-            </button>
-            <button
-              type="button"
-              onClick={() => setDirection("jsonToToml")}
-              className={`px-3 py-1.5 transition-colors ${
-                direction === "jsonToToml"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              JSON → TOML
-            </button>
-          </div>
+          <SegmentedControl
+            options={[
+              { value: "tomlToJson", label: "TOML → JSON" },
+              { value: "jsonToToml", label: "JSON → TOML" },
+            ]}
+            value={direction}
+            onChange={setDirection}
+          />
           {output && (
             <button
               type="button"

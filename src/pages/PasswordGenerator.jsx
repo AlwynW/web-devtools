@@ -5,6 +5,7 @@ import CopyArea from "../components/CopyArea";
 import { WORDS } from "../utils/words";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 export default function PasswordGenerator({ onToast }) {
   const [mode, setMode] = useState("words");
@@ -62,28 +63,15 @@ export default function PasswordGenerator({ onToast }) {
     <div className="space-y-6 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <PageHeader title="Password" description="Generate strong, random passwords." />
 
-      <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max mb-6 mx-auto font-mono text-[11px]">
-        <button
-          className={`px-3 py-1.5 transition-colors ${
-            mode === "words"
-              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-              : "text-fg-muted hover:bg-hover-muted"
-          }`}
-          onClick={() => setMode("words")}
-        >
-          3 Random Words
-        </button>
-        <button
-          className={`px-3 py-1.5 transition-colors ${
-            mode === "chars"
-              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-              : "text-fg-muted hover:bg-hover-muted"
-          }`}
-          onClick={() => setMode("chars")}
-        >
-          Random Characters
-        </button>
-      </div>
+      <SegmentedControl
+        options={[
+          { value: "words", label: "3 Random Words" },
+          { value: "chars", label: "Random Characters" },
+        ]}
+        value={mode}
+        onChange={setMode}
+        className="mb-6 mx-auto"
+      />
 
       <Panel>
         {mode === "chars" && (
@@ -123,7 +111,7 @@ export default function PasswordGenerator({ onToast }) {
               ].map((item, idx) => (
                 <label
                   key={idx}
-                  className="flex items-center gap-3 p-3 border border-border hover:bg-hover cursor-pointer transition-colors"
+                  className="flex items-center gap-3 p-3 border border-border rounded-control hover:bg-hover cursor-pointer transition-colors"
                 >
                   <input
                     type="checkbox"

@@ -5,6 +5,8 @@ import { copyToClipboard } from "../utils/clipboard";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import Button from "../components/Button";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const MORSE_MAP = {
   A: ".-", B: "-...", C: "-.-.", D: "-..", E: ".", F: "..-.", G: "--.", H: "....",
@@ -42,6 +44,11 @@ function morseToText(morse) {
     .map((s) => REVERSE_MAP[s] ?? "?")
     .join("");
 }
+
+const MODES = [
+  { value: "toMorse", label: "Text → Morse" },
+  { value: "toText", label: "Morse → Text" },
+];
 
 const SHORT_THRESHOLD_MS = 200;
 const PAUSE_THRESHOLD_MS = 400;
@@ -119,28 +126,7 @@ export default function MorseCode({ onToast }) {
           <h3 className="field-label">
             Converter
           </h3>
-          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-            <button
-              onClick={() => setMode("toMorse")}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === "toMorse"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              Text → Morse
-            </button>
-            <button
-              onClick={() => setMode("toText")}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === "toText"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              Morse → Text
-            </button>
-          </div>
+          <SegmentedControl options={MODES} value={mode} onChange={setMode} />
           <div>
             <div className="flex items-center justify-between mb-1">
               <Label>
@@ -164,30 +150,21 @@ export default function MorseCode({ onToast }) {
             {mode === "toText" && (
               <div className="space-y-2 mt-2">
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => setInput((prev) => prev + ".")}
-                    className="flex-1 py-3 border border-border-strong bg-surface hover:bg-hover font-mono text-sm text-fg-soft transition-colors"
-                  >
+                  <Button variant="outline" onClick={() => setInput((prev) => prev + ".")} className="flex-1">
                     Short (·)
-                  </button>
-                  <button
-                    onClick={() => setInput((prev) => prev + "-")}
-                    className="flex-1 py-3 border border-border-strong bg-surface hover:bg-hover font-mono text-sm text-fg-soft transition-colors"
-                  >
+                  </Button>
+                  <Button variant="outline" onClick={() => setInput((prev) => prev + "-")} className="flex-1">
                     Long (−)
-                  </button>
-                  <button
-                    onClick={() => setInput((prev) => prev + " ")}
-                    className="flex-1 py-3 border border-border-strong bg-surface hover:bg-hover font-mono text-sm text-fg-soft transition-colors"
-                  >
+                  </Button>
+                  <Button variant="outline" onClick={() => setInput((prev) => prev + " ")} className="flex-1">
                     Pause
-                  </button>
+                  </Button>
                 </div>
                 <button
                   onClick={() => setSpacebarMode((prev) => !prev)}
-                  className={`w-full py-2 font-mono text-sm border transition-colors ${
+                  className={`w-full py-2 font-mono text-sm border rounded-button transition-colors ${
                     spacebarMode
-                      ? "bg-warning-bg border-amber-400 dark:border-amber-600 text-warning-fg"
+                      ? "bg-warning-bg border-warning-border text-warning-fg"
                       : "border-border-strong bg-surface hover:bg-hover text-fg-soft"
                   }`}
                 >
@@ -234,7 +211,7 @@ export default function MorseCode({ onToast }) {
               <button
                 key={char}
                 onClick={() => copyChar(mode === "toMorse" ? morse : char)}
-                className="p-2 border border-border hover:bg-hover text-left font-mono text-sm"
+                className="p-2 border border-border rounded-control hover:bg-hover text-left font-mono text-sm"
               >
                 <span className="font-bold text-fg-soft">{char}</span>
                 <div className="text-xs text-fg-muted truncate">{morse}</div>

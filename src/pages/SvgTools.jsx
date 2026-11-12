@@ -1,14 +1,16 @@
 import { useMemo, useRef, useState } from "react";
 import { DownloadSimple, UploadSimple } from "phosphor-react";
+import Button from "../components/Button";
 import CopyPre from "../components/CopyPre";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const TABS = [
-  { id: "optimize", label: "Optimize" },
-  { id: "color", label: "Color" },
-  { id: "path", label: "Path" },
-  { id: "sprite", label: "Sprite" },
+  { value: "optimize", label: "Optimize" },
+  { value: "color", label: "Color" },
+  { value: "path", label: "Path" },
+  { value: "sprite", label: "Sprite" },
 ];
 
 function optimizeSvg(input, idPrefix = "i") {
@@ -234,7 +236,7 @@ function SvgFileDrop({ multiple = false, onFiles, onError }) {
         setDragOver(true);
       }}
       onDragLeave={() => setDragOver(false)}
-      className={`border-2 border-dashed p-4 text-center cursor-pointer transition-colors ${
+      className={`border-2 border-dashed rounded-control p-4 text-center cursor-pointer transition-colors ${
         dragOver
           ? "border-focus bg-shell/50"
           : "border-border-strong hover:border-border-muted"
@@ -283,14 +285,13 @@ function downloadSvg(markup, filename, onToast) {
 function DownloadSvgButton({ text, filename, onToast }) {
   if (!text) return null;
   return (
-    <button
-      type="button"
+    <Button
+      variant="outline"
+      icon={DownloadSimple}
       onClick={() => downloadSvg(text, filename, onToast)}
-      className="flex items-center gap-2 px-4 py-2 font-mono text-xs border border-border-strong text-fg-soft hover:bg-hover-muted transition-colors"
     >
-      <DownloadSimple size={16} weight="thin" />
       Download SVG
-    </button>
+    </Button>
   );
 }
 
@@ -374,7 +375,7 @@ export default function SvgTools({ onToast }) {
     return (
       <svg
         viewBox="0 0 200 120"
-        className="w-full max-w-md border border-border-strong bg-surface"
+        className="w-full max-w-md border border-border-strong rounded-control bg-surface"
       >
         <path
           d={d}
@@ -392,22 +393,12 @@ export default function SvgTools({ onToast }) {
       <PageHeader title="SVG tools" description={<>Optimize/minify, recolor, edit path <code className="text-fg-muted">d</code>, build a
           symbol sprite. Paste or upload SVG.</>} />
 
-      <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px] mb-6">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setTab(t.id)}
-            className={`px-3 py-1.5 transition-colors ${
-              tab === t.id
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      <SegmentedControl
+        options={TABS}
+        value={tab}
+        onChange={setTab}
+        className="mb-6"
+      />
 
       {tab === "optimize" && (
         <Panel className="space-y-4">
@@ -427,15 +418,11 @@ export default function SvgTools({ onToast }) {
             value={optIn}
             onChange={(e) => setOptIn(e.target.value)}
             rows={8}
-            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+            className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
           />
-          <button
-            type="button"
-            onClick={runOptimize}
-            className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
-          >
+          <Button onClick={runOptimize} className="w-fit">
             Optimize
-          </button>
+          </Button>
           {optErr && (
             <p className="text-sm text-red-600 dark:text-red-400 font-mono">{optErr}</p>
           )}
@@ -446,7 +433,7 @@ export default function SvgTools({ onToast }) {
                 text={optOut}
                 onCopySuccess={() => onToast("Copied!")}
                 title="Copy output"
-                className="border border-border bg-surface-code max-h-48 overflow-y-auto"
+                className="border border-border rounded-control bg-surface-code max-h-48 overflow-y-auto"
                 preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-fg-soft"
               />
             </>
@@ -472,16 +459,12 @@ export default function SvgTools({ onToast }) {
             value={colorIn}
             onChange={(e) => setColorIn(e.target.value)}
             rows={8}
-            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+            className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
           />
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={runCurrentColor}
-              className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
-            >
+            <Button onClick={runCurrentColor}>
               Use currentColor
-            </button>
+            </Button>
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -491,21 +474,17 @@ export default function SvgTools({ onToast }) {
                     : "#111111"
                 }
                 onChange={(e) => setRecolor(e.target.value)}
-                className="h-10 w-12 shrink-0 cursor-pointer border border-border-strong bg-transparent"
+                className="h-10 w-12 shrink-0 cursor-pointer border border-border-strong rounded-control bg-transparent"
                 aria-label="Replacement color"
               />
               <input
                 value={recolor}
                 onChange={(e) => setRecolor(e.target.value)}
-                className="w-28 p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
+                className="w-28 p-2 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
               />
-              <button
-                type="button"
-                onClick={runRecolor}
-                className="px-4 py-2 font-mono text-xs border border-border-muted text-fg-soft hover:bg-hover-muted"
-              >
+              <Button variant="outline" onClick={runRecolor}>
                 Apply color
-              </button>
+              </Button>
             </div>
           </div>
           <p className="text-[11px] font-mono text-fg-muted">
@@ -520,7 +499,7 @@ export default function SvgTools({ onToast }) {
           {colorOut && (
             <>
               <div
-                className="p-6 border border-border bg-surface-code flex justify-center text-fg [&_svg]:max-h-40 [&_svg]:max-w-full [&_svg]:h-auto rounded-panel"
+                className="p-6 border border-border bg-surface-code flex justify-center text-fg [&_svg]:max-h-40 [&_svg]:max-w-full [&_svg]:h-auto rounded-control overflow-hidden"
                 dangerouslySetInnerHTML={{ __html: colorOut }}
               />
               <DownloadSvgButton text={colorOut} filename={colorFileName} onToast={onToast} />
@@ -528,7 +507,7 @@ export default function SvgTools({ onToast }) {
                 text={colorOut}
                 onCopySuccess={() => onToast("Copied!")}
                 title="Copy output"
-                className="border border-border bg-surface-code max-h-48 overflow-y-auto"
+                className="border border-border rounded-control bg-surface-code max-h-48 overflow-y-auto"
                 preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-fg-soft"
               />
             </>
@@ -538,14 +517,14 @@ export default function SvgTools({ onToast }) {
 
       {tab === "path" && (
         <Panel className="space-y-4">
-          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+          <label className="field-label mb-2">
             d attribute
           </label>
           <textarea
             value={pathD}
             onChange={(e) => setPathD(e.target.value)}
             rows={4}
-            className="w-full p-4 border border-border-strong font-mono text-sm bg-surface text-fg"
+            className="w-full p-4 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
           />
           <div className="flex justify-center">{pathPreview}</div>
           {pathD.trim() && (
@@ -586,15 +565,11 @@ export default function SvgTools({ onToast }) {
             onChange={(e) => setSpriteIn(e.target.value)}
             rows={10}
             placeholder={'<svg ...>...</svg>\n---\n<svg ...>...</svg>'}
-            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+            className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
           />
-          <button
-            type="button"
-            onClick={runSprite}
-            className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
-          >
+          <Button onClick={runSprite} className="w-fit">
             Build sprite
-          </button>
+          </Button>
           {spriteErr && (
             <p className="text-sm text-red-600 dark:text-red-400 font-mono">{spriteErr}</p>
           )}
@@ -605,10 +580,10 @@ export default function SvgTools({ onToast }) {
               <CopyPre
                 text={spriteResult.sprite}
                 onCopySuccess={() => onToast("Copied!")}
-                className="border border-border bg-surface-code max-h-40 overflow-y-auto"
+                className="border border-border rounded-control bg-surface-code max-h-40 overflow-y-auto"
                 preClassName="p-4 font-mono text-xs break-all whitespace-pre-wrap text-fg-soft"
               />
-              <pre className="p-3 bg-surface-code border border-border font-mono text-[11px] text-fg-muted whitespace-pre-wrap">
+              <pre className="p-3 bg-surface-code border border-border rounded-control font-mono text-[11px] text-fg-muted whitespace-pre-wrap">
                 {spriteResult.uses}
               </pre>
             </>

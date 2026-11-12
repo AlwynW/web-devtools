@@ -82,7 +82,7 @@ export default function ColorContrast() {
       <Panel className="space-y-6">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <label className="field-label mb-2">
               Foreground (text)
             </label>
             <div className="flex gap-2 items-stretch">
@@ -91,18 +91,18 @@ export default function ColorContrast() {
                 value={pickerFg}
                 onChange={(e) => setFg(e.target.value)}
                 title="Pick foreground color"
-                className="h-11 w-14 shrink-0 cursor-pointer rounded border border-border-strong bg-hover-muted p-0.5"
+                className="h-11 w-14 shrink-0 cursor-pointer rounded-control border border-border-strong bg-hover-muted p-0.5"
               />
               <input
                 type="text"
                 value={fg}
                 onChange={(e) => setFg(e.target.value)}
-                className="min-w-0 flex-1 p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
+                className="min-w-0 flex-1 p-3 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
               />
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <label className="field-label mb-2">
               Background
             </label>
             <div className="flex gap-2 items-stretch">
@@ -111,13 +111,13 @@ export default function ColorContrast() {
                 value={pickerBg}
                 onChange={(e) => setBg(e.target.value)}
                 title="Pick background color"
-                className="h-11 w-14 shrink-0 cursor-pointer rounded border border-border-strong bg-hover-muted p-0.5"
+                className="h-11 w-14 shrink-0 cursor-pointer rounded-control border border-border-strong bg-hover-muted p-0.5"
               />
               <input
                 type="text"
                 value={bg}
                 onChange={(e) => setBg(e.target.value)}
-                className="min-w-0 flex-1 p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
+                className="min-w-0 flex-1 p-3 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
               />
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function ColorContrast() {
         {ratio != null && (
           <>
             <div
-              className="p-6 rounded border border-border text-center"
+              className="p-6 rounded-control border border-border text-center"
               style={sampleStyle()}
             >
               <p className="text-lg font-medium">Sample heading text</p>
@@ -139,7 +139,7 @@ export default function ColorContrast() {
               </p>
             </div>
 
-            <div className="font-mono text-sm space-y-2 p-4 bg-surface-code border border-border">
+            <div className="font-mono text-sm space-y-2 p-4 bg-surface-code border border-border rounded-control">
               <p className="text-2xl font-bold text-fg">
                 {ratio}:1
               </p>

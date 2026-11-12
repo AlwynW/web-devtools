@@ -25,6 +25,14 @@
   --label-size: 0.6875rem;
   --label-tracking: 0.18em;
 
+  --button-font: var(--font-mono);
+  --button-weight: 400;
+  --button-tracking: -0.025em;
+  --button-size: 0.75rem;
+  --button-size-sm: 0.6875rem;
+  --title-weight: 900;
+  --brand-name-case: uppercase;
+
   --shell: var(--color-stone-100);
   --surface: #ffffff;
   --surface-muted: var(--color-stone-50);
@@ -178,6 +186,27 @@ html.dark {
   --color-warning-fg: var(--warning-fg);
   --color-warning-bg: var(--warning-bg);
   --color-warning-border: var(--warning-border);
+}
+
+@utility button-text {
+  font-family: var(--button-font);
+  font-weight: var(--button-weight);
+  letter-spacing: var(--button-tracking);
+  font-size: var(--button-size);
+  line-height: 1.4;
+}
+
+@utility button-text-sm {
+  font-family: var(--button-font);
+  font-weight: var(--button-weight);
+  letter-spacing: var(--button-tracking);
+  font-size: var(--button-size-sm);
+  line-height: 1.4;
+}
+
+@utility title-text {
+  font-weight: var(--title-weight);
+  letter-spacing: -0.025em;
 }
 
 @utility field-label {

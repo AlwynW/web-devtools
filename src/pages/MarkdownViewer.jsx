@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { FileArrowDown, CornersOut, CornersIn } from "phosphor-react";
+import Button from "../components/Button";
 import CopyButton from "../components/CopyButton";
 import { renderMarkdownWithMermaid } from "../utils/markdownWithMermaid";
 import { isDarkTheme, subscribeTheme } from "../theme/applyTheme";
@@ -101,17 +102,14 @@ export default function MarkdownViewer({ onToast }) {
         title="Markdown Viewer"
         description="Drop a .md file or type markdown. Fenced mermaid blocks render as diagrams."
       >
-        <button
+        <Button
+          variant={fullWidth ? "primary" : "outline"}
+          icon={fullWidth ? CornersIn : CornersOut}
           onClick={() => setFullWidth((v) => !v)}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-mono tracking-tight border transition-colors shrink-0 self-center sm:self-auto ${
-            fullWidth
-              ? "bg-primary text-primary-fg border-primary-border hover:bg-primary-hover rounded-button"
-              : "bg-surface text-fg-soft border-border-strong hover:bg-hover-muted rounded-button"
-          }`}
+          className="shrink-0 self-center sm:self-auto"
         >
-          {fullWidth ? <CornersIn size={18} weight="thin" /> : <CornersOut size={18} weight="thin" />}
           {fullWidth ? "Narrow" : "Fit width"}
-        </button>
+        </Button>
       </PageHeader>
 
       <div className="space-y-6">
@@ -131,7 +129,7 @@ export default function MarkdownViewer({ onToast }) {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`border-2 border-dashed p-8 text-center transition-colors bg-surface border-border-strong ${
+          className={`border-2 border-dashed rounded-panel p-8 text-center transition-colors bg-surface border-border-strong ${
             dragOver
               ? "border-focus bg-shell/50"
               : "hover:border-border-muted dark:hover:border-stone-600"
@@ -162,7 +160,7 @@ export default function MarkdownViewer({ onToast }) {
         )}
 
         {content && (
-          <div className="bg-surface border border-border overflow-hidden">
+          <div className="bg-surface border border-border rounded-panel overflow-hidden">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between gap-2 bg-surface-muted/50">
               <span className="font-mono text-sm text-fg-muted truncate">
                 {fileName || "Direct input"}
@@ -183,7 +181,7 @@ export default function MarkdownViewer({ onToast }) {
               </div>
             </div>
             <div
-              className="markdown-preview p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-surface-inset [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-surface-inset [&_pre]:mb-4 [&_a]:text-fg-soft [&_a]:underline [&_blockquote]:border-l-fg-muted [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
+              className="markdown-preview p-6 text-sm [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1:first-child]:mt-0 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-4 [&_ol]:space-y-1 [&_li]:mb-1 [&_code]:bg-surface-inset [&_code]:px-1.5 [&_code]:py-0.5 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:bg-surface-inset [&_pre]:rounded-control [&_pre]:mb-4 [&_a]:text-fg-soft [&_a]:underline [&_blockquote]:border-l-fg-muted [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4 [&_hr]:my-6"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>

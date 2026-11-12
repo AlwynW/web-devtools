@@ -261,9 +261,9 @@ export default function Layout({ toast }) {
           <div className="flex items-center gap-3 sm:gap-4 min-w-0">
             <NavLink
               to="/"
-              className="flex items-center gap-2 font-black text-lg sm:text-xl tracking-tight text-fg-strong uppercase"
+              className="flex items-center gap-3 title-text [text-transform:var(--brand-name-case)] text-lg sm:text-xl text-fg-strong"
             >
-              <BrandMark size={22} /> {brand.name}
+              <BrandMark className="shrink-0" /> {brand.name}
             </NavLink>
             <div className="hidden sm:flex items-center text-xs sm:text-sm font-mono text-fg-muted truncate">
               <span className="mx-1 text-fg-subtle">/</span>
@@ -281,7 +281,7 @@ export default function Layout({ toast }) {
           <div className="absolute inset-x-0 flex justify-center pointer-events-none">
             <button
               onClick={() => setIsMenuOpen((prev) => !prev)}
-              className="pointer-events-auto flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 border border-border-strong/80 rounded-control bg-surface-glass text-xs sm:text-sm font-mono tracking-tight hover:bg-hover transition-colors"
+              className="pointer-events-auto flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 border border-border-strong/80 rounded-button bg-surface-glass text-xs sm:text-sm font-mono tracking-tight hover:bg-hover transition-colors"
             >
               <MagnifyingGlass
                 size={14}
@@ -304,7 +304,7 @@ export default function Layout({ toast }) {
               <button
                 type="button"
                 onClick={handleInstall}
-                className="hidden sm:inline-flex items-center px-2.5 py-1.5 border border-border-strong rounded-control text-[11px] font-mono text-fg-soft hover:bg-hover transition-colors"
+                className="hidden sm:inline-flex items-center px-3 py-1.5 border border-border-strong rounded-button text-[11px] font-mono text-fg-soft hover:bg-hover transition-colors"
               >
                 Install
               </button>
@@ -312,7 +312,7 @@ export default function Layout({ toast }) {
             <button
               type="button"
               onClick={toggleTheme}
-              className="flex items-center gap-2 p-2 border border-border-strong rounded-control text-[11px] sm:text-xs font-mono text-fg-soft hover:bg-hover transition-colors"
+              className="flex items-center gap-2 p-2 border border-border-strong rounded-button text-[11px] sm:text-xs font-mono text-fg-soft hover:bg-hover transition-colors"
             >
               <span className="relative flex items-center justify-center w-5 h-5 text-fg overflow-hidden">
                 <span

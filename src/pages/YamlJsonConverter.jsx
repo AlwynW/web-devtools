@@ -5,6 +5,7 @@ import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 export default function YamlJsonConverter({ onToast }) {
   const [direction, setDirection] = useState("yamlToJson");
@@ -36,28 +37,14 @@ export default function YamlJsonConverter({ onToast }) {
 
       <Panel className="space-y-4">
         <div className="flex items-center gap-2">
-          <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
-            <button
-              onClick={() => setDirection("yamlToJson")}
-              className={`px-3 py-1.5 transition-colors ${
-                direction === "yamlToJson"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              YAML → JSON
-            </button>
-            <button
-              onClick={() => setDirection("jsonToYaml")}
-              className={`px-3 py-1.5 transition-colors ${
-                direction === "jsonToYaml"
-                  ? "bg-primary text-primary-fg rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              JSON → YAML
-            </button>
-          </div>
+          <SegmentedControl
+            options={[
+              { value: "yamlToJson", label: "YAML → JSON" },
+              { value: "jsonToYaml", label: "JSON → YAML" },
+            ]}
+            value={direction}
+            onChange={setDirection}
+          />
           {output && (
             <button
               onClick={swapDirection}

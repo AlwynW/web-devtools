@@ -33,7 +33,7 @@ const inputClass =
   "min-w-0 flex-1 px-2 py-1.5 bg-surface border border-border-strong rounded-control font-mono text-xs text-fg focus:outline-none focus:ring-1 focus:ring-focus";
 
 const iconBtn =
-  "p-1 border border-border-strong bg-surface text-fg-muted hover:text-fg hover:bg-hover disabled:opacity-30 disabled:pointer-events-none transition-colors";
+  "p-1 border border-border-strong rounded-button bg-surface text-fg-muted hover:text-fg hover:bg-hover disabled:opacity-30 disabled:pointer-events-none transition-colors";
 
 const addLinkClass =
   "text-[11px] font-mono text-fg-muted hover:text-fg hover:underline underline-offset-2";
@@ -423,7 +423,7 @@ function NodeEditor({
               }}
               depth={depth + 1}
               keySlot={
-                <span className="block px-2 py-1.5 font-mono text-[11px] text-fg-muted bg-surface-inset/50 border border-border">
+                <span className="block px-2 py-1.5 font-mono text-[11px] text-fg-muted bg-surface-inset/50 border border-border rounded-control">
                   [{i}]
                 </span>
               }
@@ -605,7 +605,7 @@ export default function JsonTreeEditor({ onToast }) {
       </header>
 
       <div
-        className={`mb-6 border-2 border-dashed transition-colors p-4 sm:p-6 ${
+        className={`mb-6 border-2 border-dashed rounded-panel transition-colors p-4 sm:p-6 ${
           dragOver
             ? "border-border-muted bg-hover-muted"
             : "border-border-strong bg-surface"
@@ -655,7 +655,7 @@ export default function JsonTreeEditor({ onToast }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
-        <div className="bg-surface border border-border min-h-[280px]">
+        <div className="bg-surface border border-border rounded-panel min-h-[280px]">
           <div className="px-3 py-2 border-b border-border field-label">
             Tree
           </div>
@@ -670,7 +670,7 @@ export default function JsonTreeEditor({ onToast }) {
                 onChange={setRoot}
                 depth={0}
                 keySlot={
-                  <span className="block px-2 py-1.5 font-mono text-[11px] text-fg-muted bg-hover-muted/80 border border-border">
+                  <span className="block px-2 py-1.5 font-mono text-[11px] text-fg-muted bg-hover-muted/80 border border-border rounded-control">
                     root
                   </span>
                 }
@@ -688,7 +688,7 @@ export default function JsonTreeEditor({ onToast }) {
           </div>
         </div>
 
-        <div className="bg-surface border border-border min-h-[280px]">
+        <div className="bg-surface border border-border rounded-panel min-h-[280px]">
           <div className="px-3 py-2 border-b border-border field-label">
             Output JSON
           </div>

@@ -52,7 +52,7 @@ export default function CspBuilder({ onToast }) {
         <div className="space-y-3">
           {DIRECTIVES.map((d) => (
             <div key={d.key}>
-              <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.15em] mb-1">
+              <label className="field-label mb-1">
                 {d.name}
               </label>
               <input
@@ -61,7 +61,7 @@ export default function CspBuilder({ onToast }) {
                   setValues((s) => ({ ...s, [d.key]: e.target.value }))
                 }
                 placeholder={d.placeholder}
-                className="w-full p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
+                className="w-full p-2 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
               />
             </div>
           ))}
@@ -87,13 +87,13 @@ export default function CspBuilder({ onToast }) {
         </div>
 
         <div>
-          <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+          <span className="field-label mb-2">
             Header value
           </span>
           <CopyPre
             text={headerValue || ""}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-border bg-surface-code min-h-[3rem]"
+            className="border border-border rounded-control bg-surface-code min-h-[3rem]"
             preClassName="p-3 font-mono text-xs break-all text-fg-soft"
           >
             {headerValue || "—"}
@@ -102,13 +102,13 @@ export default function CspBuilder({ onToast }) {
 
         {metaTag && (
           <div>
-            <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <span className="field-label mb-2">
               Meta tag
             </span>
             <CopyPre
               text={metaTag}
               onCopySuccess={() => onToast("Copied!")}
-              className="border border-border bg-surface-code"
+              className="border border-border rounded-control bg-surface-code"
               preClassName="p-3 font-mono text-xs break-all text-fg-soft"
             />
           </div>

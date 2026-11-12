@@ -34,29 +34,29 @@ export default function RedirectGenerator({ onToast }) {
       <Panel className="space-y-4 font-mono text-sm">
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="sm:col-span-1">
-            <label className="block text-[11px] text-fg-muted mb-1">Path</label>
+            <label className="field-label mb-1">Path</label>
             <input
               value={path}
               onChange={(e) => setPath(e.target.value)}
-              className="w-full p-3 border border-border-strong bg-surface text-fg"
+              className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg"
             />
           </div>
           <div className="sm:col-span-1">
-            <label className="block text-[11px] text-fg-muted mb-1">
+            <label className="field-label mb-1">
               Target URL or path
             </label>
             <input
               value={target}
               onChange={(e) => setTarget(e.target.value)}
-              className="w-full p-3 border border-border-strong bg-surface text-fg"
+              className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] text-fg-muted mb-1">Code</label>
+            <label className="field-label mb-1">Code</label>
             <select
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full p-3 border border-border-strong bg-surface text-fg"
+              className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg"
             >
               <option value="301">301</option>
               <option value="302">302</option>
@@ -73,13 +73,13 @@ export default function RedirectGenerator({ onToast }) {
           { title: "Apache mod_alias", body: blocks.apache },
         ].map((sec) => (
           <div key={sec.title}>
-            <span className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <span className="field-label mb-2">
               {sec.title}
             </span>
             <CopyPre
               text={sec.body}
               onCopySuccess={() => onToast("Copied!")}
-              className="border border-border bg-surface-code"
+              className="border border-border rounded-control bg-surface-code"
               preClassName="p-3 text-xs whitespace-pre-wrap break-all text-fg-soft"
             />
           </div>

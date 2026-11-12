@@ -85,7 +85,7 @@ export default function PersonaGenerator({ onToast }) {
 
       <Panel className="sm:p-8 flex flex-col md:flex-row gap-8 items-center md:items-start">
         <div className="flex flex-col items-center gap-4 shrink-0">
-          <div className="w-40 h-40 border-4 border-border overflow-hidden bg-surface-muted">
+          <div className="w-40 h-40 border-4 border-border rounded-control overflow-hidden bg-surface-muted">
             <Avatar
               key={persona.avatar}
               name={persona.name}
@@ -117,7 +117,7 @@ export default function PersonaGenerator({ onToast }) {
               <Label>
                 {field.label}
               </Label>
-              <div className="flex justify-between items-center bg-surface-muted p-3 border border-border mt-1">
+              <div className="flex justify-between items-center bg-surface-muted p-3 border border-border rounded-control mt-1">
                 <span className="text-lg font-mono truncate pr-4 text-fg">
                   {field.val}
                 </span>

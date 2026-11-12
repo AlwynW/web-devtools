@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowsOut } from "phosphor-react";
 import { useImmersiveView } from "../hooks/useImmersiveView";
+import Button from "../components/Button";
 
 function formatElapsed(ms) {
   if (ms < 0) ms = 0;
@@ -73,13 +74,9 @@ export default function Stopwatch() {
         createPortal(
           <div className="fixed inset-0 z-[9999] flex flex-col bg-stage text-fg-strong">
             <div className="flex items-center justify-end gap-2 px-4 py-3 border-b border-border-strong/50">
-              <button
-                type="button"
-                onClick={() => setImmersive(false)}
-                className="font-mono text-[11px] uppercase tracking-[0.12em] px-3 py-1.5 border border-border-muted hover:bg-secondary-hover"
-              >
+              <Button variant="outline" size="sm" onClick={() => setImmersive(false)}>
                 Exit full width
-              </button>
+              </Button>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center min-h-0 px-3 py-6">
               <div
@@ -96,37 +93,16 @@ export default function Stopwatch() {
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2 px-4 py-5 border-t border-border-strong/50 font-mono text-xs sm:text-sm shrink-0">
               {!running ? (
-                <button
-                  type="button"
-                  onClick={start}
-                  className="px-5 py-2.5 bg-inverse text-inverse-fg rounded-button border border-border-strong"
-                >
-                  Start
-                </button>
+                <Button onClick={start}>Start</Button>
               ) : (
-                <button
-                  type="button"
-                  onClick={pause}
-                  className="px-5 py-2.5 bg-inverse text-inverse-fg rounded-button border border-border-strong"
-                >
-                  Pause
-                </button>
+                <Button onClick={pause}>Pause</Button>
               )}
-              <button
-                type="button"
-                onClick={lap}
-                disabled={!running}
-                className="px-5 py-2.5 border border-border-muted disabled:opacity-40 disabled:cursor-not-allowed"
-              >
+              <Button variant="outline" onClick={lap} disabled={!running}>
                 Lap
-              </button>
-              <button
-                type="button"
-                onClick={reset}
-                className="px-5 py-2.5 border border-border-muted"
-              >
+              </Button>
+              <Button variant="outline" onClick={reset}>
                 Reset
-              </button>
+              </Button>
             </div>
             <p className="text-center font-mono text-[10px] text-fg-muted pb-3 shrink-0">
               Esc to exit
@@ -144,14 +120,15 @@ export default function Stopwatch() {
             <p className="text-[13px] font-mono text-fg-muted">
               Start, pause, lap. High-resolution display.
             </p>
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              size="sm"
+              icon={ArrowsOut}
               onClick={() => setImmersive(true)}
-              className="mt-4 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] px-3 py-1.5 border border-border-strong text-fg-soft hover:bg-secondary-hover"
+              className="mt-4 mx-auto w-fit"
             >
-              <ArrowsOut size={16} weight="thin" />
               Full browser width
-            </button>
+            </Button>
           </header>
 
           <div className="w-full border-y border-border bg-surface py-6 sm:py-10 mb-8">
@@ -165,37 +142,16 @@ export default function Stopwatch() {
 
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10 px-4 font-mono text-xs sm:text-sm">
             {!running ? (
-              <button
-                type="button"
-                onClick={start}
-                className="px-5 py-2.5 bg-inverse text-inverse-fg rounded-button border border-border-strong hover:opacity-90"
-              >
-                Start
-              </button>
+              <Button onClick={start}>Start</Button>
             ) : (
-              <button
-                type="button"
-                onClick={pause}
-                className="px-5 py-2.5 bg-inverse text-inverse-fg rounded-button border border-border-strong hover:opacity-90"
-              >
-                Pause
-              </button>
+              <Button onClick={pause}>Pause</Button>
             )}
-            <button
-              type="button"
-              onClick={lap}
-              disabled={!running}
-              className="px-5 py-2.5 border border-border-strong bg-surface text-fg-soft disabled:opacity-40 disabled:cursor-not-allowed hover:bg-hover-muted"
-            >
+            <Button variant="outline" onClick={lap} disabled={!running}>
               Lap
-            </button>
-            <button
-              type="button"
-              onClick={reset}
-              className="px-5 py-2.5 border border-border-strong bg-surface text-fg-soft hover:bg-hover-muted"
-            >
+            </Button>
+            <Button variant="outline" onClick={reset}>
               Reset
-            </button>
+            </Button>
           </div>
 
           {laps.length > 0 && (
@@ -203,7 +159,7 @@ export default function Stopwatch() {
               <h3 className="field-label mb-3">
                 Laps
               </h3>
-              <ul className="border border-border divide-y divide-border bg-surface font-mono text-sm">
+              <ul className="border border-border rounded-panel overflow-hidden divide-y divide-border bg-surface font-mono text-sm">
                 <li className="flex justify-between gap-4 px-4 py-2 text-[11px] uppercase tracking-[0.12em] text-fg-muted">
                   <span className="w-8">#</span>
                   <span>Lap</span>

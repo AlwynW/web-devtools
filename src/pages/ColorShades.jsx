@@ -48,7 +48,7 @@ export default function ColorShades({ onToast }) {
       <Panel className="space-y-4">
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="sm:col-span-1">
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               Base
             </label>
             <div className="flex gap-2">
@@ -63,17 +63,17 @@ export default function ColorShades({ onToast }) {
                   })()
                 }
                 onChange={(e) => setHex(e.target.value)}
-                className="h-10 w-12 shrink-0 cursor-pointer rounded border border-border-strong"
+                className="h-10 w-12 shrink-0 cursor-pointer rounded-control border border-border-strong"
               />
               <input
                 value={hex}
                 onChange={(e) => setHex(e.target.value)}
-                className="min-w-0 flex-1 p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
+                className="min-w-0 flex-1 p-2 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
               />
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               Steps (3–21)
             </label>
             <input
@@ -82,11 +82,11 @@ export default function ColorShades({ onToast }) {
               max={21}
               value={steps}
               onChange={(e) => setSteps(+e.target.value || 9)}
-              className="w-full p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
+              className="w-full p-2 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+            <label className="field-label mb-1">
               Lightness spread
             </label>
             <input
@@ -96,7 +96,7 @@ export default function ColorShades({ onToast }) {
               max={0.5}
               value={spread}
               onChange={(e) => setSpread(+e.target.value || 0.42)}
-              className="w-full p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
+              className="w-full p-2 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
             />
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function ColorShades({ onToast }) {
 
         {!err && rows.length > 0 && (
           <>
-            <div className="flex flex-wrap gap-1 rounded overflow-hidden border border-border">
+            <div className="flex flex-wrap gap-1 rounded-control overflow-hidden border border-border">
               {rows.map((r) => (
                 <div
                   key={r.step}
@@ -117,42 +117,44 @@ export default function ColorShades({ onToast }) {
                 />
               ))}
             </div>
-            <table className="w-full text-left font-mono text-xs border border-border">
-              <thead className="bg-hover-muted text-fg-muted">
-                <tr>
-                  <th className="p-2">#</th>
-                  <th className="p-2">Hex</th>
-                  <th className="p-2 w-20" />
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r) => (
-                  <tr
-                    key={r.step}
-                    className="border-t border-border group"
-                  >
-                    <td className="p-2">{r.step}</td>
-                    <td className="p-2">{r.hex}</td>
-                    <td className="p-2">
-                      <CopyButton
-                        text={r.hex}
-                        onCopySuccess={() => onToast("Copied!")}
-                        size={16}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
-                    </td>
+            <div className="border border-border rounded-control overflow-hidden">
+              <table className="w-full text-left font-mono text-xs">
+                <thead className="bg-hover-muted text-fg-muted">
+                  <tr>
+                    <th className="p-2">#</th>
+                    <th className="p-2">Hex</th>
+                    <th className="p-2 w-20" />
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr
+                      key={r.step}
+                      className="border-t border-border group"
+                    >
+                      <td className="p-2">{r.step}</td>
+                      <td className="p-2">{r.hex}</td>
+                      <td className="p-2">
+                        <CopyButton
+                          text={r.hex}
+                          onCopySuccess={() => onToast("Copied!")}
+                          size={16}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <div>
-              <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+              <span className="field-label mb-2">
                 CSS variables
               </span>
               <CopyPre
                 text={cssVars}
                 onCopySuccess={() => onToast("Copied!")}
-                className="border border-border bg-surface-code overflow-x-auto"
+                className="border border-border rounded-control bg-surface-code overflow-x-auto"
                 preClassName="p-3 font-mono text-xs text-fg-soft"
               />
             </div>

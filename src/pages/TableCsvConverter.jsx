@@ -68,7 +68,7 @@ export default function TableCsvConverter({ onToast }) {
             value={htmlIn}
             onChange={(e) => setHtmlIn(e.target.value)}
             rows={6}
-            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+            className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
           />
           {toCsv.error && (
             <p className="text-sm text-red-600 dark:text-red-400 font-mono">
@@ -79,7 +79,7 @@ export default function TableCsvConverter({ onToast }) {
           <CopyPre
             text={toCsv.csv || ""}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-border bg-surface-code max-h-40 overflow-y-auto"
+            className="border border-border rounded-control bg-surface-code max-h-40 overflow-y-auto"
             preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
           >
             {toCsv.csv || "—"}
@@ -94,7 +94,7 @@ export default function TableCsvConverter({ onToast }) {
             value={csvIn}
             onChange={(e) => setCsvIn(e.target.value)}
             rows={6}
-            className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+            className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
           />
           {toHtml.error && (
             <p className="text-sm text-red-600 dark:text-red-400 font-mono">
@@ -105,7 +105,7 @@ export default function TableCsvConverter({ onToast }) {
           <CopyPre
             text={toHtml.html || ""}
             onCopySuccess={() => onToast("Copied!")}
-            className="border border-border bg-surface-code max-h-48 overflow-y-auto"
+            className="border border-border rounded-control bg-surface-code max-h-48 overflow-y-auto"
             preClassName="p-4 font-mono text-xs whitespace-pre-wrap text-fg-soft"
           >
             {toHtml.html || "—"}

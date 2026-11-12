@@ -91,9 +91,9 @@ export default function CrontabGenerator({ onToast }) {
                 key={p.cron}
                 type="button"
                 onClick={() => selectPreset(p)}
-                className={`p-3 border text-left text-sm font-mono transition-colors ${
+                className={`p-3 border rounded-control text-left text-sm font-mono transition-colors ${
                   preset === p.cron
-                    ? "border-inverse-border bg-shell"
+                    ? "border-emphasis bg-shell"
                     : "border-border hover:border-border-strong"
                 }`}
               >
@@ -115,7 +115,7 @@ export default function CrontabGenerator({ onToast }) {
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
             <div>
-              <label className="block text-xs font-mono text-fg-muted mb-1">
+              <label className="field-label mb-1">
                 Minute
               </label>
               <input
@@ -131,7 +131,7 @@ export default function CrontabGenerator({ onToast }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-mono text-fg-muted mb-1">
+              <label className="field-label mb-1">
                 Hour
               </label>
               <input
@@ -147,7 +147,7 @@ export default function CrontabGenerator({ onToast }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-mono text-fg-muted mb-1">
+              <label className="field-label mb-1">
                 Day (1-31)
               </label>
               <input
@@ -163,7 +163,7 @@ export default function CrontabGenerator({ onToast }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-mono text-fg-muted mb-1">
+              <label className="field-label mb-1">
                 Month
               </label>
               <select
@@ -183,7 +183,7 @@ export default function CrontabGenerator({ onToast }) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-mono text-fg-muted mb-1">
+              <label className="field-label mb-1">
                 Day of week
               </label>
               <select
@@ -235,7 +235,7 @@ export default function CrontabGenerator({ onToast }) {
             <Label>
               Current expression
             </Label>
-            <pre className="p-3 bg-surface-code border border-border font-mono text-sm text-fg-soft">
+            <pre className="p-3 bg-surface-code border border-border rounded-control font-mono text-sm text-fg-soft">
               {cron}
             </pre>
             <button
@@ -269,7 +269,7 @@ export default function CrontabGenerator({ onToast }) {
                 <Label>
                   Human-readable
                 </Label>
-                <p className="p-4 bg-surface-code border border-border text-fg-soft text-sm leading-relaxed">
+                <p className="p-4 bg-surface-code border border-border rounded-control text-fg-soft text-sm leading-relaxed">
                   {human}
                 </p>
               </div>
@@ -277,7 +277,7 @@ export default function CrontabGenerator({ onToast }) {
                 <Label>
                   Next {NEXT_COUNT} runs (local time)
                 </Label>
-                <ul className="font-mono text-xs text-fg-soft space-y-1 border border-border p-3 bg-surface max-h-48 overflow-y-auto">
+                <ul className="font-mono text-xs text-fg-soft space-y-1 border border-border rounded-control p-3 bg-surface max-h-48 overflow-y-auto">
                   {next.map((d, i) => (
                     <li key={i}>{d.toLocaleString()}</li>
                   ))}

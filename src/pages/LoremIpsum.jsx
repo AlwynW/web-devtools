@@ -6,6 +6,7 @@ import { faker } from "@faker-js/faker";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 export default function LoremIpsum({ onToast }) {
   const [mode, setMode] = useState("paragraphs");
@@ -27,25 +28,15 @@ export default function LoremIpsum({ onToast }) {
       <PageHeader title="Lorem Ipsum" description="Generate placeholder text for your projects." />
 
       <Panel className="space-y-4">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px] flex-wrap">
-          {[
-            { id: "paragraphs", label: "Paragraphs" },
-            { id: "sentences", label: "Sentences" },
-            { id: "words", label: "Words" },
-          ].map((m) => (
-            <button
-              key={m.id}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === m.id
-                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-              onClick={() => setMode(m.id)}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "paragraphs", label: "Paragraphs" },
+            { value: "sentences", label: "Sentences" },
+            { value: "words", label: "Words" },
+          ]}
+          value={mode}
+          onChange={setMode}
+        />
 
         <div>
           <Label>

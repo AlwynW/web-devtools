@@ -6,8 +6,8 @@ export const brand = {
 };
 
 /**
- * Browser / PWA chrome. Keep in sync with --shell in tokens.css
- * (default stone-100 / stone-900: #f5f5f4 / #1c1917).
+ * Browser and PWA chrome. Keep equal to --shell in tokens.css.
+ * vite.config.js writes these and the names above into index.html.
  */
 export const themeColor = {
   light: "#f5f5f4",

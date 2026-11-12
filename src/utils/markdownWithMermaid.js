@@ -1,6 +1,5 @@
 import { Marked } from "marked";
 
-const DIAGRAM_FONT = '"Space Grotesk", system-ui, sans-serif';
 
 let renderQueue = Promise.resolve();
 let renderSeq = 0;
@@ -43,97 +42,67 @@ function errorBlock(message) {
   return `<div class="mermaid-diagram mermaid-diagram-error" role="alert"><p class="mermaid-error-title">Could not render this diagram</p><p class="mermaid-error-message">${escapeHtml(message)}</p></div>`;
 }
 
+// Mermaid derives shades from these, so it needs resolved colors, not var().
+// Keep the tokens read here as plain hex in tokens.css (no color-mix).
 function themeVariables(dark) {
-  if (dark) {
-    return {
-      darkMode: true,
-      background: "transparent",
-      fontFamily: DIAGRAM_FONT,
-      primaryColor: "#44403c",
-      primaryTextColor: "#fafaf9",
-      primaryBorderColor: "#a8a29e",
-      secondaryColor: "#292524",
-      secondaryTextColor: "#fafaf9",
-      secondaryBorderColor: "#a8a29e",
-      tertiaryColor: "#1c1917",
-      tertiaryTextColor: "#e7e5e4",
-      tertiaryBorderColor: "#78716c",
-      lineColor: "#d6d3d1",
-      textColor: "#fafaf9",
-      mainBkg: "#44403c",
-      nodeBorder: "#a8a29e",
-      clusterBkg: "#292524",
-      clusterBorder: "#78716c",
-      titleColor: "#fafaf9",
-      edgeLabelBackground: "#1c1917",
-      actorBkg: "#44403c",
-      actorBorder: "#a8a29e",
-      actorTextColor: "#fafaf9",
-      actorLineColor: "#d6d3d1",
-      signalColor: "#d6d3d1",
-      signalTextColor: "#fafaf9",
-      labelBoxBkgColor: "#44403c",
-      labelBoxBorderColor: "#a8a29e",
-      labelTextColor: "#fafaf9",
-      loopTextColor: "#fafaf9",
-      noteBkgColor: "#292524",
-      noteTextColor: "#fafaf9",
-      noteBorderColor: "#a8a29e",
-      activationBkgColor: "#57534e",
-      activationBorderColor: "#d6d3d1",
-      sequenceNumberColor: "#fafaf9",
-    };
-  }
-
+  const css = getComputedStyle(document.documentElement);
+  const token = (name) => css.getPropertyValue(name).trim();
+  const fill = token("--surface");
+  const fillMuted = token("--surface-sunken");
+  const text = token("--fg");
+  const textMuted = token("--fg-muted");
+  const border = token("--border-muted");
+  const line = token("--fg-soft");
   return {
-    darkMode: false,
+    darkMode: dark,
     background: "transparent",
-    fontFamily: DIAGRAM_FONT,
-    primaryColor: "#f5f5f4",
-    primaryTextColor: "#1c1917",
-    primaryBorderColor: "#57534e",
-    secondaryColor: "#e7e5e4",
-    secondaryTextColor: "#1c1917",
-    secondaryBorderColor: "#78716c",
-    tertiaryColor: "#fafaf9",
-    tertiaryTextColor: "#44403c",
-    tertiaryBorderColor: "#a8a29e",
-    lineColor: "#44403c",
-    textColor: "#1c1917",
-    mainBkg: "#f5f5f4",
-    nodeBorder: "#57534e",
-    clusterBkg: "#fafaf9",
-    clusterBorder: "#a8a29e",
-    titleColor: "#1c1917",
-    edgeLabelBackground: "#ffffff",
-    actorBkg: "#f5f5f4",
-    actorBorder: "#57534e",
-    actorTextColor: "#1c1917",
-    actorLineColor: "#57534e",
-    signalColor: "#44403c",
-    signalTextColor: "#1c1917",
-    labelBoxBkgColor: "#f5f5f4",
-    labelBoxBorderColor: "#57534e",
-    labelTextColor: "#1c1917",
-    loopTextColor: "#1c1917",
-    noteBkgColor: "#fafaf9",
-    noteTextColor: "#1c1917",
-    noteBorderColor: "#a8a29e",
-    activationBkgColor: "#e7e5e4",
-    activationBorderColor: "#57534e",
-    sequenceNumberColor: "#1c1917",
+    fontFamily: token("--font-sans"),
+    primaryColor: fill,
+    primaryTextColor: text,
+    primaryBorderColor: border,
+    secondaryColor: fillMuted,
+    secondaryTextColor: text,
+    secondaryBorderColor: border,
+    tertiaryColor: token("--shell"),
+    tertiaryTextColor: textMuted,
+    tertiaryBorderColor: border,
+    lineColor: line,
+    textColor: text,
+    mainBkg: fill,
+    nodeBorder: border,
+    clusterBkg: fillMuted,
+    clusterBorder: border,
+    titleColor: text,
+    edgeLabelBackground: token("--shell"),
+    actorBkg: fill,
+    actorBorder: border,
+    actorTextColor: text,
+    actorLineColor: line,
+    signalColor: line,
+    signalTextColor: text,
+    labelBoxBkgColor: fill,
+    labelBoxBorderColor: border,
+    labelTextColor: text,
+    loopTextColor: text,
+    noteBkgColor: token("--primary"),
+    noteTextColor: token("--primary-fg"),
+    noteBorderColor: token("--primary-border"),
+    activationBkgColor: fillMuted,
+    activationBorderColor: line,
+    sequenceNumberColor: token("--primary-fg"),
   };
 }
 
 function mermaidConfig(dark) {
+  const themeVars = themeVariables(dark);
   return {
     startOnLoad: false,
     securityLevel: "strict",
     suppressErrorRendering: true,
     htmlLabels: true,
-    fontFamily: DIAGRAM_FONT,
+    fontFamily: themeVars.fontFamily,
     theme: "base",
-    themeVariables: themeVariables(dark),
+    themeVariables: themeVars,
   };
 }
 

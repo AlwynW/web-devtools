@@ -118,7 +118,7 @@ DevKit is a sleek, browser-based toolbox for everyday developer tasks. It bundle
 
 - **Frontend**: React 19 with React Router v7
 - **Build**: Vite 7
-- **Styling**: Tailwind CSS v4 with light/dark theme
+- **Styling**: Tailwind CSS v4 with light/dark theme. To rebrand, see [THEME.md](THEME.md)
 - **Icons**: Phosphor React
 
 ### Getting Started

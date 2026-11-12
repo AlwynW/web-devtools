@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import Button from "../components/Button";
 import CopyPre from "../components/CopyPre";
 import { formatXml, minifyXml, parseXmlError } from "../utils/xmlFormat";
 import PageHeader from "../components/ui/PageHeader";
@@ -49,34 +50,20 @@ export default function XmlTools({ onToast }) {
 
       <Panel className="space-y-4">
         <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={runFormat}
-            className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
-          >
-            Format
-          </button>
-          <button
-            type="button"
-            onClick={runMinify}
-            className="px-4 py-2 font-mono text-xs border border-border-strong hover:bg-hover-muted"
-          >
+          <Button onClick={runFormat}>Format</Button>
+          <Button variant="outline" onClick={runMinify}>
             Minify
-          </button>
-          <button
-            type="button"
-            onClick={validateOnly}
-            className="px-4 py-2 font-mono text-xs border border-border-strong hover:bg-hover-muted"
-          >
+          </Button>
+          <Button variant="outline" onClick={validateOnly}>
             Validate only
-          </button>
+          </Button>
         </div>
 
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={10}
-          className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+          className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
         />
 
         {(err || liveErr) && (
@@ -92,13 +79,13 @@ export default function XmlTools({ onToast }) {
 
         {output && (
           <div>
-            <span className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <span className="field-label mb-2">
               Output
             </span>
             <CopyPre
               text={output}
               onCopySuccess={() => onToast("Copied!")}
-              className="border border-border bg-surface-code max-h-80 overflow-y-auto overflow-x-auto"
+              className="border border-border rounded-control bg-surface-code max-h-80 overflow-y-auto overflow-x-auto"
               preClassName="p-4 font-mono text-xs whitespace-pre-wrap break-all text-fg-soft"
             />
           </div>

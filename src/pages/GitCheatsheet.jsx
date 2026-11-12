@@ -93,7 +93,7 @@ export default function GitCheatsheet({ onToast }) {
                 {group.commands.map((c) => (
                   <div
                     key={c.command}
-                    className="flex items-center justify-between p-3 border border-border hover:bg-hover transition-colors group"
+                    className="flex items-center justify-between p-3 border border-border rounded-control hover:bg-hover transition-colors group"
                   >
                     <div className="min-w-0 flex-1">
                       <code className="font-mono font-bold text-fg-soft">

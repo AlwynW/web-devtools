@@ -40,38 +40,38 @@ export default function HmacGenerator({ onToast }) {
 
       <Panel className="space-y-4">
         <div>
-          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+          <label className="field-label mb-1">
             Algorithm
           </label>
           <select
             value={alg}
             onChange={(e) => setAlg(e.target.value)}
-            className="p-2 border border-border-strong font-mono text-sm bg-surface text-fg"
+            className="p-2 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
           >
             <option value="SHA256">HMAC-SHA256</option>
             <option value="SHA512">HMAC-SHA512</option>
           </select>
         </div>
         <div>
-          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+          <label className="field-label mb-1">
             Secret
           </label>
           <input
             type="password"
             value={secret}
             onChange={(e) => setSecret(e.target.value)}
-            className="w-full p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
+            className="w-full p-3 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
           />
         </div>
         <div>
-          <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-1">
+          <label className="field-label mb-1">
             Message
           </label>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={5}
-            className="w-full p-3 border border-border-strong font-mono text-sm bg-surface text-fg"
+            className="w-full p-3 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
           />
         </div>
 
@@ -86,7 +86,7 @@ export default function HmacGenerator({ onToast }) {
               <CopyPre
                 text={hex}
                 onCopySuccess={() => onToast("Copied!")}
-                className="border border-border bg-surface-code"
+                className="border border-border rounded-control bg-surface-code"
                 preClassName="p-3 text-xs break-all text-fg-soft"
               />
             </div>
@@ -95,7 +95,7 @@ export default function HmacGenerator({ onToast }) {
               <CopyPre
                 text={b64}
                 onCopySuccess={() => onToast("Copied!")}
-                className="border border-border bg-surface-code"
+                className="border border-border rounded-control bg-surface-code"
                 preClassName="p-3 text-xs break-all text-fg-soft"
               />
             </div>

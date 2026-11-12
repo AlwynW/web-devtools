@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { UploadSimple, DownloadSimple, X } from "phosphor-react";
 import { downloadCanvas } from "../utils/assetGridComposer";
+import Button from "../components/Button";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
@@ -112,13 +113,6 @@ export default function ImageEditor({ onToast }) {
     }
   };
 
-  const toggleClass = (active) =>
-    `px-3 py-1.5 font-mono text-xs border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-      active
-        ? "bg-primary text-primary-fg rounded-button border-inverse-border"
-        : "bg-surface text-fg-muted border-border-strong hover:bg-hover-muted"
-    }`;
-
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <PageHeader title="Editor" description="Greyscale, invert, and hue/saturation tweaks — then download." />
@@ -131,7 +125,7 @@ export default function ImageEditor({ onToast }) {
             setDragOver(true);
           }}
           onDragLeave={() => setDragOver(false)}
-          className={`border-2 border-dashed p-10 text-center transition-colors ${
+          className={`border-2 border-dashed rounded-control p-10 text-center transition-colors ${
             dragOver
               ? "border-focus bg-shell/50"
               : "border-border-strong hover:border-border-muted"
@@ -177,7 +171,7 @@ export default function ImageEditor({ onToast }) {
               </button>
             </div>
 
-            <div className="border border-border bg-surface-code p-4 flex items-center justify-center min-h-[200px]">
+            <div className="border border-border rounded-control overflow-hidden bg-surface-code p-4 flex items-center justify-center min-h-[200px]">
               <img
                 ref={imageRef}
                 src={src}
@@ -192,24 +186,24 @@ export default function ImageEditor({ onToast }) {
                 Effects
               </Label>
               <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
+                <Button
+                  size="sm"
+                  variant={greyscale ? "primary" : "outline"}
                   onClick={() => setGreyscale((v) => !v)}
-                  className={toggleClass(greyscale)}
                 >
                   Greyscale
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <Button
+                  size="sm"
+                  variant={invert ? "primary" : "outline"}
                   onClick={() => setInvert((v) => !v)}
-                  className={toggleClass(invert)}
                 >
                   Invert
-                </button>
+                </Button>
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="px-3 py-1.5 font-mono text-xs text-fg-muted hover:text-fg border border-transparent"
+                  className="px-3 py-1.5 font-mono text-xs text-fg-muted hover:text-fg border border-transparent rounded-button"
                 >
                   Reset
                 </button>
@@ -259,22 +253,16 @@ export default function ImageEditor({ onToast }) {
             </div>
 
             <div className="flex flex-wrap gap-2 pt-2">
-              <button
-                type="button"
-                onClick={() => download("image/png")}
-                className="flex items-center gap-2 px-4 py-2 font-mono text-xs bg-primary text-primary-fg rounded-button border border-inverse-border hover:bg-primary-hover transition-colors"
-              >
-                <DownloadSimple size={16} weight="thin" />
+              <Button icon={DownloadSimple} onClick={() => download("image/png")}>
                 Download PNG
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="outline"
+                icon={DownloadSimple}
                 onClick={() => download("image/jpeg")}
-                className="flex items-center gap-2 px-4 py-2 font-mono text-xs border border-border-strong text-fg-soft hover:bg-hover-muted transition-colors"
               >
-                <DownloadSimple size={16} weight="thin" />
                 Download JPG
-              </button>
+              </Button>
             </div>
           </>
         )}

@@ -3,6 +3,13 @@ import { Plus, Trash } from "phosphor-react";
 import CopyArea from "../components/CopyArea";
 import Button from "../components/Button";
 import PageHeader from "../components/ui/PageHeader";
+import SegmentedControl from "../components/ui/SegmentedControl";
+
+const PREVIEW_BG_OPTIONS = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "custom", label: "Custom" },
+];
 
 const initialShadow = {
   x: 0,
@@ -60,30 +67,20 @@ export default function CssGenerator({ onToast }) {
       <PageHeader title="Box-Shadow Builder" description="Visual controls to fine-tune single and layered shadows." />
 
       <div className="bg-surface p-6 border border-border rounded-panel space-y-6">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max flex-wrap font-mono text-[11px]">
-          {[
-            { id: "shadow", label: "Box-Shadow" },
-            { id: "shadow-builder", label: "Shadow Builder" },
-          ].map((m) => (
-            <button
-              key={m.id}
-              onClick={() => setMode(m.id)}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === m.id
-                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "shadow", label: "Box-Shadow" },
+            { value: "shadow-builder", label: "Shadow Builder" },
+          ]}
+          value={mode}
+          onChange={setMode}
+        />
 
         {mode === "shadow" && (
           <>
             <div className="flex flex-col items-center gap-4">
               <div
-                className="w-full max-w-xs aspect-square flex items-center justify-center p-8 border border-border"
+                className="w-full max-w-xs aspect-square flex items-center justify-center p-8 border border-border rounded-control overflow-hidden"
                 style={{ backgroundColor: shadowPreviewBgColor }}
               >
                 <div
@@ -95,38 +92,24 @@ export default function CssGenerator({ onToast }) {
                 />
               </div>
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex gap-2 p-1 bg-hover-muted">
-                  {[
-                    { id: "light", label: "Light" },
-                    { id: "dark", label: "Dark" },
-                    { id: "custom", label: "Custom" },
-                  ].map((m) => (
-                    <button
-                      key={m.id}
-                      onClick={() => setShadowPreviewBg(m.id)}
-                      className={`px-3 py-1.5  text-sm font-medium transition-all ${
-                        shadowPreviewBg === m.id
-                          ? "bg-surface-inset shadow text-fg-muted"
-                          : "text-fg-muted hover:text-fg"
-                      }`}
-                    >
-                      {m.label}
-                    </button>
-                  ))}
-                </div>
+                <SegmentedControl
+                  options={PREVIEW_BG_OPTIONS}
+                  value={shadowPreviewBg}
+                  onChange={setShadowPreviewBg}
+                />
                 {shadowPreviewBg === "custom" && (
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
                       value={shadowPreviewColor.slice(0, 7)}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-10 h-8 border border-border cursor-pointer"
+                      className="w-10 h-8 border border-border rounded-control cursor-pointer"
                     />
                     <input
                       type="text"
                       value={shadowPreviewColor}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-24 px-2 py-1.5 bg-surface-muted border border-border font-mono text-xs dark:text-white"
+                      className="w-24 px-2 py-1.5 bg-surface-muted border border-border rounded-control font-mono text-xs dark:text-white"
                     />
                   </div>
                 )}
@@ -138,13 +121,13 @@ export default function CssGenerator({ onToast }) {
                     type="color"
                     value={shadowBoxColor.slice(0, 7)}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-10 h-8 border border-border cursor-pointer"
+                    className="w-10 h-8 border border-border rounded-control cursor-pointer"
                   />
                   <input
                     type="text"
                     value={shadowBoxColor}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-24 px-2 py-1.5 bg-surface-muted border border-border font-mono text-xs dark:text-white"
+                    className="w-24 px-2 py-1.5 bg-surface-muted border border-border rounded-control font-mono text-xs dark:text-white"
                   />
                 </div>
               </div>
@@ -187,7 +170,7 @@ export default function CssGenerator({ onToast }) {
                   onChange={(e) =>
                     setShadow({ ...shadow, color: e.target.value })
                   }
-                  className="w-12 h-10 border border-border cursor-pointer"
+                  className="w-12 h-10 border border-border rounded-control cursor-pointer"
                 />
                 <input
                   type="text"
@@ -196,7 +179,7 @@ export default function CssGenerator({ onToast }) {
                     setShadow({ ...shadow, color: e.target.value })
                   }
                   placeholder="#000000 or #00000080"
-                  className="flex-1 px-3 py-1.5 bg-surface-muted border border-border font-mono text-sm dark:text-white"
+                  className="flex-1 px-3 py-1.5 bg-surface-muted border border-border rounded-control font-mono text-sm dark:text-white"
                 />
               </div>
             </div>
@@ -211,7 +194,7 @@ export default function CssGenerator({ onToast }) {
           <>
             <div className="flex flex-col items-center gap-4">
               <div
-                className="w-full max-w-xs aspect-square flex items-center justify-center p-8 border border-border"
+                className="w-full max-w-xs aspect-square flex items-center justify-center p-8 border border-border rounded-control overflow-hidden"
                 style={{ backgroundColor: shadowPreviewBgColor }}
               >
                 <div
@@ -223,38 +206,24 @@ export default function CssGenerator({ onToast }) {
                 />
               </div>
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex gap-2 p-1 bg-hover-muted">
-                  {[
-                    { id: "light", label: "Light" },
-                    { id: "dark", label: "Dark" },
-                    { id: "custom", label: "Custom" },
-                  ].map((m) => (
-                    <button
-                      key={m.id}
-                      onClick={() => setShadowPreviewBg(m.id)}
-                      className={`px-3 py-1.5  text-sm font-medium transition-all ${
-                        shadowPreviewBg === m.id
-                          ? "bg-surface-inset shadow text-fg-muted"
-                          : "text-fg-muted hover:text-fg"
-                      }`}
-                    >
-                      {m.label}
-                    </button>
-                  ))}
-                </div>
+                <SegmentedControl
+                  options={PREVIEW_BG_OPTIONS}
+                  value={shadowPreviewBg}
+                  onChange={setShadowPreviewBg}
+                />
                 {shadowPreviewBg === "custom" && (
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
                       value={shadowPreviewColor.slice(0, 7)}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-10 h-8 border border-border cursor-pointer"
+                      className="w-10 h-8 border border-border rounded-control cursor-pointer"
                     />
                     <input
                       type="text"
                       value={shadowPreviewColor}
                       onChange={(e) => setShadowPreviewColor(e.target.value)}
-                      className="w-24 px-2 py-1.5 bg-surface-muted border border-border font-mono text-xs dark:text-white"
+                      className="w-24 px-2 py-1.5 bg-surface-muted border border-border rounded-control font-mono text-xs dark:text-white"
                     />
                   </div>
                 )}
@@ -266,13 +235,13 @@ export default function CssGenerator({ onToast }) {
                     type="color"
                     value={shadowBoxColor.slice(0, 7)}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-10 h-8 border border-border cursor-pointer"
+                    className="w-10 h-8 border border-border rounded-control cursor-pointer"
                   />
                   <input
                     type="text"
                     value={shadowBoxColor}
                     onChange={(e) => setShadowBoxColor(e.target.value)}
-                    className="w-24 px-2 py-1.5 bg-surface-muted border border-border font-mono text-xs dark:text-white"
+                    className="w-24 px-2 py-1.5 bg-surface-muted border border-border rounded-control font-mono text-xs dark:text-white"
                   />
                 </div>
               </div>
@@ -281,7 +250,7 @@ export default function CssGenerator({ onToast }) {
               {layers.map((layer, i) => (
                 <div
                   key={i}
-                  className="p-4 border border-border bg-surface-muted/50 dark:bg-stone-900/50 space-y-3"
+                  className="p-4 border border-border rounded-control bg-surface-muted/50 dark:bg-stone-900/50 space-y-3"
                 >
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-bold text-fg-muted">
@@ -290,7 +259,7 @@ export default function CssGenerator({ onToast }) {
                     <button
                       onClick={() => removeLayer(i)}
                       disabled={layers.length <= 1}
-                      className="p-1.5 text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-1.5 rounded-button text-fg-subtle hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Remove layer"
                     >
                       <Trash size={16} weight="thin" />
@@ -326,14 +295,14 @@ export default function CssGenerator({ onToast }) {
                       type="color"
                       value={layer.color.slice(0, 7)}
                       onChange={(e) => updateLayer(i, "color", e.target.value)}
-                      className="w-10 h-8 border border-border cursor-pointer"
+                      className="w-10 h-8 border border-border rounded-control cursor-pointer"
                     />
                     <input
                       type="text"
                       value={layer.color}
                       onChange={(e) => updateLayer(i, "color", e.target.value)}
                       placeholder="#00000020"
-                      className="flex-1 px-2 py-1.5 bg-shell border border-border font-mono text-xs dark:text-white"
+                      className="flex-1 px-2 py-1.5 bg-shell border border-border rounded-control font-mono text-xs dark:text-white"
                     />
                   </div>
                 </div>

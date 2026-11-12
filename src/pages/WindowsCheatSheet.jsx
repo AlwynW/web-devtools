@@ -255,7 +255,7 @@ function filterSection(section, q) {
 
 function CheatRow({ item, onCopySuccess }) {
   return (
-    <div className="flex items-center justify-between p-3 border border-border hover:bg-hover transition-colors group">
+    <div className="flex items-center justify-between p-3 border border-border rounded-control hover:bg-hover transition-colors group">
       <div className="min-w-0 flex-1">
         <code className="font-mono font-bold text-fg-soft break-all">
           {item.token}
@@ -311,7 +311,7 @@ export default function WindowsCheatSheet({ onToast }) {
               key={section.title}
               className={
                 section.highlight
-                  ? "p-4 border-2 border-amber-400/80 dark:border-amber-600/60 bg-amber-50/50 dark:bg-amber-950/20"
+                  ? "p-4 border-2 rounded-control border-amber-400/80 dark:border-amber-600/60 bg-amber-50/50 dark:bg-amber-950/20"
                   : ""
               }
             >

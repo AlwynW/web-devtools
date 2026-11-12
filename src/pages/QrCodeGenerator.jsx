@@ -6,18 +6,20 @@ import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
+import Button from "../components/Button";
 
 const MODES = [
-  { id: "text", label: "Text" },
-  { id: "vcard", label: "vCard" },
-  { id: "wifi", label: "WiFi" },
+  { value: "text", label: "Text" },
+  { value: "vcard", label: "vCard" },
+  { value: "wifi", label: "WiFi" },
 ];
 
 const SIZES = [
-  { id: 256, label: "Default (256)" },
-  { id: 500, label: "500" },
-  { id: 800, label: "800" },
-  { id: 1024, label: "1024" },
+  { value: 256, label: "Default (256)" },
+  { value: 500, label: "500" },
+  { value: 800, label: "800" },
+  { value: 1024, label: "1024" },
 ];
 
 function hexToRgba(hex, alpha = 255) {
@@ -56,8 +58,8 @@ function buildWifiString(fields) {
 }
 
 const DIRECTIONS = [
-  { id: "generate", label: "Generate" },
-  { id: "read", label: "Read" },
+  { value: "generate", label: "Generate" },
+  { value: "read", label: "Read" },
 ];
 
 export default function QrCodeGenerator({ onToast }) {
@@ -166,43 +168,17 @@ export default function QrCodeGenerator({ onToast }) {
       <PageHeader title="QR Code" description="Generate a code from text, or read one from an image, clipboard, or camera." />
 
       <Panel className="space-y-6">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-          {DIRECTIONS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setDirection(item.id)}
-              aria-pressed={direction === item.id}
-              className={`px-3 py-1.5 transition-colors ${
-                direction === item.id
-                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          options={DIRECTIONS}
+          value={direction}
+          onChange={setDirection}
+        />
 
         {direction === "read" ? (
           <QrReader onToast={onToast} />
         ) : (
         <>
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-          {MODES.map((m) => (
-            <button
-              key={m.id}
-              onClick={() => setMode(m.id)}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === m.id
-                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl options={MODES} value={mode} onChange={setMode} />
 
         {mode === "text" && (
           <div>
@@ -320,7 +296,7 @@ export default function QrCodeGenerator({ onToast }) {
               type="color"
               value={fgColor}
               onChange={(e) => setFgColor(e.target.value)}
-              className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent"
+              className="w-10 h-10 border border-border-strong rounded-control cursor-pointer bg-transparent"
             />
             <span className="text-xs font-mono text-fg-muted">{fgColor}</span>
           </div>
@@ -332,7 +308,7 @@ export default function QrCodeGenerator({ onToast }) {
               type="color"
               value={bgColor}
               onChange={(e) => setBgColor(e.target.value)}
-              className="w-10 h-10 border border-border-strong cursor-pointer bg-transparent"
+              className="w-10 h-10 border border-border-strong rounded-control cursor-pointer bg-transparent"
             />
             <span className="text-xs font-mono text-fg-muted">{bgColor}</span>
           </div>
@@ -340,21 +316,7 @@ export default function QrCodeGenerator({ onToast }) {
             <label className="text-sm font-mono text-fg-muted">
               Size
             </label>
-            <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
-              {SIZES.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setSize(s.id)}
-                  className={`px-3 py-1.5 transition-colors ${
-                    size === s.id
-                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                      : "text-fg-muted hover:bg-hover-muted"
-                  }`}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
+            <SegmentedControl options={SIZES} value={size} onChange={setSize} />
           </div>
         </div>
 
@@ -367,34 +329,37 @@ export default function QrCodeGenerator({ onToast }) {
         {qrSvg && (
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap gap-2">
-              <button
+              <Button
+                variant="outline"
+                icon={DownloadSimple}
                 onClick={saveSvg}
-                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
-                <DownloadSimple size={16} weight="thin" /> SVG
-              </button>
-              <button
+                SVG
+              </Button>
+              <Button
+                variant="outline"
+                icon={DownloadSimple}
                 onClick={() => savePng(false)}
-                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
-                <DownloadSimple size={16} weight="thin" /> PNG (with bg)
-              </button>
-              <button
+                PNG (with bg)
+              </Button>
+              <Button
+                variant="outline"
+                icon={DownloadSimple}
                 onClick={() => savePng(true)}
-                className="flex items-center gap-2 px-4 py-2 border border-border-strong bg-surface hover:bg-hover-muted text-fg-soft font-mono text-xs transition-colors"
               >
-                <DownloadSimple size={16} weight="thin" /> PNG (transparent)
-              </button>
+                PNG (transparent)
+              </Button>
             </div>
             <div
-              className="p-4 bg-surface border border-border w-fit"
+              className="p-4 bg-surface border border-border rounded-control overflow-hidden w-fit"
               dangerouslySetInnerHTML={{ __html: qrSvg }}
             />
           </div>
         )}
 
         {!qrSvg && encodedText.trim() && (
-          <div className="flex items-center gap-3 p-4 bg-surface-muted border border-border text-fg-muted">
+          <div className="flex items-center gap-3 p-4 bg-surface-muted border border-border rounded-control text-fg-muted">
             <QrCode size={24} weight="thin" className="shrink-0" />
             <span className="text-sm font-mono">Generating QR code...</span>
           </div>

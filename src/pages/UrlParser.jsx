@@ -133,14 +133,14 @@ export default function UrlParser({ onToast }) {
                       value={p.key}
                       onChange={(e) => updateParam(i, "key", e.target.value)}
                       placeholder="key"
-                      className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
+                      className="flex-1 p-2 bg-surface border border-border-strong rounded-control font-mono text-sm"
                     />
                     <input
                       type="text"
                       value={p.value}
                       onChange={(e) => updateParam(i, "value", e.target.value)}
                       placeholder="value"
-                      className="flex-1 p-2 bg-surface border border-border-strong font-mono text-sm"
+                      className="flex-1 p-2 bg-surface border border-border-strong rounded-control font-mono text-sm"
                     />
                     <button
                       onClick={() => removeParam(i)}

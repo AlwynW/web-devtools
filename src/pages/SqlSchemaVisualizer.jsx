@@ -11,13 +11,28 @@ import Button from "../components/Button";
 import SchemaCanvas from "../components/SchemaCanvas";
 import { parseSqlSchema, SAMPLE_SQL } from "../utils/sqlSchemaParser";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
-const tabClass = (active) =>
-  `px-4 py-2 font-mono text-xs uppercase tracking-[0.12em] border rounded-button transition-colors ${
-    active
-      ? "bg-inverse text-inverse-fg border-inverse-border"
-      : "bg-surface text-fg-muted border-border-strong hover:bg-surface-muted"
-  }`;
+const viewOptions = [
+  {
+    value: "tables",
+    label: (
+      <span className="inline-flex items-center gap-2">
+        <TableIcon size={14} weight="thin" />
+        Tables
+      </span>
+    ),
+  },
+  {
+    value: "visual",
+    label: (
+      <span className="inline-flex items-center gap-2">
+        <TreeStructure size={14} weight="thin" />
+        Visual
+      </span>
+    ),
+  },
+];
 
 function DataModal({ table, tableData, onClose }) {
   const columns =
@@ -40,7 +55,7 @@ function DataModal({ table, tableData, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-surface border border-border-strong w-full max-w-4xl max-h-[85vh] flex flex-col shadow-xl"
+        className="bg-surface border border-border-strong rounded-panel overflow-hidden w-full max-w-4xl max-h-[85vh] flex flex-col shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -52,14 +67,13 @@ function DataModal({ table, tableData, onClose }) {
               {rows.length} row{rows.length !== 1 ? "s" : ""}
             </p>
           </div>
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="sm"
+            icon={X}
             onClick={onClose}
-            className="p-1.5 border border-border-strong text-fg-muted hover:text-fg hover:bg-hover transition-colors"
             aria-label="Close"
-          >
-            <X size={18} weight="thin" />
-          </button>
+          />
         </div>
         <div className="flex-1 overflow-auto min-h-0">
           {rows.length === 0 ? (
@@ -198,7 +212,7 @@ export default function SqlSchemaVisualizer({ onToast }) {
       </header>
 
       <div
-        className={`mb-6 border-2 border-dashed transition-colors p-4 sm:p-6 ${
+        className={`mb-6 border-2 border-dashed rounded-panel transition-colors p-4 sm:p-6 ${
           dragOver
             ? "border-border-muted bg-hover-muted"
             : "border-border-strong bg-surface"
@@ -209,7 +223,7 @@ export default function SqlSchemaVisualizer({ onToast }) {
       >
         <div className="flex flex-wrap items-center gap-3 mb-3">
           <UploadSimple size={20} weight="thin" className="text-fg-subtle" />
-          <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-fg-muted">
+          <span className="field-label">
             Drop .sql file or paste DDL
           </span>
           <input
@@ -246,27 +260,20 @@ export default function SqlSchemaVisualizer({ onToast }) {
       {schema && (
         <>
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            <button type="button" className={tabClass(view === "tables")} onClick={() => setView("tables")}>
-              <span className="inline-flex items-center gap-2">
-                <TableIcon size={14} weight="thin" />
-                Tables
-              </span>
-            </button>
-            <button type="button" className={tabClass(view === "visual")} onClick={() => setView("visual")}>
-              <span className="inline-flex items-center gap-2">
-                <TreeStructure size={14} weight="thin" />
-                Visual
-              </span>
-            </button>
+            <SegmentedControl
+              options={viewOptions}
+              value={view}
+              onChange={setView}
+            />
             <span className="ml-auto text-[11px] font-mono text-fg-muted">
               {schema.tables.length} table{schema.tables.length !== 1 ? "s" : ""}
             </span>
           </div>
 
           {view === "tables" ? (
-            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-0 border border-border bg-surface min-h-[480px]">
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-0 border border-border bg-surface rounded-panel overflow-hidden min-h-[480px]">
               <aside className="border-b lg:border-b-0 lg:border-r border-border overflow-auto max-h-[240px] lg:max-h-none">
-                <p className="px-4 py-3 text-[11px] font-mono uppercase tracking-[0.18em] text-fg-muted border-b border-border sticky top-0 bg-surface z-10">
+                <p className="field-label px-4 py-3 border-b border-border sticky top-0 bg-surface z-10">
                   Tables
                 </p>
                 <ul>
@@ -357,22 +364,22 @@ export default function SqlSchemaVisualizer({ onToast }) {
                                 <td className="px-4 py-2.5">
                                   <div className="flex flex-wrap gap-1.5">
                                     {col.primaryKey && (
-                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-warning-border">
+                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-badge bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-warning-border">
                                         PK
                                       </span>
                                     )}
                                     {fk && (
-                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-sky-100 dark:bg-sky-900/30 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
+                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-badge bg-sky-100 dark:bg-sky-900/30 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
                                         FK → {fk.refTable}.{fk.refColumn}
                                       </span>
                                     )}
                                     {col.unique && !col.primaryKey && (
-                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-hover-muted text-fg-muted border border-border">
+                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-badge bg-hover-muted text-fg-muted border border-border">
                                         Unique
                                       </span>
                                     )}
                                     {!col.nullable && (
-                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider bg-hover-muted text-fg-muted border border-border">
+                                      <span className="px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-badge bg-hover-muted text-fg-muted border border-border">
                                         NOT NULL
                                       </span>
                                     )}
@@ -398,7 +405,7 @@ export default function SqlSchemaVisualizer({ onToast }) {
               </section>
             </div>
           ) : (
-            <div className="border border-border bg-surface h-[calc(100vh-320px)] min-h-[480px]">
+            <div className="border border-border bg-surface rounded-panel overflow-hidden h-[calc(100vh-320px)] min-h-[480px]">
               <SchemaCanvas
                 tables={schema.tables}
                 selectedTable={selectedTable}

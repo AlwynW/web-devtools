@@ -3,6 +3,7 @@ import { MagnifyingGlass } from "phosphor-react";
 import CopyButton from "../components/CopyButton";
 import PageHeader from "../components/ui/PageHeader";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 /** Hints for IANA ids (abbreviations are location-dependent; shown as typical labels). */
 const IANA_EXTRA_LABELS = {
@@ -230,7 +231,7 @@ function TimezoneSelect({ value, onChange, zones, id }) {
       </button>
 
       {open && (
-        <div className="absolute z-20 left-0 right-0 mt-1 bg-surface border border-border-strong shadow-lg">
+        <div className="absolute z-20 left-0 right-0 mt-1 bg-surface border border-border-strong rounded-control overflow-hidden shadow-lg">
           <div className="relative border-b border-border">
             <MagnifyingGlass
               size={14}
@@ -430,37 +431,22 @@ export default function TimezoneConverter({ onToast }) {
           time in zone A or B. Searchable zone pickers with typical abbreviations
           (ET, CET, PST/PDT, etc.).</>} />
 
-      <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max mb-8 mx-auto font-mono text-[11px]">
-        <button
-          type="button"
-          className={`px-3 py-1.5 transition-colors ${
-            mode === "live"
-              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-              : "text-fg-muted hover:bg-hover-muted"
-          }`}
-          onClick={() => setMode("live")}
-        >
-          Live
-        </button>
-        <button
-          type="button"
-          className={`px-3 py-1.5 transition-colors ${
-            mode === "custom"
-              ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-              : "text-fg-muted hover:bg-hover-muted"
-          }`}
-          onClick={() => setMode("custom")}
-        >
-          Pick a moment
-        </button>
-      </div>
+      <SegmentedControl
+        options={[
+          { value: "live", label: "Live" },
+          { value: "custom", label: "Pick a moment" },
+        ]}
+        value={mode}
+        onChange={setMode}
+        className="mb-8 mx-auto"
+      />
 
       {mode === "custom" && (
         <div className="mb-8 flex flex-col items-center gap-3">
           <div className="flex flex-wrap items-center justify-center gap-2 font-mono text-[11px]">
             <label
               htmlFor="custom-time-source"
-              className="text-fg-muted uppercase tracking-[0.18em]"
+              className="field-label"
             >
               Date &amp; time in
             </label>

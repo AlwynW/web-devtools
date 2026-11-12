@@ -38,7 +38,7 @@ export default function ExistentialTimer() {
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <PageHeader title="Existential Timer" description="Counts seconds. Asks questions. Provides no answers." />
 
-      <div className="bg-surface p-12 border border-border text-center">
+      <div className="bg-surface p-12 border border-border rounded-panel text-center">
         <div className="font-mono text-6xl font-bold text-fg-soft mb-6">
           {formatTime(seconds)}
         </div>

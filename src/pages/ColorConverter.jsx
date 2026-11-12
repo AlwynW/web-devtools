@@ -98,7 +98,7 @@ export default function ColorConverter({ onToast }) {
           <>
             <div className="flex items-center gap-4">
               <label
-                className="w-24 h-24 border-2 border-border shrink-0 cursor-pointer overflow-hidden block"
+                className="w-24 h-24 border-2 border-border rounded-control shrink-0 cursor-pointer overflow-hidden block"
                 style={{ backgroundColor: previewColor }}
                 title="Click to pick a color"
               >
@@ -123,7 +123,7 @@ export default function ColorConverter({ onToast }) {
               ].map(({ key, label }) => (
                 <div
                   key={key}
-                  className="flex items-center justify-between p-3 bg-surface-muted border border-border"
+                  className="flex items-center justify-between p-3 bg-surface-muted border border-border rounded-control"
                 >
                   <span className="text-sm font-mono text-fg-muted">
                     {label}

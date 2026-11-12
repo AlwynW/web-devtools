@@ -5,6 +5,8 @@ import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
 import ErrorBanner from "../components/ui/ErrorBanner";
+import SegmentedControl from "../components/ui/SegmentedControl";
+import Button from "../components/Button";
 
 const base64UrlDecode = (str) => {
   try {
@@ -199,28 +201,18 @@ export default function JwtDebugger({ onToast }) {
       <PageHeader title="JWT Debugger" description="Decode, verify (HS256), and create signed JWTs (HS256 / RS256)." />
 
       <Panel className="space-y-6">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-          {[
-            { id: "decode", label: "Decode" },
-            { id: "create", label: "Create" },
-          ].map((m) => (
-            <button
-              key={m.id}
-              onClick={() => {
-                setMode(m.id);
-                setError(null);
-                if (m.id === "create") setCreatedToken("");
-              }}
-              className={`px-3 py-1.5 transition-colors ${
-                mode === m.id
-                  ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                  : "text-fg-muted hover:bg-hover-muted"
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "decode", label: "Decode" },
+            { value: "create", label: "Create" },
+          ]}
+          value={mode}
+          onChange={(id) => {
+            setMode(id);
+            setError(null);
+            if (id === "create") setCreatedToken("");
+          }}
+        />
 
         {mode === "decode" && (
           <>
@@ -235,7 +227,7 @@ export default function JwtDebugger({ onToast }) {
             />
 
             {decoded && decodeHeaderAlg === "HS256" && (
-              <div className="space-y-2 p-4 border border-border bg-surface-code/50">
+              <div className="space-y-2 p-4 border border-border rounded-control bg-surface-code/50">
                 <Label>
                   Verify HS256 signature
                 </Label>
@@ -249,13 +241,9 @@ export default function JwtDebugger({ onToast }) {
                   placeholder="Shared secret"
                   className="w-full p-3 bg-surface border border-border-strong font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg rounded-control"
                 />
-                <button
-                  type="button"
-                  onClick={handleVerify}
-                  className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg hover:opacity-90"
-                >
+                <Button onClick={handleVerify} className="w-fit">
                   Verify
-                </button>
+                </Button>
                 {verifyResult && (
                   <p
                     className={`text-sm font-mono ${verifyResult.ok ? "text-green-700 dark:text-green-400" : "text-danger-fg"}`}
@@ -281,7 +269,7 @@ export default function JwtDebugger({ onToast }) {
                   <CopyPre
                     text={decoded.header}
                     onCopySuccess={() => onToast("Header copied!")}
-                    className="border border-border bg-surface-muted overflow-x-auto"
+                    className="border border-border rounded-control bg-surface-muted overflow-x-auto"
                     preClassName="p-4 font-mono text-sm text-fg-soft"
                   />
                 </div>
@@ -293,7 +281,7 @@ export default function JwtDebugger({ onToast }) {
                   <CopyPre
                     text={decoded.payload}
                     onCopySuccess={() => onToast("Payload copied!")}
-                    className="border border-border bg-surface-muted overflow-x-auto"
+                    className="border border-border rounded-control bg-surface-muted overflow-x-auto"
                     preClassName="p-4 font-mono text-sm text-fg-soft"
                   />
                   {(decoded.exp || decoded.iat || decoded.sub) && (
@@ -322,7 +310,7 @@ export default function JwtDebugger({ onToast }) {
                   <CopyPre
                     text={decoded.signature}
                     onCopySuccess={() => onToast("Copied!")}
-                    className="border border-border bg-surface-muted"
+                    className="border border-border rounded-control bg-surface-muted"
                     preClassName="p-4 font-mono text-xs break-all text-fg-soft"
                   />
                 </div>
@@ -361,14 +349,14 @@ export default function JwtDebugger({ onToast }) {
                   { label: "+24h", s: 86400 },
                   { label: "+7d", s: 86400 * 7 },
                 ].map((p) => (
-                  <button
+                  <Button
                     key={p.label}
-                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => applyExpiryPreset(p.s)}
-                    className="px-2 py-1 text-[11px] font-mono border border-border-strong hover:bg-hover-muted text-fg-soft"
                   >
                     exp {p.label}
-                  </button>
+                  </Button>
                 ))}
               </div>
               <textarea
@@ -400,14 +388,9 @@ export default function JwtDebugger({ onToast }) {
                 {error}
               </ErrorBanner>
             )}
-            <button
-              type="button"
-              onClick={handleCreate}
-              disabled={signing}
-              className="w-full py-3 font-mono text-xs tracking-tight border border-inverse-border bg-inverse text-primary-fg hover:bg-primary-hover transition-colors disabled:opacity-50"
-            >
+            <Button onClick={handleCreate} disabled={signing} className="w-full">
               {signing ? "Signing…" : " > Sign & Create JWT"}
-            </button>
+            </Button>
             {createdToken && (
               <div>
                 <Label>
@@ -416,7 +399,7 @@ export default function JwtDebugger({ onToast }) {
                 <CopyPre
                   text={createdToken}
                   onCopySuccess={() => onToast("Token copied!")}
-                  className="border border-border bg-surface-muted overflow-x-auto"
+                  className="border border-border rounded-control bg-surface-muted overflow-x-auto"
                   preClassName="p-4 font-mono text-xs break-all text-fg-soft"
                 />
               </div>

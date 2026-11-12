@@ -108,14 +108,14 @@ export default function UnicodeInspector() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={4}
-          className="w-full p-4 border border-border-strong font-mono text-sm bg-surface text-fg"
+          className="w-full p-4 border border-border-strong rounded-control font-mono text-sm bg-surface text-fg"
         />
 
         <div className="space-y-3 max-h-[32rem] overflow-y-auto">
           {rows.map((r, idx) => (
             <div
               key={`${idx}-${r.offset}`}
-              className="p-3 border border-border text-xs font-mono space-y-1 bg-surface-code"
+              className="p-3 border border-border rounded-control text-xs font-mono space-y-1 bg-surface-code"
             >
               <div className="flex flex-wrap gap-2 text-fg-muted">
                 <span>offset {r.offset}</span>

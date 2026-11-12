@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import CopyArea from "../components/CopyArea";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 /**
  * Adaptive harmony: linear R − P for small padding, then blend toward a
@@ -133,9 +134,9 @@ export default function PerfectBorderGenerator({ onToast }) {
 </div>`;
 
   const copyModes = [
-    { key: "separate", label: "CSS + HTML" },
-    { key: "inline", label: "Inline vars" },
-    { key: "tailwind", label: "Tailwind v4" },
+    { value: "separate", label: "CSS + HTML" },
+    { value: "inline", label: "Inline vars" },
+    { value: "tailwind", label: "Tailwind v4" },
   ];
 
   const harmonySwatch = useMemo(() => {
@@ -261,14 +262,14 @@ export default function PerfectBorderGenerator({ onToast }) {
                 aria-checked={adaptiveHarmony}
                 aria-label="Enable adaptive harmony algorithm"
                 onClick={() => setAdaptiveHarmony((v) => !v)}
-                className={`relative shrink-0 w-11 h-6 rounded-full border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 dark:focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-stone-900 ${
+                className={`relative shrink-0 w-11 h-6 rounded-button border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
                   adaptiveHarmony
-                    ? "bg-stone-800 dark:bg-stone-200 border-border-strong"
+                    ? "bg-primary border-primary-border"
                     : "bg-secondary-hover border-border-strong"
                 }`}
               >
                 <span
-                  className={`absolute top-0.5 left-0.5 h-[calc(100%-4px)] aspect-square rounded-full bg-surface shadow-sm transition-transform ${
+                  className={`absolute top-0.5 left-0.5 h-[calc(100%-4px)] aspect-square rounded-button bg-surface shadow-sm transition-transform ${
                     adaptiveHarmony ? "translate-x-5" : "translate-x-0"
                   }`}
                 />
@@ -315,7 +316,7 @@ export default function PerfectBorderGenerator({ onToast }) {
             </div>
 
             {/* Harmony indicator */}
-            <div className="p-3 bg-surface-inset/50 border border-border space-y-2">
+            <div className="p-3 bg-surface-inset/50 border border-border rounded-control space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[11px] font-mono text-fg-muted">
                   Harmony
@@ -372,7 +373,7 @@ export default function PerfectBorderGenerator({ onToast }) {
                 </span>
               )}
             </div>
-            <div className="p-6 bg-shell border border-border flex items-center justify-center">
+            <div className="p-6 bg-shell border border-border rounded-control overflow-hidden flex items-center justify-center">
               <div
                 className="bg-gradient-to-br from-stone-500 to-stone-600 flex items-center justify-center transition-all duration-150"
                 style={{
@@ -405,22 +406,7 @@ export default function PerfectBorderGenerator({ onToast }) {
                 Copy mode
               </h3>
             </div>
-            <div className="flex gap-1 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px]">
-              {copyModes.map((m) => (
-                <button
-                  key={m.key}
-                  type="button"
-                  onClick={() => setCopyMode(m.key)}
-                  className={`px-3 py-1.5 transition-colors ${
-                    copyMode === m.key
-                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                      : "text-fg-muted hover:bg-secondary-hover"
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
+            <SegmentedControl options={copyModes} value={copyMode} onChange={setCopyMode} />
           </div>
 
           {copyMode === "separate" && (

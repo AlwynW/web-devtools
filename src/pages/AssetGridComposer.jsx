@@ -20,6 +20,7 @@ import {
 } from "../utils/assetGridComposer";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
+import SegmentedControl from "../components/ui/SegmentedControl";
 
 const INPUT_CLASS =
   "w-full px-3 py-2 bg-surface border border-border-strong rounded-control font-mono text-sm focus:outline-none focus:ring-1 focus:ring-focus text-fg";
@@ -30,9 +31,9 @@ const LABEL_CLASS =
 const ZERO_TRIM = { top: 0, bottom: 0, left: 0, right: 0 };
 
 const FIT_MODES = [
-  { id: "cover", label: "Cover" },
-  { id: "contain", label: "Contain" },
-  { id: "fill", label: "Fill" },
+  { value: "cover", label: "Cover" },
+  { value: "contain", label: "Contain" },
+  { value: "fill", label: "Fill" },
 ];
 
 function parsePositiveInt(value, fallback, min = 0) {
@@ -294,7 +295,7 @@ export default function AssetGridComposer({ onToast }) {
               setDragOver(true);
             }}
             onDragLeave={() => setDragOver(false)}
-            className={`border-2 border-dashed text-center cursor-pointer transition-colors ${
+            className={`border-2 border-dashed rounded-control text-center cursor-pointer transition-colors ${
               images.length ? "p-6" : "p-12"
             } ${
               dragOver
@@ -326,7 +327,7 @@ export default function AssetGridComposer({ onToast }) {
               {images.map((item, index) => (
                 <li
                   key={item.id}
-                  className="group relative aspect-square bg-stage border border-border overflow-hidden"
+                  className="group relative aspect-square bg-stage border border-border rounded-control overflow-hidden"
                 >
                   <img
                     src={item.objectUrl}
@@ -358,7 +359,7 @@ export default function AssetGridComposer({ onToast }) {
                       type="button"
                       aria-label="Remove image"
                       onClick={() => removeAt(index)}
-                      className="p-1.5 bg-red-600 hover:bg-red-700 text-white"
+                      className="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-button"
                     >
                       <Trash size={16} weight="thin" />
                     </button>
@@ -450,22 +451,7 @@ export default function AssetGridComposer({ onToast }) {
 
           <div>
             <p className={LABEL_CLASS}>Image fit</p>
-            <div className="flex flex-wrap gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
-              {FIT_MODES.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => setFitMode(m.id)}
-                  className={`px-3 py-1.5 transition-colors ${
-                    fitMode === m.id
-                      ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                      : "text-fg-muted hover:bg-hover-muted"
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
+            <SegmentedControl options={FIT_MODES} value={fitMode} onChange={setFitMode} />
             <p className="mt-2 text-[10px] font-mono text-fg-muted">
               Cover crops to fill, contain keeps the full image, fill stretches.
             </p>
@@ -492,7 +478,7 @@ export default function AssetGridComposer({ onToast }) {
                 { key: "right", label: "Right" },
               ].map((side) => (
                 <div key={side.key}>
-                  <label className="block text-[10px] font-mono text-fg-subtle uppercase mb-1 text-center">
+                  <label className="field-label mb-1 text-center">
                     {side.label}
                   </label>
                   <input
@@ -548,7 +534,7 @@ export default function AssetGridComposer({ onToast }) {
 
           <div
             ref={wrapperRef}
-            className="relative border border-border bg-stage flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]"
+            className="relative border border-border rounded-control bg-stage flex justify-center items-center overflow-hidden p-4 min-h-[280px] [background-image:radial-gradient(#d6d3d1_1px,transparent_1px)] dark:[background-image:radial-gradient(#44403c_1px,transparent_1px)] [background-size:16px_16px]"
           >
             <div className="relative inline-block max-w-full">
               <canvas
@@ -564,7 +550,7 @@ export default function AssetGridComposer({ onToast }) {
                 style={{ top: handlePx.top, left: handlePx.left, right: handlePx.right }}
               >
                 <span className="pointer-events-none absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-stone-800 dark:bg-stone-200" />
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-badge border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
@@ -574,7 +560,7 @@ export default function AssetGridComposer({ onToast }) {
                 style={{ bottom: handlePx.bottom, left: handlePx.left, right: handlePx.right }}
               >
                 <span className="pointer-events-none absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-stone-800 dark:bg-stone-200" />
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-badge border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
@@ -584,7 +570,7 @@ export default function AssetGridComposer({ onToast }) {
                 style={{ left: handlePx.left, top: handlePx.top, bottom: handlePx.bottom }}
               >
                 <span className="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-stone-800 dark:bg-stone-200" />
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3.5 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3.5 w-3.5 rounded-badge border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
               <div
                 role="slider"
@@ -594,7 +580,7 @@ export default function AssetGridComposer({ onToast }) {
                 style={{ right: handlePx.right, top: handlePx.top, bottom: handlePx.bottom }}
               >
                 <span className="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-stone-800 dark:bg-stone-200" />
-                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3.5 w-3.5 border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
+                <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3.5 w-3.5 rounded-badge border border-white dark:border-stone-900 bg-stone-800 dark:bg-stone-200 shadow" />
               </div>
             </div>
           </div>

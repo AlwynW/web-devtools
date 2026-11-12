@@ -57,17 +57,17 @@ export default function Strobo() {
                 type="color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
-                className="w-12 h-12 border border-border-strong cursor-pointer bg-transparent"
+                className="w-12 h-12 border border-border-strong rounded-control cursor-pointer bg-transparent"
               />
               <span className="font-mono text-sm text-fg-muted">{color}</span>
             </div>
           </div>
           <button
             onClick={() => setActive((a) => !a)}
-            className={`px-6 py-3 font-mono text-sm border transition-colors ${
+            className={`px-6 py-3 font-mono text-sm border rounded-button transition-colors ${
               active
                 ? "bg-red-600 text-white border-red-600 hover:bg-red-700"
-                : "bg-primary text-primary-fg border-primary-border hover:bg-primary-hover rounded-button"
+                : "bg-primary text-primary-fg border-primary-border hover:bg-primary-hover"
             }`}
           >
             {active ? "Stop" : "Start"}

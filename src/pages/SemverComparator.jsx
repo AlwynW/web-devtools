@@ -62,35 +62,35 @@ export default function SemverComparator() {
       <Panel className="space-y-6 font-mono text-sm">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <label className="field-label mb-2">
               Version A
             </label>
             <input
               value={a}
               onChange={(e) => setA(e.target.value)}
-              className="w-full p-3 border border-border-strong bg-surface text-fg"
+              className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg"
             />
           </div>
           <div>
-            <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <label className="field-label mb-2">
               Version B
             </label>
             <input
               value={b}
               onChange={(e) => setB(e.target.value)}
-              className="w-full p-3 border border-border-strong bg-surface text-fg"
+              className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-[11px] text-fg-muted uppercase tracking-[0.18em] mb-2">
+          <label className="field-label mb-2">
             Range (npm style)
           </label>
           <input
             value={range}
             onChange={(e) => setRange(e.target.value)}
-            className="w-full p-3 border border-border-strong bg-surface text-fg"
+            className="w-full p-3 border border-border-strong rounded-control bg-surface text-fg"
             placeholder="^1.0.0, >=2 <3, 1.x"
           />
           {!result.rangeValid && (
@@ -100,7 +100,7 @@ export default function SemverComparator() {
           )}
         </div>
 
-        <div className="space-y-2 p-4 bg-surface-code border border-border text-fg-soft">
+        <div className="space-y-2 p-4 bg-surface-code border border-border rounded-control text-fg-soft">
           <p>
             <span className="text-fg-muted">Compare: </span>
             {result.compareMsg}

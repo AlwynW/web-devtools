@@ -8,7 +8,7 @@ export default function PageHeader({
   return (
     <header className={className}>
       <div className={titleClassName || undefined}>
-        <h2 className="text-4xl font-black mb-2 tracking-tight text-fg-strong">
+        <h2 className="title-text text-4xl mb-2 text-fg-strong">
           {title}
         </h2>
         {description ? (

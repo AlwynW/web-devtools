@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { UploadSimple } from "phosphor-react";
 import CryptoJS from "crypto-js";
 import CopyArea from "../components/CopyArea";
+import Button from "../components/Button";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
@@ -69,22 +70,24 @@ export default function HashGenerator({ onToast }) {
       <PageHeader title="Hash Generator" description="Create MD5, SHA-1, SHA-256, or SHA-512 hashes for verification." />
 
       <Panel className="space-y-4">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control w-max font-mono text-[11px]">
+        <div className="flex gap-1 p-1 bg-surface-sunken border border-border-strong rounded-button w-max font-medium text-xs">
           <button
+            type="button"
             onClick={switchToText}
-            className={`px-3 py-1.5 transition-colors ${
+            aria-pressed={mode === "text"}
+            className={`px-3 py-1.5 transition-colors rounded-button ${
               mode === "text"
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
+                ? "bg-primary text-primary-fg"
+                : "text-fg-muted hover:bg-hover-muted hover:text-fg"
             }`}
           >
             Text
           </button>
           <label
-            className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-2 ${
+            className={`px-3 py-1.5 transition-colors rounded-button cursor-pointer flex items-center gap-2 ${
               mode === "file"
-                ? "bg-primary text-primary-fg border border-primary-border rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
+                ? "bg-primary text-primary-fg"
+                : "text-fg-muted hover:bg-hover-muted hover:text-fg"
             }`}
           >
             <input
@@ -110,7 +113,7 @@ export default function HashGenerator({ onToast }) {
             />
           </div>
         ) : (
-          <div className="p-4 bg-surface-muted border border-border">
+          <div className="p-4 bg-surface-muted border border-border rounded-control">
             <div className="font-mono text-sm text-fg-soft">{fileName}</div>
             <div className="text-xs font-mono text-fg-muted">
               {(input.length / 1024).toFixed(1)} KB loaded
@@ -120,12 +123,9 @@ export default function HashGenerator({ onToast }) {
 
         {mode === "text" && (
           <div className="flex justify-end">
-            <button
-              onClick={compute}
-              className="px-4 py-2 border border-border-muted text-xs font-mono tracking-tight text-fg bg-surface hover:bg-hover-muted transition-colors"
-            >
+            <Button variant="outline" onClick={compute}>
               {" > Generate hashes"}
-            </button>
+            </Button>
           </div>
         )}
 

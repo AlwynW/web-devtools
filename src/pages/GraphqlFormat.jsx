@@ -4,6 +4,7 @@ import CopyArea from "../components/CopyArea";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 import Label from "../components/ui/Label";
+import SegmentedControl from "../components/ui/SegmentedControl";
 import ErrorBanner from "../components/ui/ErrorBanner";
 
 const SAMPLE = `query GetUser($id: ID!) {
@@ -37,30 +38,14 @@ export default function GraphqlFormat({ onToast }) {
       <PageHeader title="GraphQL format" description="Parse and print GraphQL documents. Validates syntax; no server." />
 
       <Panel className="space-y-4">
-        <div className="flex gap-2 p-1 bg-surface-sunken border border-border-strong rounded-control font-mono text-[11px] w-fit">
-          <button
-            type="button"
-            onClick={() => setMode("pretty")}
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "pretty"
-                ? "bg-primary text-primary-fg rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-          >
-            Pretty
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("minify")}
-            className={`px-3 py-1.5 transition-colors ${
-              mode === "minify"
-                ? "bg-primary text-primary-fg rounded-button"
-                : "text-fg-muted hover:bg-hover-muted"
-            }`}
-          >
-            Minify
-          </button>
-        </div>
+        <SegmentedControl
+          options={[
+            { value: "pretty", label: "Pretty" },
+            { value: "minify", label: "Minify" },
+          ]}
+          value={mode}
+          onChange={setMode}
+        />
 
         <div>
           <Label>

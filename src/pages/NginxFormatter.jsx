@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { formatNginxConfig, lintNginxConfig } from "../utils/nginxFormat";
 import CopyButton from "../components/CopyButton";
+import Button from "../components/Button";
 import PageHeader from "../components/ui/PageHeader";
 import Panel from "../components/ui/Panel";
 
@@ -34,19 +35,19 @@ export default function NginxFormatter({ onToast }) {
       <Panel className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em] mb-2">
+            <label className="field-label mb-2">
               Input
             </label>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               rows={16}
-              className="w-full p-4 border border-border-strong font-mono text-xs bg-surface text-fg"
+              className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface text-fg"
             />
           </div>
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-[11px] font-mono text-fg-muted uppercase tracking-[0.18em]">
+              <label className="field-label">
                 Formatted
               </label>
               <CopyButton
@@ -59,18 +60,14 @@ export default function NginxFormatter({ onToast }) {
               readOnly
               value={formatted}
               rows={16}
-              className="w-full p-4 border border-border-strong font-mono text-xs bg-surface-code text-fg-soft"
+              className="w-full p-4 border border-border-strong rounded-control font-mono text-xs bg-surface-code text-fg-soft"
             />
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setInput(formatted)}
-          className="px-4 py-2 font-mono text-xs border border-inverse-border bg-inverse text-primary-fg"
-        >
+        <Button onClick={() => setInput(formatted)} className="w-fit">
           Replace input with formatted
-        </button>
+        </Button>
 
         {issues.length > 0 && (
           <div className="p-4 border border-warning-border bg-warning-bg space-y-1 rounded-control">
